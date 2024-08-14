@@ -1,17 +1,20 @@
-import Background from './background';
 import { Suspense } from 'react';
-import Pager from './pager';
-import { fetchPromise, resolvePromise } from './backgroundHelper';
+
+import Background from './spaceBackground';
+import { fetchBgLoading, setBgLoaded } from './spaceBgHelper';
+
+import Interface from './spaceInterface';
+import Loading from './spaceLoader';
 
 export default function SpaceGuest() {
-    const customPromise = fetchPromise();
+    const customPromise = fetchBgLoading();
+
     return(
-        <main>
-            <Suspense fallback={<div>Loading...</div>}>
-                <h1>spaceGuest</h1>
-                <Pager promise={customPromise} />
+        <div className='w-screen h-screen'>
+            <Background videoId='xg1gNlxto2M' live={false} resolve={setBgLoaded}/>
+            <Suspense fallback={<Loading />}>
+                <Interface promise={customPromise} />
             </Suspense>
-            <Background videoId='xg1gNlxto2M' resolve={resolvePromise} />
-        </main>
+        </div>
     )
 }
