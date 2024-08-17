@@ -1,16 +1,16 @@
+'use server';
+
 let resolvePromiseFunction: (reason: any) => void;
 
-function fetchBgLoading() {
-    const customPromise = new Promise((resolve) => {
+function fetchBgLoading(): Promise<string> {
+    const customPromise = new Promise<string>((resolve) => {
         resolvePromiseFunction = resolve;
     });
 
     return customPromise;
 }
 
-async function setBgLoaded(reason: string) {
-    'use server';
-
+function setBgLoaded(reason: string) {
     if (resolvePromiseFunction) {
         resolvePromiseFunction(reason);
     }

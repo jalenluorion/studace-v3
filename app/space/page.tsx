@@ -1,20 +1,32 @@
-import { Suspense } from 'react';
+import { fetchFillerId } from './database/filler';
 
-import Background from './spaceBackground';
-import { fetchBgLoading, setBgLoaded } from './spaceBgHelper';
+import { redirect } from 'next/navigation';
 
-import Interface from './spaceInterface';
-import Loading from './spaceLoader';
+import Space from './spaceMain';
+import { fetchBgLoading } from './database/spaceBgHelper';
 
-export default function SpaceGuest() {
-    const customPromise = fetchBgLoading();
+export default async function SpaceGuest() {
+    const fillerId = await fetchFillerId();
 
-    return(
-        <div className='w-screen h-screen'>
-            <Background videoId='xg1gNlxto2M' live={false} resolve={setBgLoaded}/>
-            <Suspense fallback={<Loading />}>
-                <Interface promise={customPromise} />
-            </Suspense>
-        </div>
-    )
+    if (fillerId) {
+        redirect(`/space/${fillerId}`);
+    }
+
+    const initialData = {
+        backgroundId: "c0_ejQQcrwI"
+    };
+
+    const spaceData = [
+        {
+            module: 'background',
+            data: fetchBgLoading(),
+        },
+    ];
+
+    return (
+        <Space
+            initialData={initialData}
+            spaceData={spaceData}
+        />
+    );
 }
