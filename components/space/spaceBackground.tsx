@@ -1,7 +1,7 @@
 'use client';
 
 import YouTube from 'react-youtube';
-import { setBgLoaded } from './database/spaceBgHelper';
+import { setBgLoaded } from '@/lib/spaceBgHelper';
 import { useState } from 'react';
 import Image from 'next/image';
 
