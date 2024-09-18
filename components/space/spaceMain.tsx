@@ -1,38 +1,52 @@
-'use client'
+'use client';
 
 import { Suspense, useState } from 'react';
+import { Tables } from '@/database.types';
 
-import Background from './spaceBackground';
+import Background from './control/background';
 import Interface from './spaceInterface';
+import Image from 'next/image';
 
 export default function Space({
-    initialData,
+    spaceSettings,
+    backgroundLoading,
     spaceData,
 }: {
-    initialData: {
-        backgroundId: string
-    }
-    spaceData: {
-        module: string
-        data: Promise<any>
-    }[]
+    spaceSettings: Tables<'space'>;
+    backgroundLoading: Promise<string>;
+    spaceData: Promise<unknown[]>;
 }) {
-    const [backgroundId, setbackgroundId] = useState<string>(initialData.backgroundId);
+    const [background, setbackground] = useState<string>(spaceSettings.background);
 
     return (
-        <div className='w-screen h-screen'>
-            <Background backgroundId={backgroundId} live={false} />
-            <Suspense fallback={<Loading />}>
-                <Interface promise={spaceData} />
+        <div className="h-screen w-screen overflow-hidden">
+            <Background backgroundId={background} live={false} />
+            <Suspense fallback={<Loading background={background} />}>
+                <Interface
+                    spaceSettings={spaceSettings}
+                    backgroundLoading={backgroundLoading}
+                    spaceData={spaceData}
+                    setBackground={setbackground}
+                />
             </Suspense>
         </div>
     );
 }
 
-function Loading() {
+function Loading({ background }: { background: string }) {
     return (
-        <div className='absolute h-full w-full z-30 flex justify-center items-center backdrop-blur transition-opacity'>
-            <div className='text-white text-xl animate-pulse'>Loading...</div>
+        <div>
+            <div className="absolute z-30 flex h-full w-full items-center justify-center backdrop-blur transition-opacity">
+                <div className="animate-pulse text-xl text-white">Loading...</div>
+            </div>
+            <Image
+                className="absolute left-1/2 z-10 h-full w-auto max-w-none -translate-x-1/2 transform min-video-aspect:top-1/2 min-video-aspect:h-auto min-video-aspect:w-full min-video-aspect:-translate-y-1/2"
+                src={`https://img.youtube.com/vi/${background}/maxresdefault.jpg`}
+                width="0"
+                height="0"
+                sizes="100vw"
+                alt="Video Thumbnail"
+            />
         </div>
-    )
+    );
 }

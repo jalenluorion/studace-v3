@@ -1,36 +1,58 @@
-"use client";
+'use client';
 
-import { use } from "react";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { use, useState } from 'react';
+import Control from './control/control';
+import SpaceModules from './spaceModules';
+import SpaceSocial from './spaceSocial';
+import { Tables } from '@/database.types';
 
 export default function Interface({
-  promise,
+    spaceSettings,
+    backgroundLoading,
+    spaceData,
+    setBackground,
 }: {
-  promise: { module: string; data: Promise<any> }[];
+    spaceSettings: Tables<'space'>;
+    backgroundLoading: Promise<string>;
+    spaceData: Promise<unknown[]>;
+    setBackground: (background: string) => void;
 }) {
-  const modules = promise.map((p) => p.module);
-  const data = promise.map((p) => p.data);
+    const [volumnOn, setVolumeOn] = useState(false);
+    const [micOn, setMicOn] = useState(false);
+    const [cameraOn, setCameraOn] = useState(false);
 
-  const res = use(Promise.all(data));
+    const [hidden, setHidden] = useState(false);
 
-  return (
-    <div className="absolute z-10">
-      <Card>
-        <h1 className="">spaceGuest</h1>
-        {res.map((r, i) => (
-          <div className="" key={modules[i]}>
-            {modules[i]}: {r}
-          </div>
-        ))}
-      </Card>
-    </div>
-  );
+    const background = use(backgroundLoading);
+    const res = use(spaceData);
+
+    return (
+        <div className="absolute flex h-full w-full flex-col overflow-hidden md:flex md:flex-col md:items-center lg:block">
+            <div className="flex h-full w-full flex-col items-center overflow-scroll md:flex-row md:items-stretch lg:absolute lg:z-10 lg:flex-row lg:items-stretch">
+                <div className="flex w-full items-center px-4 text-white sm:w-auto md:w-auto lg:w-auto">
+                    <SpaceSocial spaceSettings={spaceSettings} hidden={hidden} />
+                </div>
+
+                <div className="flex-1 p-4"></div>
+
+                <div className="flex w-full items-center px-4 text-white sm:w-auto md:w-auto lg:w-auto">
+                    <SpaceModules modules={spaceSettings.modules} data={res} hidden={hidden} />
+                </div>
+            </div>
+            <div className="w-full md:static md:w-auto md:pb-2 lg:absolute lg:bottom-0 lg:left-1/2 lg:z-20 lg:w-auto lg:-translate-x-1/2 lg:transform lg:pb-2">
+                <Control
+                    name={spaceSettings.name}
+                    volumeOn={volumnOn}
+                    setVolumeOn={setVolumeOn}
+                    micOn={micOn}
+                    setMicOn={setMicOn}
+                    cameraOn={cameraOn}
+                    setCameraOn={setCameraOn}
+                    hidden={hidden}
+                    setHidden={setHidden}
+                    setBackground={setBackground}
+                />
+            </div>
+        </div>
+    );
 }

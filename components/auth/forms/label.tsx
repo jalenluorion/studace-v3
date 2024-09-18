@@ -1,13 +1,13 @@
-import { cn } from "@/lib/utils";
-import React from "react";
+import { cn } from '@/lib/utils';
+import React from 'react';
 
 export function Label({
-  children,
-  ...props
-}: { children: React.ReactNode } & React.JSX.IntrinsicElements["label"]) {
-  return (
-    <label className={cn("text-sm font-medium", props.className)} {...props}>
-      {children}
-    </label>
-  );
+    children,
+    ...props
+}: { children: React.ReactNode } & React.JSX.IntrinsicElements['label']) {
+    return (
+        <label className={cn('text-sm font-medium', props.className)} {...props}>
+            {children}
+        </label>
+    );
 }

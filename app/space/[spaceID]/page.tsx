@@ -1,12 +1,11 @@
-import SpaceHandler from "@/components/space/spaceHandler"
+import SpaceHandler from '@/components/space/spaceHandler';
 
 export default async function SpaceId({
     params,
 }: {
     params: {
-        spaceID: string
-    }
+        spaceID: string;
+    };
 }) {
-    return <SpaceHandler guest={false} spaceID={params.spaceID} />
+    return <SpaceHandler guest={false} spaceID={params.spaceID} />;
 }
-

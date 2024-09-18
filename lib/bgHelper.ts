@@ -1,6 +1,6 @@
 'use server';
 
-let resolvePromiseFunction: (reason: any) => void;
+let resolvePromiseFunction: (backgroundId: string) => void;
 
 function fetchBgLoading(): Promise<string> {
     const customPromise = new Promise<string>((resolve) => {
@@ -10,9 +10,9 @@ function fetchBgLoading(): Promise<string> {
     return customPromise;
 }
 
-function setBgLoaded(reason: string) {
+function setBgLoaded(backgroundId: string) {
     if (resolvePromiseFunction) {
-        resolvePromiseFunction(reason);
+        resolvePromiseFunction(backgroundId);
     }
 }
 
