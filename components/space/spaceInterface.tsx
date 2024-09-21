@@ -5,15 +5,18 @@ import Control from './control/control';
 import SpaceModules from './spaceModules';
 import SpaceSocial from './spaceSocial';
 import { Tables } from '@/database.types';
+import { User } from './control/social';
 
 export default function Interface({
     spaceSettings,
     backgroundLoading,
+    activeUsers,
     spaceData,
     setBackground,
 }: {
     spaceSettings: Tables<'space'>;
     backgroundLoading: Promise<string>;
+    activeUsers: User & {presence_ref: string}[];
     spaceData: Promise<unknown[]>;
     setBackground: (background: string) => void;
 }) {
@@ -30,7 +33,7 @@ export default function Interface({
         <div className="absolute flex h-full w-full flex-col overflow-hidden md:flex md:flex-col md:items-center lg:block">
             <div className="flex h-full w-full flex-col items-center overflow-scroll md:flex-row md:items-stretch lg:absolute lg:z-10 lg:flex-row lg:items-stretch">
                 <div className="flex w-full items-center px-4 text-white sm:w-auto md:w-auto lg:w-auto">
-                    <SpaceSocial spaceSettings={spaceSettings} hidden={hidden} />
+                    <SpaceSocial activeUsers={activeUsers} hidden={hidden} />
                 </div>
 
                 <div className="flex-1 p-4"></div>

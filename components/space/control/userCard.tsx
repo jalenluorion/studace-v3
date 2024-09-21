@@ -9,9 +9,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { CarouselItem } from '../../ui/carousel';
-import { User } from '../spaceSocial';
 import { useState } from 'react';
 import { UserPlus } from 'lucide-react';
+import { User } from './social';
 
 export function UserCard({ user }: { user: User & { presence_ref: string } }) {
     const [showUsername, setShowUsername] = useState(false);
