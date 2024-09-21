@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Space from './spaceMain';
 
 import { defaultSpace } from '@/config/default';
-import { fetchBgLoading } from '@/lib/bgHelper';
+import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
 import { getLastSpace, updateLastSpace } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
@@ -32,7 +32,7 @@ export default async function SpaceHandler({
         return (
             <Space
                 spaceSettings={defaultSpace}
-                backgroundLoading={fetchBgLoading()}
+                spaceStates={[fetchBgLoading(), fetchUsersLoading()]}
                 spaceData={fetchModules(defaultSpace.modules, null)}
             />
         );
@@ -66,7 +66,7 @@ export default async function SpaceHandler({
         return (
             <Space
                 spaceSettings={initialData}
-                backgroundLoading={fetchBgLoading()}
+                spaceStates={[fetchBgLoading(), fetchUsersLoading()]}
                 spaceData={fetchModules(initialData.modules, spaceID)}
             />
         );

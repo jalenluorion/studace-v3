@@ -10,11 +10,11 @@ import Social, { User } from './control/social';
 
 export default function Space({
     spaceSettings,
-    backgroundLoading,
+    spaceStates,
     spaceData,
 }: {
     spaceSettings: Tables<'space'>;
-    backgroundLoading: Promise<string>;
+    spaceStates: Promise<string>[];
     spaceData: Promise<unknown[]>;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);
@@ -28,7 +28,7 @@ export default function Space({
                 <Interface
                     spaceSettings={spaceSettings}
                     activeUsers={activeUsers}
-                    backgroundLoading={backgroundLoading}
+                    spaceStates={spaceStates}
                     spaceData={spaceData}
                     setBackground={setbackground}
                 />

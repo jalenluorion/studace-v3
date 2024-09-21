@@ -9,13 +9,13 @@ import { User } from './control/social';
 
 export default function Interface({
     spaceSettings,
-    backgroundLoading,
+    spaceStates,
     activeUsers,
     spaceData,
     setBackground,
 }: {
     spaceSettings: Tables<'space'>;
-    backgroundLoading: Promise<string>;
+    spaceStates: Promise<string>[];
     activeUsers: User & {presence_ref: string}[];
     spaceData: Promise<unknown[]>;
     setBackground: (background: string) => void;
@@ -26,7 +26,7 @@ export default function Interface({
 
     const [hidden, setHidden] = useState(false);
 
-    const background = use(backgroundLoading);
+    const state = use(Promise.all(spaceStates));
     const res = use(spaceData);
 
     return (

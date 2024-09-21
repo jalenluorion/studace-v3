@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Tables } from '@/database.types';
+import { setUsersLoaded } from '@/lib/bgHelper';
 
 export interface User {
     user_id?: string;
@@ -20,6 +21,7 @@ export default function Social({
     useEffect(() => {
         const supabase = createClient();
         if (spaceSettings.space_id === '') {
+            setUsersLoaded('done');
             return;
         }
 
@@ -71,7 +73,8 @@ export default function Social({
                 if (status !== 'SUBSCRIBED') {
                     return;
                 }
-            
+
+                setUsersLoaded('done');
                 roomOne.track(userStatus);
             });
     }, []);
