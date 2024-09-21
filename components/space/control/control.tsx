@@ -109,13 +109,14 @@ export default function Control({
                         <House className="" />
                     </Button>
                     <Popover open={spacePopup}>
-                        <PopoverTrigger>
+                        <PopoverTrigger asChild>
                             <Toggle
                                 pressed={spacePopup}
                                 onPressedChange={() => {
                                     setSpacePopup(!spacePopup);
                                     setMusicPopup(false);
                                 }}
+                                className={spacePopup ? 'bg-accent hover:text-accent-foreground text-accent-foreground' : ''}
                                 size="icon"
                             >
                                 <LayoutGrid className="" />
@@ -129,13 +130,14 @@ export default function Control({
                         {volumeOn ? <Volume2 /> : <VolumeX className="text-destructive" />}
                     </Button>
                     <Popover open={musicPopup}>
-                        <PopoverTrigger>
+                        <PopoverTrigger asChild>
                             <Toggle
                                 pressed={musicPopup}
                                 onPressedChange={() => {
                                     setMusicPopup(!musicPopup);
                                     setSpacePopup(false);
                                 }}
+                                className={musicPopup ? 'bg-accent hover:text-accent-foreground text-accent-foreground' : ''}
                                 size="icon"
                             >
                                 <ListMusic className="" />
@@ -145,7 +147,7 @@ export default function Control({
                         <PopoverContent>pick music</PopoverContent>
                     </Popover>
                     <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <ImageIcon />
                             </Button>
@@ -168,7 +170,7 @@ export default function Control({
                         {cameraOn ? <Video /> : <VideoOff className="text-destructive" />}
                     </Button>
                     <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <ScreenShare />
                             </Button>
@@ -177,7 +179,7 @@ export default function Control({
                     </Dialog>
                     <Separator orientation="vertical" className="h-6" />
                     <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src="" />
@@ -188,7 +190,7 @@ export default function Control({
                         <DialogContent>user info</DialogContent>
                     </Dialog>
                     <Dialog>
-                        <DialogTrigger>
+                        <DialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <Settings />
                             </Button>

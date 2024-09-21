@@ -14,7 +14,7 @@ export default function Space({
     spaceData,
 }: {
     spaceSettings: Tables<'space'>;
-    spaceStates: Promise<string>[];
+    spaceStates: Promise<string[]>;
     spaceData: Promise<unknown[]>;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);

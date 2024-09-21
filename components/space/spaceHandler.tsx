@@ -32,7 +32,7 @@ export default async function SpaceHandler({
         return (
             <Space
                 spaceSettings={defaultSpace}
-                spaceStates={[fetchBgLoading(), fetchUsersLoading()]}
+                spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
                 spaceData={fetchModules(defaultSpace.modules, null)}
             />
         );
@@ -66,7 +66,7 @@ export default async function SpaceHandler({
         return (
             <Space
                 spaceSettings={initialData}
-                spaceStates={[fetchBgLoading(), fetchUsersLoading()]}
+                spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
                 spaceData={fetchModules(initialData.modules, spaceID)}
             />
         );

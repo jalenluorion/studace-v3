@@ -15,7 +15,7 @@ export default function Interface({
     setBackground,
 }: {
     spaceSettings: Tables<'space'>;
-    spaceStates: Promise<string>[];
+    spaceStates: Promise<string[]>;
     activeUsers: User & {presence_ref: string}[];
     spaceData: Promise<unknown[]>;
     setBackground: (background: string) => void;
@@ -26,7 +26,7 @@ export default function Interface({
 
     const [hidden, setHidden] = useState(false);
 
-    const state = use(Promise.all(spaceStates));
+    const state = use(spaceStates);
     const res = use(spaceData);
 
     return (
