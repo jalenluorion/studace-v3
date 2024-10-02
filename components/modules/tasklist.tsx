@@ -60,7 +60,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
             return;
         }
 
-        const newData = {
+        const newData : Tables<'tasklist'> = {
             ...data,
             private_tasks: [
                 ...tasks,
@@ -86,7 +86,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
 
     function clearCompleted() {
         if (currentTab == 'tasks') {
-            const newData = {
+            const newData : Tables<'tasklist'> = {
                 ...data,
                 private_tasks: tasks.filter((task) => !task.complete && task.task),
                 tasks_complete:
@@ -96,7 +96,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
             setTasks(newData.private_tasks);
             updateTasks(newData);
         } else {
-            const newData = {
+            const newData : Tables<'tasklist'> = {
                 ...data,
                 private_tasks: tasks.filter((task) => !task.complete && !task.task),
                 tasks_complete:

@@ -162,26 +162,29 @@ export type Database = {
       }
       timer: {
         Row: {
+          current_timer: number
           last_updated: string
           running: boolean
           space_id: string
-          time_remaining: number | null
+          time_remaining: number
           timers: Database["public"]["CompositeTypes"]["timertype"][]
           timers_complete: number
         }
         Insert: {
+          current_timer?: number
           last_updated?: string
           running?: boolean
           space_id: string
-          time_remaining?: number | null
+          time_remaining: number
           timers?: Database["public"]["CompositeTypes"]["timertype"][]
           timers_complete?: number
         }
         Update: {
+          current_timer?: number
           last_updated?: string
           running?: boolean
           space_id?: string
-          time_remaining?: number | null
+          time_remaining?: number
           timers?: Database["public"]["CompositeTypes"]["timertype"][]
           timers_complete?: number
         }

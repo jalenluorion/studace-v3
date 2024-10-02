@@ -16,9 +16,10 @@ const defaultTimer: Tables<'timer'> = {
     last_updated: new Date().toISOString(),
     running: false,
     space_id: '',
-    time_remaining: null,
+    time_remaining: defaultTimers[0].time,
     timers: defaultTimers,
     timers_complete: 0,
+    current_timer: 0,
 };
 
 export interface TimerModule {
