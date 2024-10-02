@@ -27,7 +27,7 @@ export default function Timer({ data }: { data: Tables<'timer'> }) {
     }, [running, timeRemaining]);
 
     useEffect(() => {
-        if (timeRemaining <= 0) {
+        if (timeRemaining <= 0 && running) {
             alert(data.timers[timerIndex].name + " complete!");
             const newIndex = data.timers[timerIndex + 1] ? timerIndex + 1 : 0;
             const newData : Tables<'timer'> = {

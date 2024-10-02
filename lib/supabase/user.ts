@@ -103,3 +103,15 @@ export async function updateLastSpace(userId: string, spaceId: string) {
         throw spaceError;
     }
 }
+
+export async function getSpaces(userId: string) {
+    const supabase = createClient();
+
+    const { data, error } = await supabase.from('space').select().eq('owner_id', userId);
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
