@@ -18,6 +18,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 import {
     House,
@@ -39,7 +40,6 @@ import {
     Minimize2,
 } from 'lucide-react';
 
-import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 export default function Control({
@@ -65,8 +65,6 @@ export default function Control({
     setHidden: (hidden: boolean) => void;
     setBackground: (background: string) => void;
 }) {
-    const router = useRouter();
-
     const [spacePopup, setSpacePopup] = useState(false);
     const [musicPopup, setMusicPopup] = useState(false);
 
@@ -104,10 +102,12 @@ export default function Control({
                 </div>
                 <div
                     className={`flex items-center overflow-hidden transition-[max-height,opacity] ease-in duration-250 [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 md:max-h-12 lg:max-h-12'} flex-wrap md:flex-nowrap lg:flex-nowrap`}
-                >
-                    <Button variant="ghost" size="icon" onClick={() => router.push('/')}>
+                >   
+                    <Link href="/" prefetch={false}>
+                    <Button variant="ghost" size="icon">
                         <House className="" />
                     </Button>
+                    </Link>
                     <Popover open={spacePopup}>
                         <PopoverTrigger asChild>
                             <Toggle
