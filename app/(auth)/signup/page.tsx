@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { SubmitButton } from '../../components/auth/forms/submit-button';
+import { SubmitButton } from '@/components/auth/forms/submit-button';
 import { Input } from '@/components/auth/forms/input';
 import { Label } from '@/components/auth/forms/label';
 import { FormMessage, Message } from '@/components/auth/forms/form-message';

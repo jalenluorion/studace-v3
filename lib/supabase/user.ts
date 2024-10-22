@@ -40,20 +40,6 @@ export async function registerProfile() {
     return spaceId;
 }
 
-export async function getUserId() {
-    const supabase = createClient();
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-        throw new Error('User not logged in');
-    }
-
-    return user.id;
-}
-
 export async function getProfile(userId: string) {
     const supabase = createClient();
 

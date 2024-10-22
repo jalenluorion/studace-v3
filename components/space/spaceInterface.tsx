@@ -5,7 +5,7 @@ import Control from './control/control';
 import SpaceModules from './spaceModules';
 import SpaceSocial from './spaceSocial';
 import { Tables } from '@/database.types';
-import { User } from './control/social';
+import { SocialUser } from './control/social';
 
 export default function Interface({
     spaceSettings,
@@ -16,7 +16,7 @@ export default function Interface({
 }: {
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
-    activeUsers: User & {presence_ref: string}[];
+    activeUsers: SocialUser & { presence_ref: string }[];
     spaceData: Promise<unknown[]>;
     setBackground: (background: string) => void;
 }) {
@@ -30,19 +30,19 @@ export default function Interface({
     const res = use(spaceData);
 
     return (
-        <div className="absolute flex h-full w-full flex-col overflow-hidden md:flex md:flex-col md:items-center lg:block">
-            <div className="flex h-full w-full flex-col items-center overflow-scroll md:flex-row md:items-stretch lg:absolute lg:z-10 lg:flex-row lg:items-stretch">
-                <div className="flex w-full items-center px-4 text-white sm:w-auto md:w-auto lg:w-auto">
+        <div className="absolute flex h-full w-full flex-col overflow-hidden modmd:flex modmd:flex-col modmd:items-center modlg:block">
+            <div className="flex h-full w-full flex-col items-center overflow-scroll modmd:flex-row modmd:items-stretch modlg:absolute modlg:z-10 modlg:flex-row modlg:items-stretch">
+                <div className="flex w-full items-center px-4 text-white modsm:w-auto modmd:w-auto modlg:w-auto">
                     <SpaceSocial activeUsers={activeUsers} hidden={hidden} />
                 </div>
 
                 <div className="flex-1 p-4"></div>
 
-                <div className="flex w-full items-center px-4 text-white sm:w-auto md:w-auto lg:w-auto">
+                <div className="flex w-full items-center px-4 text-white modsm:w-auto modmd:w-auto modlg:w-auto">
                     <SpaceModules modules={spaceSettings.modules} data={res} hidden={hidden} />
                 </div>
             </div>
-            <div className="w-full md:static md:w-auto md:pb-2 lg:absolute lg:bottom-0 lg:left-1/2 lg:z-20 lg:w-auto lg:-translate-x-1/2 lg:transform lg:pb-2">
+            <div className="w-full modmd:static modmd:w-auto modmd:pb-2 modlg:absolute modlg:bottom-0 modlg:left-1/2 modlg:z-20 modlg:w-auto modlg:-translate-x-1/2 modlg:transform modlg:pb-2">
                 <Control
                     name={spaceSettings.name}
                     volumeOn={volumnOn}

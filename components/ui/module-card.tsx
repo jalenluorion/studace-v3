@@ -7,7 +7,10 @@ const Module = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElem
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={cn('flex-1 rounded-lg border-2 bg-card text-card-foreground shadow-sm flex h-full flex-col w-full sm:w-72 md:w-72 lg:w-72', className)}
+            className={cn(
+                'modsm:w-72 modmd:w-72 modmodlg:w-72 flex h-full w-full flex-1 flex-col rounded-lg border-2 bg-card text-card-foreground shadow-sm',
+                className,
+            )}
             {...props}
         />
     ),
@@ -21,17 +24,23 @@ const ModuleHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 );
 ModuleHeader.displayName = 'ModuleHeader';
 
-const ModuleTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-    ({ className, ...props }, ref) => (
-        <h3 ref={ref} className={cn('text-lg font-semibold my-1 flex-1', className)} {...props} />
-    ),
-);
+const ModuleTitle = React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+    <h3 ref={ref} className={cn('my-1 flex-1 text-lg font-semibold', className)} {...props} />
+));
 ModuleTitle.displayName = 'ModuleTitle';
 
 const SocialButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
     ({ className, ...props }, ref) => {
         return (
-            <Button ref={ref} className={cn("h-auto w-auto p-1", className)} variant="ghost" {...props}>
+            <Button
+                ref={ref}
+                className={cn('h-auto w-auto p-1', className)}
+                variant="ghost"
+                {...props}
+            >
                 <User size={20} />
             </Button>
         );
@@ -41,7 +50,12 @@ SocialButton.displayName = 'SocialButton';
 const ExpandButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
     ({ className, ...props }, ref) => {
         return (
-            <Button ref={ref} className={cn("h-auto w-auto p-1", className)} variant="ghost" {...props}>
+            <Button
+                ref={ref}
+                className={cn('h-auto w-auto p-1', className)}
+                variant="ghost"
+                {...props}
+            >
                 <Maximize2 size={20} />
             </Button>
         );
@@ -51,7 +65,12 @@ ExpandButton.displayName = 'ExpandButton';
 const MenuButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
     ({ className, ...props }, ref) => {
         return (
-            <Button ref={ref} className={cn("h-auto w-auto p-1", className)} variant="ghost" {...props}>
+            <Button
+                ref={ref}
+                className={cn('h-auto w-auto p-1', className)}
+                variant="ghost"
+                {...props}
+            >
                 <Menu size={20} />
             </Button>
         );
@@ -61,7 +80,7 @@ MenuButton.displayName = 'MenuButton';
 
 const ModuleContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (
-        <div ref={ref} className={cn('p-3 pt-0 w-full flex-1', className)} {...props} />
+        <div ref={ref} className={cn('w-full flex-1 p-3 pt-0', className)} {...props} />
     ),
 );
 ModuleContent.displayName = 'ModuleContent';

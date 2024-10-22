@@ -6,7 +6,7 @@ import { Tables } from '@/database.types';
 import Background from './control/background';
 import Interface from './spaceInterface';
 import Image from 'next/image';
-import Social, { User } from './control/social';
+import Social, { SocialUser } from './control/social';
 
 export default function Space({
     spaceSettings,
@@ -18,7 +18,7 @@ export default function Space({
     spaceData: Promise<unknown[]>;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);
-    const [activeUsers, setActiveUsers] = useState<User & {presence_ref: string}[]>([]);
+    const [activeUsers, setActiveUsers] = useState<SocialUser & { presence_ref: string }[]>([]);
 
     return (
         <div className="h-screen w-screen overflow-hidden">

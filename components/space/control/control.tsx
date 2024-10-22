@@ -1,9 +1,6 @@
 'use client';
 
-import {
-    Card,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
@@ -84,7 +81,7 @@ export default function Control({
     return (
         <div className="">
             <Card
-                className="flex flex-col items-center rounded-b-none md:rounded-b-lg lg:rounded-b-lg"
+                className="modmd:rounded-b-lg modlg:rounded-b-lg flex flex-col items-center rounded-b-none"
                 ref={controlRef}
             >
                 <div className={`flex items-center [&>*]:mt-2 ${hidden ? 'mb-2' : ''}`}>
@@ -101,12 +98,12 @@ export default function Control({
                     </Button>
                 </div>
                 <div
-                    className={`flex items-center overflow-hidden transition-[max-height,opacity] ease-in duration-250 [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 md:max-h-12 lg:max-h-12'} flex-wrap md:flex-nowrap lg:flex-nowrap`}
-                >   
-                    <Link href="/" prefetch={false}>
-                    <Button variant="ghost" size="icon">
-                        <House className="" />
-                    </Button>
+                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'modmd:max-h-12 modlg:max-h-12 opacity-100'} modmd:flex-nowrap modlg:flex-nowrap flex-wrap`}
+                >
+                    <Link href="/home">
+                        <Button variant="ghost" size="icon">
+                            <House className="" />
+                        </Button>
                     </Link>
                     <Popover open={spacePopup}>
                         <PopoverTrigger asChild>
@@ -116,7 +113,11 @@ export default function Control({
                                     setSpacePopup(!spacePopup);
                                     setMusicPopup(false);
                                 }}
-                                className={spacePopup ? 'bg-accent hover:text-accent-foreground text-accent-foreground' : ''}
+                                className={
+                                    spacePopup
+                                        ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
+                                        : ''
+                                }
                                 size="icon"
                             >
                                 <LayoutGrid className="" />
@@ -137,7 +138,11 @@ export default function Control({
                                     setMusicPopup(!musicPopup);
                                     setSpacePopup(false);
                                 }}
-                                className={musicPopup ? 'bg-accent hover:text-accent-foreground text-accent-foreground' : ''}
+                                className={
+                                    musicPopup
+                                        ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
+                                        : ''
+                                }
                                 size="icon"
                             >
                                 <ListMusic className="" />

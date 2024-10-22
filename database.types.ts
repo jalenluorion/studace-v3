@@ -20,7 +20,7 @@ export type Database = {
         }
         Insert: {
           date_created?: string
-          first_name: string
+          first_name?: string
           last_name?: string
           last_space?: string | null
           user_id?: string
@@ -42,30 +42,29 @@ export type Database = {
             referencedRelation: "space"
             referencedColumns: ["space_id"]
           },
-          {
-            foreignKeyName: "profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       school: {
         Row: {
+          admins: string[]
           default_space: string | null
           name: string | null
           school_id: string
+          users: string[]
         }
         Insert: {
+          admins: string[]
           default_space?: string | null
           name?: string | null
-          school_id?: string
+          school_id: string
+          users: string[]
         }
         Update: {
+          admins?: string[]
           default_space?: string | null
           name?: string | null
           school_id?: string
+          users?: string[]
         }
         Relationships: [
           {
@@ -113,18 +112,18 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "space_school_fkey"
+            columns: ["school"]
+            isOneToOne: false
+            referencedRelation: "school"
+            referencedColumns: ["school_id"]
+          },
+          {
             foreignKeyName: "spaces_owner_id_fkey"
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["user_id"]
-          },
-          {
-            foreignKeyName: "spaces_school_fkey"
-            columns: ["school"]
-            isOneToOne: false
-            referencedRelation: "school"
-            referencedColumns: ["school_id"]
           },
         ]
       }
@@ -310,4 +309,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

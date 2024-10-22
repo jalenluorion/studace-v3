@@ -1,30 +1,43 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { SubmitButton } from '../../components/auth/forms/submit-button';
+import { SubmitButton } from '@/components/auth/forms/submit-button';
 import { Label } from '@/components/auth/forms/label';
 import { Input } from '@/components/auth/forms/input';
 import { FormMessage, Message } from '@/components/auth/forms/form-message';
+import { headers } from 'next/headers';
 import { encodedRedirect } from '@/lib/utils';
 
-export default function Login({ searchParams }: { searchParams: Message }) {
-    const signIn = async (formData: FormData) => {
+export default function ForgotPassword({ searchParams }: { searchParams: Message }) {
+    const forgotPassword = async (formData: FormData) => {
         'use server';
 
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
+        const email = formData.get('email')?.toString();
         const supabase = createClient();
+        const origin = headers().get('origin');
+        const callbackUrl = formData.get('callbackUrl')?.toString();
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
+        if (!email) {
+            return encodedRedirect('error', '/forgot-password', 'Email is required');
+        }
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${origin}/auth/callback?redirect_to=/protected/reset-password`,
         });
 
         if (error) {
-            return encodedRedirect('error', '/login', 'Could not authenticate user');
+            return encodedRedirect('error', '/forgot-password', 'Could not reset password');
         }
 
-        return redirect('/protected');
+        if (callbackUrl) {
+            return redirect(callbackUrl);
+        }
+
+        return encodedRedirect(
+            'success',
+            '/forgot-password',
+            'Check your email for a link to reset your password.',
+        );
     };
 
     return (
@@ -51,27 +64,17 @@ export default function Login({ searchParams }: { searchParams: Message }) {
             </Link>
 
             <form className="flex w-full max-w-md flex-1 flex-col justify-center gap-2 p-4 text-foreground [&>input]:mb-6">
-                <h1 className="text-2xl font-medium">Log in</h1>
+                <h1 className="text-2xl font-medium">Reset Password</h1>
                 <p className="text-sm text-foreground/60">
-                    {`Don\'t have an account? `}
-                    <Link className="font-medium text-blue-600 underline" href="/signup">
-                        Sign up
+                    Already have an account?{' '}
+                    <Link className="font-medium text-blue-600 underline" href="/login">
+                        Log in
                     </Link>
                 </p>
                 <div className="mt-8 flex flex-col gap-2 [&>input]:mb-3">
                     <Label htmlFor="email">Email</Label>
                     <Input name="email" placeholder="you@example.com" required />
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Password</Label>
-
-                        <Link className="text-sm text-blue-600 underline" href="/forgot-password">
-                            Forgot Password?
-                        </Link>
-                    </div>
-                    <Input type="password" name="password" placeholder="••••••••" required />
-                    <SubmitButton formAction={signIn} pendingText="Signing In...">
-                        Log in
-                    </SubmitButton>
+                    <SubmitButton formAction={forgotPassword}>Reset Password</SubmitButton>
                     <FormMessage message={searchParams} />
                 </div>
             </form>

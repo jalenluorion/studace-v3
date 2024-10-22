@@ -17,13 +17,8 @@ export default function SpaceModules({
     hidden: boolean;
 }) {
     return (
-        <CSSTransition
-            in={!hidden}
-            timeout={250}
-            classNames="right"
-            unmountOnExit
-        >
-            <div className="flex h-[38rem] w-full items-center @container sm:w-72 md:h-full md:w-72 lg:h-full lg:w-72">
+        <CSSTransition in={!hidden} timeout={250} classNames="right" unmountOnExit>
+            <div className="modsm:w-72 modmd:h-full modmd:w-72 modlg:h-full modlg:w-72 flex h-[38rem] w-full items-center @container">
                 <Carousel
                     opts={{
                         align: 'start',

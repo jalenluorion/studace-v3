@@ -10,23 +10,18 @@ import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 import { Tables } from '@/database.types';
 import { CarouselCard, CarouselAddCard } from './control/userCard';
-import { User } from './control/social';
+import { SocialUser } from './control/social';
 
 export default function SpaceSocial({
     activeUsers,
     hidden,
 }: {
-    activeUsers: User & {presence_ref: string}[];
+    activeUsers: SocialUser & { presence_ref: string }[];
     hidden: boolean;
 }) {
     return (
-        <CSSTransition
-            in={!hidden}
-            timeout={250}
-            classNames="left"
-            unmountOnExit
-        >
-            <div className="flex h-[38rem] w-full items-center @container sm:w-48 md:h-full md:w-48 lg:h-full lg:w-48">
+        <CSSTransition in={!hidden} timeout={250} classNames="left" unmountOnExit>
+            <div className="flex h-[38rem] w-full items-center @container modsm:w-48 modmd:h-full modmd:w-48 modlg:h-full modlg:w-48">
                 <Carousel
                     opts={{
                         align: 'start',

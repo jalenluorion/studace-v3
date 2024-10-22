@@ -11,20 +11,26 @@ import { Button } from '@/components/ui/button';
 import { CarouselItem } from '../../ui/carousel';
 import { useState } from 'react';
 import { UserPlus } from 'lucide-react';
-import { User } from './social';
+import { SocialUser } from './social';
 
-export function UserCard({ user }: { user: User & { presence_ref: string } }) {
+export function UserCard({ user }: { user: SocialUser & { presence_ref: string } }) {
     const [showUsername, setShowUsername] = useState(false);
-    
+
     return (
-        <Card className="flex h-full w-full flex-1 flex-col sm:w-48 md:w-48 lg:w-48 relative" onMouseEnter={() => setShowUsername(true)} onMouseLeave={() => setShowUsername(false)}>
-            <div className='h-full flex items-center justify-center'>
-            <Avatar className='w-12 h-12'>
-                <AvatarImage src={user.profile_picture} />
-                <AvatarFallback>{user.initials?.toUpperCase()}</AvatarFallback>
-            </Avatar>
+        <Card
+            className="relative flex h-full w-full flex-1 flex-col modsm:w-48 modmd:w-48 modlg:w-48"
+            onMouseEnter={() => setShowUsername(true)}
+            onMouseLeave={() => setShowUsername(false)}
+        >
+            <div className="flex h-full items-center justify-center">
+                <Avatar className="h-12 w-12">
+                    <AvatarImage src={user.profile_picture} />
+                    <AvatarFallback>{user.initials?.toUpperCase()}</AvatarFallback>
+                </Avatar>
             </div>
-            <div className={`absolute bottom-0 flex items-center justify-center w-full ${showUsername ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
+            <div
+                className={`absolute bottom-0 flex w-full items-center justify-center ${showUsername ? 'opacity-100' : 'opacity-0'} transition-opacity`}
+            >
                 <p>{user.username}</p>
             </div>
         </Card>
@@ -33,24 +39,30 @@ export function UserCard({ user }: { user: User & { presence_ref: string } }) {
 
 export function AddCard() {
     const [showUsername, setShowUsername] = useState(false);
-    
+
     return (
-        <Card className="flex h-full w-full flex-1 flex-col sm:w-48 md:w-48 lg:w-48 relative" onMouseEnter={() => setShowUsername(true)} onMouseLeave={() => setShowUsername(false)}>
-            <div className='h-full flex items-center justify-center'>
-            <Button className='w-12 h-12 rounded-full' size={'icon'}>
-                <UserPlus size="24" />
-            </Button>
+        <Card
+            className="relative flex h-full w-full flex-1 flex-col modsm:w-48 modmd:w-48 modlg:w-48"
+            onMouseEnter={() => setShowUsername(true)}
+            onMouseLeave={() => setShowUsername(false)}
+        >
+            <div className="flex h-full items-center justify-center">
+                <Button className="h-12 w-12 rounded-full" size={'icon'}>
+                    <UserPlus size="24" />
+                </Button>
             </div>
-            <div className={`absolute bottom-0 flex items-center justify-center w-full ${showUsername ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
+            <div
+                className={`absolute bottom-0 flex w-full items-center justify-center ${showUsername ? 'opacity-100' : 'opacity-0'} transition-opacity`}
+            >
                 <p>Invite Friend</p>
             </div>
         </Card>
     );
 }
 
-export function CarouselCard({ user }: { user: User & { presence_ref: string } }) {
+export function CarouselCard({ user }: { user: SocialUser & { presence_ref: string } }) {
     return (
-        <CarouselItem className="flex items-center pt-0 basis-1/2 @[38rem]:basis-1/4 @[54rem]:basis-1/6">
+        <CarouselItem className="flex basis-1/2 items-center pt-0 @[38rem]:basis-1/4 @[54rem]:basis-1/6">
             <div className="h-1b">
                 <UserCard user={user} />
             </div>
@@ -60,7 +72,7 @@ export function CarouselCard({ user }: { user: User & { presence_ref: string } }
 
 export function CarouselAddCard() {
     return (
-        <CarouselItem className="flex items-center pt-0 basis-1/2 @[38rem]:basis-1/4 @[54rem]:basis-1/6">
+        <CarouselItem className="flex basis-1/2 items-center pt-0 @[38rem]:basis-1/4 @[54rem]:basis-1/6">
             <div className="h-1b">
                 <AddCard />
             </div>
