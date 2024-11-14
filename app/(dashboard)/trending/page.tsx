@@ -7,11 +7,10 @@ export default async function Home() {
         <div className="flex-1 overflow-auto flex flex-col">
             <header className="flex items-center gap-2 border-b p-4">
                 <SidebarTrigger />
-                <h1 className="text-2xl font-bold">Digital Spaces</h1>
+                <h1 className="text-2xl font-bold">Trending Spaces</h1>
             </header>
             <div className="p-6 flex-1">
               <Suspense fallback={<SpaceLoader />}>
-                < SpaceList />
               </Suspense>
             </div>
         </div>

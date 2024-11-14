@@ -1,6 +1,9 @@
+'use server';
+
 import { createClient } from './server';
 import { Database, Tables, Enums } from '@/database.types';
 import { createSpace } from './space';
+import { redirect } from 'next/navigation';
 
 export async function registerProfile() {
     const supabase = createClient();
@@ -101,3 +104,9 @@ export async function getSpaces(userId: string) {
 
     return data;
 }
+
+export async function signOut() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    return redirect('/login');
+};

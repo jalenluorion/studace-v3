@@ -1,7 +1,9 @@
-import Sidebar from "@/components/dashboard/sidebar";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-import { getSchools } from "@/lib/supabase/school";
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { getSchools } from '@/lib/supabase/school';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/dashboard/sidebar';
+import { getProfile } from '@/lib/supabase/user';
 
 export default async function RootLayout({
     children,
@@ -19,15 +21,15 @@ export default async function RootLayout({
     }
 
     const schools = await getSchools(user.id);
+    const profile = await getProfile(user.id);
 
     return (
-        <div className="flex h-screen">
-            <aside className="hidden w-64 border-r-2 lg:block">
-                <Sidebar
-                    schools={schools}
-                />
-            </aside>
-            {children}
-        </div>
+        <SidebarProvider>
+            <AppSidebar 
+                profile={profile}
+                schools={schools}
+            />
+            <main className="h-screen w-full">{children}</main>
+        </SidebarProvider>
     );
 }

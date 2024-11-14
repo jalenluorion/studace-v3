@@ -1,69 +1,187 @@
 'use client';
 
-import { PlusCircle } from 'lucide-react';
-import { Toggle } from '../ui/toggle';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import {
+    BadgeCheck,
+    Bell,
+    ChevronsUpDown,
+    CreditCard,
+    Flame,
+    LayoutGrid,
+    LogOut,
+    PlusCircle,
+    Sparkles,
+} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { signOut } from '@/lib/supabase/user';
 import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { getSchools } from '@/lib/supabase/school';
-import { Database, Tables, Enums } from '@/database.types';
+import { Tables } from '@/database.types';
 
-export default function Sidebar({
+export async function AppSidebar({
+    profile,
     schools,
 }: {
+    profile: Tables<'profile'>;
     schools: Tables<'school'>[];
 }) {
     const pathname = usePathname();
-
+	
     return (
-        <div className="flex h-full flex-col p-2">
-            <div className="p-2">
-                <h2 className="mb-4 text-lg font-semibold">Studace.Live</h2>
-                <Button className="mb-4 w-full" variant="default">
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Create New Space
-                </Button>
-                <nav className="space-y-2">
-                    <Link href={`/home`} prefetch={true}>
-                        <Toggle
-                            className="w-full justify-start"
-                            data-state={pathname === '/home' ? 'on' : 'off'}
-                        >
-                            My Spaces
-                        </Toggle>
-                    </Link>
-                    {schools.length > 0 ? (
-                        <div>
-                            {schools.map((school) => (
-                                <div key={school.school_id} className="my-2">
-                                    <Link href={`/school/${school.school_id}`} prefetch={true}>
-                                        <Toggle
-                                            className="w-full justify-start"
-                                            data-state={
-                                                pathname === `/school/${school.school_id}` ? 'on' : 'off'
-                                            }
-                                        >
-                                            {school.name}
-                                        </Toggle>
-                                    </Link>
-                                </div>
-                            ))}
-                        </div>
-                    ) : null}
-                </nav>
-            </div>
-            <div className="flex-grow"></div>
-            <Toggle className="flex h-auto items-center justify-start p-2">
-                <Avatar className="h-10 w-10">
-                    <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col items-start ml-2">
-                    <div className="font-semibold">John Doe</div>
-                    <div className="text-green-500">Online</div>
-                </div>
-            </Toggle>
-        </div>
+        <Sidebar>
+            <SidebarHeader>
+                <SidebarGroup>
+                    <h1 className="text-xl font-semibold">Studace.Live</h1>
+                    <SidebarGroupContent>
+                        <Button className="mt-2 w-full" variant="default">
+                            <PlusCircle className="mr-2" />
+                            Create New Space
+                        </Button>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild isActive={pathname === '/trending'}>
+                                    <a href="/trending">
+                                        <Flame />
+                                        <span>Trending</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild isActive={pathname === '/home'}>
+                                    <a href="/home">
+                                        <LayoutGrid />
+                                        <span>My Spaces</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+				<SidebarGroup>
+					<SidebarGroupLabel>My Schools</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							{schools.map((school) => (
+								<SidebarMenuItem key={school.school_id}>
+									<SidebarMenuButton
+										asChild
+										isActive={pathname === `/school/${school.school_id}`}
+									>
+										<a href={`/school/${school.school_id}`}>{school.name}</a>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							))}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <SidebarMenuButton
+                                    size="lg"
+                                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                                >
+                                    <Avatar className="h-8 w-8 rounded-lg">
+                                        <AvatarImage src={profile.avatar} alt={profile.username} />
+                                        <AvatarFallback className="rounded-lg">{(profile.first_name.charAt(0) + profile.last_name.charAt(0)).toUpperCase()}</AvatarFallback>
+                                    </Avatar>
+                                    <div className="grid flex-1 text-left text-sm leading-tight">
+                                        <span className="truncate font-semibold">
+                                            {profile.username}
+                                        </span>
+                                        <span className="text-green-500 truncate text-xs">
+                                                Online
+                                        </span>
+                                    </div>
+                                    <ChevronsUpDown className="ml-auto size-4" />
+                                </SidebarMenuButton>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                                side="bottom"
+                                align="end"
+                                sideOffset={4}
+                            >
+                                <DropdownMenuLabel className="p-0 font-normal">
+                                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                                        <Avatar className="h-8 w-8 rounded-lg">
+                                            <AvatarImage
+                                                src={profile.avatar}
+                                                alt={profile.username}
+                                            />
+                                            <AvatarFallback className="rounded-lg">{(profile.first_name.charAt(0) + profile.last_name.charAt(0)).toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                        <div className="grid flex-1 text-left text-sm leading-tight">
+                                            <span className="truncate font-semibold">
+                                                {profile.username}
+                                            </span>
+                                            <span className="text-green-500 truncate text-xs">
+                                                Online
+                                            </span>
+                                        </div>
+                                    </div>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem>
+                                        <Sparkles />
+                                        Upgrade to Pro
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem>
+                                        <BadgeCheck />
+                                        Account
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <CreditCard />
+                                        Billing
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Bell />
+                                        Notifications
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => signOut()}>
+                                    <LogOut />
+                                    Log out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+        </Sidebar>
     );
 }

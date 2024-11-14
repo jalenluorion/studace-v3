@@ -87,18 +87,18 @@ export default function Control({
                 <div className={`flex items-center [&>*]:mt-2 ${hidden ? 'mb-2' : ''}`}>
                     <Button
                         variant="ghost"
-                        className="mx-2 h-6 w-6 p-0"
+                        className="mx-2 h-auto w-auto p-1"
                         onClick={() => setHidden(!hidden)}
                     >
-                        {hidden ? <ChevronUp size="20" /> : <ChevronDown size="20" />}
+                        {hidden ? <ChevronUp /> : <ChevronDown />}
                     </Button>
                     <CardTitle>{name}</CardTitle>
-                    <Button variant="ghost" className="mx-2 h-6 w-6 p-0" onClick={editFullScreen}>
-                        {fullScreen ? <Minimize2 size="20" /> : <Maximize2 size="20" />}
+                    <Button variant="ghost" className="mx-2 h-auto w-auto p-1" onClick={editFullScreen}>
+                        {fullScreen ? <Minimize2 /> : <Maximize2 />}
                     </Button>
                 </div>
                 <div
-                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'modmd:max-h-12 modlg:max-h-12 opacity-100'} modmd:flex-nowrap modlg:flex-nowrap flex-wrap`}
+                    className={`[&_svg]:size-6 duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'modmd:max-h-12 modlg:max-h-12 opacity-100'} modmd:flex-nowrap modlg:flex-nowrap flex-wrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">
@@ -113,12 +113,12 @@ export default function Control({
                                     setSpacePopup(!spacePopup);
                                     setMusicPopup(false);
                                 }}
+                                size="icon"
                                 className={
                                     spacePopup
                                         ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
                                         : ''
                                 }
-                                size="icon"
                             >
                                 <LayoutGrid className="" />
                             </Toggle>
@@ -138,12 +138,12 @@ export default function Control({
                                     setMusicPopup(!musicPopup);
                                     setSpacePopup(false);
                                 }}
+                                size="icon"
                                 className={
                                     musicPopup
                                         ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
                                         : ''
                                 }
-                                size="icon"
                             >
                                 <ListMusic className="" />
                             </Toggle>
