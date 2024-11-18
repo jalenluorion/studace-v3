@@ -8,12 +8,14 @@ import { Tables } from '@/database.types';
 import { SocialUser } from './control/social';
 
 export default function Interface({
+    spaceUser,
     spaceSettings,
     spaceStates,
     activeUsers,
     spaceData,
     setBackground,
 }: {
+    spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
     activeUsers: SocialUser & { presence_ref: string }[];
@@ -44,6 +46,7 @@ export default function Interface({
             </div>
             <div className="w-full modmd:static modmd:w-auto modmd:pb-2 modlg:absolute modlg:bottom-0 modlg:left-1/2 modlg:z-20 modlg:w-auto modlg:-translate-x-1/2 modlg:transform modlg:pb-2">
                 <Control
+                    user={spaceUser}
                     name={spaceSettings.name}
                     volumeOn={volumnOn}
                     setVolumeOn={setVolumeOn}

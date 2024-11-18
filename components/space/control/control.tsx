@@ -9,6 +9,7 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from '@/compon
 import {
     Dialog,
     DialogContent,
+    DialogContentChild,
     DialogDescription,
     DialogFooter,
     DialogHeader,
@@ -38,8 +39,11 @@ import {
 } from 'lucide-react';
 
 import { useRef, useState } from 'react';
+import { Tables } from '@/database.types';
+import { LoginForm } from '@/components/auth/login-form';
 
 export default function Control({
+    user,
     name,
     volumeOn,
     setVolumeOn,
@@ -51,6 +55,7 @@ export default function Control({
     setHidden,
     setBackground,
 }: {
+    user: Tables<'profile'> | null;
     name: string;
     volumeOn: boolean;
     setVolumeOn: (volumeOn: boolean) => void;
@@ -81,7 +86,7 @@ export default function Control({
     return (
         <div className="">
             <Card
-                className="modmd:rounded-b-lg modlg:rounded-b-lg flex flex-col items-center rounded-b-none"
+                className="flex flex-col items-center rounded-b-none modmd:rounded-b-lg modlg:rounded-b-lg"
                 ref={controlRef}
             >
                 <div className={`flex items-center [&>*]:mt-2 ${hidden ? 'mb-2' : ''}`}>
@@ -93,12 +98,16 @@ export default function Control({
                         {hidden ? <ChevronUp /> : <ChevronDown />}
                     </Button>
                     <CardTitle>{name}</CardTitle>
-                    <Button variant="ghost" className="mx-2 h-auto w-auto p-1" onClick={editFullScreen}>
+                    <Button
+                        variant="ghost"
+                        className="mx-2 h-auto w-auto p-1"
+                        onClick={editFullScreen}
+                    >
                         {fullScreen ? <Minimize2 /> : <Maximize2 />}
                     </Button>
                 </div>
                 <div
-                    className={`[&_svg]:size-6 duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 ${hidden ? 'max-h-0 opacity-0' : 'modmd:max-h-12 modlg:max-h-12 opacity-100'} modmd:flex-nowrap modlg:flex-nowrap flex-wrap`}
+                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 [&_svg]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">
@@ -192,7 +201,20 @@ export default function Control({
                                 </Avatar>
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>user info</DialogContent>
+                        <DialogContentChild>
+                            {user ? (
+                                'hi'
+                            ) : (
+                                <LoginForm
+                                    searchParams={
+                                        {} as
+                                            | { success: string }
+                                            | { error: string }
+                                            | { message: string }
+                                    }
+                                ></LoginForm>
+                            )}
+                        </DialogContentChild>
                     </Dialog>
                     <Dialog>
                         <DialogTrigger asChild>

@@ -5,7 +5,7 @@ import Space from './spaceMain';
 import { defaultSpace } from '@/config/default';
 import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
-import { getLastSpace, updateLastSpace } from '@/lib/supabase/user';
+import { getLastSpace, getProfile, updateLastSpace } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
 
 import { createClient } from '@/lib/supabase/server';
@@ -31,6 +31,7 @@ export default async function SpaceHandler({
 
         return (
             <Space
+                spaceUser={null}
                 spaceSettings={defaultSpace}
                 spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
                 spaceData={fetchModules(defaultSpace.modules, null)}
@@ -63,8 +64,11 @@ export default async function SpaceHandler({
 
         await updateLastSpace(user.id, spaceID);
 
+        const spaceUser = await getProfile(user.id);
+
         return (
             <Space
+                spaceUser={spaceUser}
                 spaceSettings={initialData}
                 spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
                 spaceData={fetchModules(initialData.modules, spaceID)}

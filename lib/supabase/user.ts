@@ -4,6 +4,7 @@ import { createClient } from './server';
 import { Database, Tables, Enums } from '@/database.types';
 import { createSpace } from './space';
 import { redirect } from 'next/navigation';
+import { createClient as adminClient} from '@supabase/supabase-js';
 
 export async function registerProfile() {
     const supabase = createClient();
@@ -97,7 +98,7 @@ export async function getSpaces(userId: string) {
     const supabase = createClient();
 
     const { data, error } = await supabase.from('space').select().eq('owner_id', userId);
-
+    
     if (error) {
         throw error;
     }
@@ -109,4 +110,22 @@ export async function signOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
     return redirect('/login');
-};
+}
+
+export async function getEmail(username: string) {
+    const admin = adminClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PRIVATE_SUPABASE_SERVICE_KEY!);
+
+    const { data: profile } = await admin
+        .from('profile')
+        .select('user_id')
+        .eq('username', username)
+        .single();
+
+    if (!profile?.user_id) {
+        return undefined;
+    }
+
+    const { data } = await admin.auth.admin.getUserById(profile.user_id);
+
+    return data.user!.email;
+}

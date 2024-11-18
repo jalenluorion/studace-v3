@@ -9,10 +9,12 @@ import Image from 'next/image';
 import Social, { SocialUser } from './control/social';
 
 export default function Space({
+    spaceUser,
     spaceSettings,
     spaceStates,
     spaceData,
 }: {
+    spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
     spaceData: Promise<unknown[]>;
@@ -26,6 +28,7 @@ export default function Space({
             <Background backgroundId={background} live={false} />
             <Suspense fallback={<Loading background={background} />}>
                 <Interface
+                    spaceUser={spaceUser}
                     spaceSettings={spaceSettings}
                     activeUsers={activeUsers}
                     spaceStates={spaceStates}
