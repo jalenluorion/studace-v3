@@ -34,7 +34,6 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
         });
     
         if (error) {
-          console.error(error.code + " " + error.message);
           return encodedRedirect("error", "/signup", "Error trying to sign up");
         } else {
           return encodedRedirect(

@@ -38,7 +38,7 @@ import { Button } from '../ui/button';
 import { usePathname } from 'next/navigation';
 import { Tables } from '@/database.types';
 
-export async function AppSidebar({
+export function AppSidebar({
     profile,
     schools,
 }: {

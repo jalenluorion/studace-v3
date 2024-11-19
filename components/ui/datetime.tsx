@@ -67,7 +67,6 @@ export function DatetimePicker({ children, date, setDate }: DatetimePickerV1Prop
                                 setDate(newDate);
                             }
                         }}
-                        open={true}
                     >
                         <SelectTrigger className="my-2 mr-2 w-[120px] font-normal focus:ring-0">
                             <SelectValue />
