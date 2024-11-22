@@ -2,6 +2,7 @@
 
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { createClient } from './server';
+import { getProfile } from './user';
 
 export async function registerPresence(status: "SUBSCRIBED" | "TIMED_OUT" | "CLOSED" | "CHANNEL_ERROR", room: RealtimeChannel) {
     const supabase = createClient();
@@ -14,18 +15,14 @@ export async function registerPresence(status: "SUBSCRIBED" | "TIMED_OUT" | "CLO
         throw new Error('User not logged in');
     }
 
-    const { data, error } = await supabase.from('profile').select().eq('user_id', user.id).single();
+    const profile = await getProfile(user.id);
 
-    if (error) {
-        throw error;
-    }
-
-    if (!data) {
+    if (!profile) {
         throw new Error('User not found');
     }
 
     const userStatus = {
-        user: data.username,
+        user: profile.username,
         online_at: new Date().toISOString(),
     };
 

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { SubmitButton } from '@/components/auth/submit-button';
-import { signIn } from './form-functions';
+import { signIn } from '@/lib/supabase/auth';
 
 type Message = { success: string } | { error: string } | { message: string };
 

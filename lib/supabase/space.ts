@@ -1,6 +1,7 @@
 import { createClient } from './server';
 import { defaultSpace } from '@/config/default';
 import { createModules } from './modules';
+import { getProfile } from './user';
 
 interface SpaceInput {
     allowed_users?: string[];
@@ -18,17 +19,9 @@ export async function createSpace(spaceInput: SpaceInput) {
 
     let defaultName = defaultSpace.name;
     if (!spaceInput.name) {
-        const { data, error } = await supabase
-            .from('profile')
-            .select()
-            .eq('user_id', spaceInput.owner_id)
-            .single();
+        const profile = await getProfile(spaceInput.owner_id);
 
-        if (error) {
-            throw error;
-        }
-
-        defaultName = data.first_name + ' ' + data.last_name + "'s Space";
+        defaultName = profile.first_name + ' ' + profile.last_name + "'s Space";
     }
 
     const updatedInput = {

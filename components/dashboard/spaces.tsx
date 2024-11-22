@@ -1,22 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
-import { Tables } from '@/database.types';
 import Link from 'next/link';
-import { getSpaces } from '@/lib/supabase/user';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthUser, getSpaces } from '@/lib/supabase/user';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default async function SpaceList() {
-    const supabase = createClient();
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-        return null;
-    }
-
+    const user = await getAuthUser();
+    
     const spaces = await getSpaces(user.id);
 
     return (

@@ -1,51 +1,15 @@
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
 import { SubmitButton } from '@/components/auth/submit-button';
-import { encodedRedirect } from '@/lib/utils';
-import { getEmail } from '@/lib/supabase/user';
-import { headers } from 'next/headers';
+import { forgotPassword, resetPassword } from '@/lib/supabase/auth';
 
 type Message = { success: string } | { error: string } | { message: string };
 
 export function ForgotPassword({ searchParams }: { searchParams: Message }) {
-    const forgotPassword = async (formData: FormData) => {
-        'use server';
-
-        const email = formData.get('email')?.toString();
-        const supabase = createClient();
-        const origin = headers().get('origin');
-        const callbackUrl = formData.get('callbackUrl')?.toString();
-
-        if (!email) {
-            return encodedRedirect('error', '/forgot-password', 'Email is required');
-        }
-
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${origin}/auth/callback?redirect_to=/reset-password`,
-        });
-
-        if (error) {
-            return encodedRedirect('error', '/forgot-password', 'Invalid email');
-        }
-
-        if (callbackUrl) {
-            return redirect(callbackUrl);
-        }
-
-        return encodedRedirect(
-            'success',
-            '/forgot-password',
-            'Password reset link successfully sent',
-        );
-    };
-
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
@@ -93,36 +57,6 @@ export function ForgotPassword({ searchParams }: { searchParams: Message }) {
 }
 
 export function ResetPassword({ searchParams }: { searchParams: Message }) {
-    const resetPassword = async (formData: FormData) => {
-        'use server';
-        const supabase = createClient();
-
-        const password = formData.get('password') as string;
-        const confirmPassword = formData.get('confirmPassword') as string;
-
-        if (!password || !confirmPassword) {
-            encodedRedirect(
-                'error',
-                '/reset-password',
-                'Password and confirm password are required',
-            );
-        }
-
-        if (password !== confirmPassword) {
-            encodedRedirect('error', '/reset-password', 'Passwords do not match');
-        }
-
-        const { error } = await supabase.auth.updateUser({
-            password: password,
-        });
-
-        if (error) {
-            encodedRedirect('error', '/reset-password', 'Password update failed');
-        }
-
-        encodedRedirect('success', '/reset-password', 'Password updated');
-    };
-
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>

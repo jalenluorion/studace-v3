@@ -6,6 +6,24 @@ import { createSpace } from './space';
 import { redirect } from 'next/navigation';
 import { createClient as adminClient} from '@supabase/supabase-js';
 
+export async function getAuthUser(redirectLink: string | null = '/login') {
+    const supabase = createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        if (!redirectLink){
+            throw new Error('User not found');
+        } else {
+            return redirect(redirectLink);
+        }
+    }
+
+    return user;
+}
+
 export async function registerProfile() {
     const supabase = createClient();
 

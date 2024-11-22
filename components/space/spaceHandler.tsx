@@ -5,51 +5,42 @@ import Space from './spaceMain';
 import { defaultSpace } from '@/config/default';
 import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
-import { getLastSpace, getProfile, updateLastSpace } from '@/lib/supabase/user';
+import { getAuthUser, getLastSpace, getProfile, updateLastSpace } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
 
 import { createClient } from '@/lib/supabase/server';
 
 export default async function SpaceHandler({
-    guest,
     spaceID,
 }: {
-    guest: boolean;
-    spaceID: string | undefined;
+    spaceID: string | null;
 }) {
-    const supabase = createClient();
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-
-    if (guest) {
+    if (!spaceID) {
+        const user = await getAuthUser(null)
+            .catch(() => {
+                return null;
+            });
+        
         if (user) {
             const lastSpace = await getLastSpace(user.id);
-            return redirect(lastSpace ? 'space/' + lastSpace : '/');
+            return redirect(lastSpace ? '/space/' + lastSpace : '/');
+        } else {
+            return (
+                <Space
+                    spaceUser={null}
+                    spaceSettings={defaultSpace}
+                    spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
+                    spaceData={fetchModules(defaultSpace.modules, null)}
+                />
+            );
         }
-
-        return (
-            <Space
-                spaceUser={null}
-                spaceSettings={defaultSpace}
-                spaceStates={Promise.all([fetchBgLoading(), fetchUsersLoading()])}
-                spaceData={fetchModules(defaultSpace.modules, null)}
-            />
-        );
     } else {
-        if (!user) {
-            return redirect('/login');
-        }
-
-        if (!spaceID) {
-            throw new Error('This should never happen.');
-        }
+        const user = await getAuthUser()
 
         const lastSpace = await getLastSpace(user.id);
 
         const initialData = await getSpace(spaceID).catch(() => {
-            return redirect(lastSpace ? 'space/' + lastSpace : '/');
+            return redirect(lastSpace ? '/space/' + lastSpace : '/');
         });
 
         // Check if the user ID is in the space ID owners
@@ -59,7 +50,7 @@ export default async function SpaceHandler({
                 initialData.allowed_users !== null &&
                 !initialData.allowed_users.includes(user.id))
         ) {
-            return redirect(lastSpace ? 'space/' + lastSpace : '/');
+            return redirect(lastSpace ? '/space/' + lastSpace : '/');
         }
 
         await updateLastSpace(user.id, spaceID);

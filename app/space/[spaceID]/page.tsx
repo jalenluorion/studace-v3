@@ -7,5 +7,5 @@ export default async function SpaceId({
         spaceID: string;
     };
 }) {
-    return <SpaceHandler guest={false} spaceID={params.spaceID} />;
+    return <SpaceHandler spaceID={params.spaceID} />;
 }

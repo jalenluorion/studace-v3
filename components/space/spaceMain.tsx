@@ -24,7 +24,7 @@ export default function Space({
 
     return (
         <div className="h-screen w-screen overflow-hidden">
-            <Social setActiveUsers={setActiveUsers} spaceSettings={spaceSettings} />
+            <Social setActiveUsers={setActiveUsers} spaceUser={spaceUser} spaceSettings={spaceSettings} />
             <Background backgroundId={background} live={false} />
             <Suspense fallback={<Loading background={background} />}>
                 <Interface
