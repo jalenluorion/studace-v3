@@ -13,7 +13,7 @@ const config = {
     prefix: '',
     theme: {
     	container: {
-    		center: 'true',
+    		center: true,
     		padding: '2rem',
     		screens: {
     			'2xl': '1400px'
@@ -94,7 +94,10 @@ const config = {
     			'accordion-up': 'accordion-up 0.2s ease-out'
     		},
     		fontFamily: {
-    			sans: ['var(--font-sans)', ...fontFamily.sans]
+    			sans: [
+    				'var(--font-sans)',
+                    ...fontFamily.sans
+                ]
     		},
     		screens: {
     			'min-video-aspect': {

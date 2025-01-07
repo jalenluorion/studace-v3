@@ -47,5 +47,6 @@ const PopoverContentChild = React.forwardRef<
     </PopoverPrimitive.Content>
   </PopoverPrimitive.Portal>
 ))
+PopoverContentChild.displayName = PopoverPrimitive.Content.displayName
 
 export { Popover, PopoverTrigger, PopoverAnchor, PopoverContent, PopoverContentChild };
