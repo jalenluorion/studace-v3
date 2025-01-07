@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from '@/components/ui/popover';
+import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverContentChild } from '@/components/ui/popover';
 import {
     Dialog,
     DialogContent,
@@ -41,6 +41,8 @@ import {
 import { useRef, useState } from 'react';
 import { Tables } from '@/database.types';
 import { LoginForm } from '@/components/auth/login-form';
+import BackgroundPicker from './backgroundPicker';
+import AudioPicker from './audioPicker';
 
 export default function Control({
     user,
@@ -53,18 +55,20 @@ export default function Control({
     setCameraOn,
     hidden,
     setHidden,
+    background,
     setBackground,
 }: {
     user: Tables<'profile'> | null;
     name: string;
-    volumeOn: boolean;
-    setVolumeOn: (volumeOn: boolean) => void;
+    volumeOn: { id: string; on: boolean, ready: boolean };
+    setVolumeOn: (volumeOn: { id: string; on: boolean, ready: boolean }) => void;
     micOn: boolean;
     setMicOn: (micOn: boolean) => void;
     cameraOn: boolean;
     setCameraOn: (cameraOn: boolean) => void;
     hidden: boolean;
     setHidden: (hidden: boolean) => void;
+    background: string;
     setBackground: (background: string) => void;
 }) {
     const [spacePopup, setSpacePopup] = useState(false);
@@ -136,8 +140,8 @@ export default function Control({
                         <PopoverContent>pick a new space</PopoverContent>
                     </Popover>
                     <Separator orientation="vertical" className="h-6" />
-                    <Button variant="ghost" size="icon" onClick={() => setVolumeOn(!volumeOn)}>
-                        {volumeOn ? <Volume2 /> : <VolumeX className="text-destructive" />}
+                    <Button variant="ghost" size="icon" onClick={() => setVolumeOn({id: volumeOn.id, on: !volumeOn.on, ready: false})}>
+                        {volumeOn.on ? <Volume2 /> : <VolumeX className="text-destructive" />}
                     </Button>
                     <Popover open={musicPopup}>
                         <PopoverTrigger asChild>
@@ -158,7 +162,12 @@ export default function Control({
                             </Toggle>
                         </PopoverTrigger>
                         <PopoverAnchor virtualRef={controlRef}></PopoverAnchor>
-                        <PopoverContent>pick music</PopoverContent>
+                        <PopoverContentChild>
+                            <AudioPicker 
+                                audio={volumeOn} 
+                                setAudio={setVolumeOn} 
+                            />
+                        </PopoverContentChild>
                     </Popover>
                     <Dialog>
                         <DialogTrigger asChild>
@@ -166,15 +175,9 @@ export default function Control({
                                 <ImageIcon />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>
-                            select space image
-                            <Button
-                                variant="destructive"
-                                onClick={() => setBackground('xg1gNlxto2M')}
-                            >
-                                change
-                            </Button>
-                        </DialogContent>
+                        <DialogContentChild>
+                            <BackgroundPicker background={background} setBackground={setBackground} />
+                        </DialogContentChild>
                     </Dialog>
                     <Separator orientation="vertical" className="h-6" />
                     <Button variant="ghost" size="icon" onClick={() => setMicOn(!micOn)}>

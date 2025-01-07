@@ -4,6 +4,7 @@ import { Suspense, useState } from 'react';
 import { Tables } from '@/database.types';
 
 import Background from './control/background';
+import Audio from './control/audio';
 import Interface from './spaceInterface';
 import Image from 'next/image';
 import Social, { SocialUser } from './control/social';
@@ -20,12 +21,14 @@ export default function Space({
     spaceData: Promise<unknown[]>;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);
+    const [audio, setAudio] = useState({id: '', on: false, ready: false});
     const [activeUsers, setActiveUsers] = useState<SocialUser & { presence_ref: string }[]>([]);
 
     return (
         <div className="h-screen w-screen overflow-hidden">
             <Social setActiveUsers={setActiveUsers} spaceUser={spaceUser} spaceSettings={spaceSettings} />
             <Background backgroundId={background} live={false} />
+            <Audio audio={audio} setAudio={setAudio} />
             <Suspense fallback={<Loading background={background} />}>
                 <Interface
                     spaceUser={spaceUser}
@@ -33,6 +36,9 @@ export default function Space({
                     activeUsers={activeUsers}
                     spaceStates={spaceStates}
                     spaceData={spaceData}
+                    audio={audio}
+                    setAudio={setAudio}
+                    background={background}
                     setBackground={setbackground}
                 />
             </Suspense>

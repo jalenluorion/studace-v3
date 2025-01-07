@@ -13,6 +13,9 @@ export default function Interface({
     spaceStates,
     activeUsers,
     spaceData,
+    audio,
+    setAudio,
+    background,
     setBackground,
 }: {
     spaceUser: Tables<'profile'> | null;
@@ -20,9 +23,11 @@ export default function Interface({
     spaceStates: Promise<string[]>;
     activeUsers: SocialUser & { presence_ref: string }[];
     spaceData: Promise<unknown[]>;
+    audio: { id: string; on: boolean, ready: boolean };
+    setAudio: (audio: { id: string; on: boolean, ready: boolean }) => void;
+    background: string;
     setBackground: (background: string) => void;
 }) {
-    const [volumnOn, setVolumeOn] = useState(false);
     const [micOn, setMicOn] = useState(false);
     const [cameraOn, setCameraOn] = useState(false);
 
@@ -48,14 +53,15 @@ export default function Interface({
                 <Control
                     user={spaceUser}
                     name={spaceSettings.name}
-                    volumeOn={volumnOn}
-                    setVolumeOn={setVolumeOn}
+                    volumeOn={audio}
+                    setVolumeOn={setAudio}
                     micOn={micOn}
                     setMicOn={setMicOn}
                     cameraOn={cameraOn}
                     setCameraOn={setCameraOn}
                     hidden={hidden}
                     setHidden={setHidden}
+                    background={background}
                     setBackground={setBackground}
                 />
             </div>

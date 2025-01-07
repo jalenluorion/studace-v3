@@ -39,6 +39,7 @@ export async function registerProfile() {
     const userFirst = user.user_metadata.firstName;
     const userLast = user.user_metadata.lastName;
     const username = user.user_metadata.username;
+    const birthday = user.user_metadata.birthday;
 
     const { error } = await supabase.from('profile').insert([
         {
@@ -46,6 +47,7 @@ export async function registerProfile() {
             first_name: userFirst,
             last_name: userLast,
             username: username,
+            birthday: birthday,
         },
     ]);
 
