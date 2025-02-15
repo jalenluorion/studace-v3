@@ -38,7 +38,7 @@ export default function Interface({
 
     return (
         <div className="absolute flex h-full w-full flex-col overflow-hidden modmd:flex modmd:flex-col modmd:items-center modlg:block">
-            <div className="flex h-full w-full flex-col items-center overflow-scroll modmd:flex-row modmd:items-stretch modmd:overflow-visible modlg:absolute modlg:z-10 modlg:flex-row modlg:items-stretch modlg:overflow-visible">
+            <div className="flex h-full w-full flex-col items-center  modmd:flex-row modmd:items-stretch modlg:absolute modlg:z-10 modlg:flex-row modlg:items-stretch">
                 <div className="flex w-full items-center px-4 text-white modsm:w-auto modmd:w-auto modlg:w-auto">
                     <SpaceSocial activeUsers={activeUsers} hidden={hidden} />
                 </div>
