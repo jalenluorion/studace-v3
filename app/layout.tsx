@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils';
 import './globals.css';
 import NextTopLoader from 'nextjs-toploader';
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -32,6 +33,7 @@ export default function RootLayout({
                     <NextTopLoader 
                         showSpinner={false}
                     />
+                    <GoogleTagManager gtmId="G-7D4X9EE312"/>
                     {children}
                 </ThemeProvider>
             </body>
