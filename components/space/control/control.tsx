@@ -136,6 +136,7 @@ export default function Control({
                                 <LayoutGrid className="" />
                             </Toggle>
                         </PopoverTrigger>
+                        {/* @ts-expect-error: PopoverAnchor requires a virtualRef prop */}
                         <PopoverAnchor virtualRef={controlRef}></PopoverAnchor>
                         <PopoverContent>pick a new space</PopoverContent>
                     </Popover>
@@ -161,6 +162,7 @@ export default function Control({
                                 <ListMusic className="" />
                             </Toggle>
                         </PopoverTrigger>
+                        {/* @ts-expect-error: PopoverAnchor requires a virtualRef prop */}
                         <PopoverAnchor virtualRef={controlRef}></PopoverAnchor>
                         <PopoverContentChild>
                             <AudioPicker 

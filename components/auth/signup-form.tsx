@@ -36,7 +36,7 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
                                 className={'error' in searchParams ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={signUp} pendingText="Registering...">
+                        <SubmitButton pendingText="Registering...">
                             Register
                         </SubmitButton>
                         <div className="relative">
