@@ -28,7 +28,7 @@ export default function RootLayout({
     return (
         <html suppressHydrationWarning lang="en">
             <body className={cn('bg-background font-sans antialiased', fontSans.variable)}>
-                <ThemeProvider attribute="class">
+                <ThemeProvider attribute="class" defaultTheme='dark'>
                     <NextTopLoader 
                         showSpinner={false}
                     />
