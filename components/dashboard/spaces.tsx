@@ -13,7 +13,7 @@ export default async function SpaceList() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {spaces.map((space) => (
                 <button key={space.space_id} className="w-full">
-                    <Link key={space.space_id} href={`/space/${space.space_id}`}>
+                    <Link key={space.space_id} href={`/space/${space.space_id}`} prefetch={false}>
                         <Card
                             key={space.space_id}
                             className="pointer-events-none relative aspect-video w-full overflow-hidden border-none transition-transform active:scale-95 active:transform"

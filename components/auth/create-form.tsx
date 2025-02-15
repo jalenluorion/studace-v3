@@ -16,7 +16,7 @@ export function WelcomeForm({
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
                 <CardTitle className="text-2xl">Create an Account</CardTitle>
-                <CardDescription>Welcome to Studace.live!</CardDescription>
+                <CardDescription>Welcome to Studace!</CardDescription>
             </CardHeader>
             <CardContent>
                 <form>

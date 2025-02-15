@@ -51,7 +51,7 @@ export function AppSidebar({
         <Sidebar>
             <SidebarHeader>
                 <SidebarGroup>
-                    <h1 className="text-xl font-semibold">Studace.Live</h1>
+                    <h1 className="text-xl font-semibold">Studace</h1>
                     <SidebarGroupContent>
                         <Button className="mt-2 w-full" variant="default">
                             <PlusCircle className="mr-2" />

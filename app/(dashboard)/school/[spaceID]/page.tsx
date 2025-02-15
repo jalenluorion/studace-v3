@@ -1,12 +1,13 @@
 import { getSchool } from "@/lib/supabase/school";
 
-export default async function Home({
-    params,
-}: {
-    params: {
-        spaceID: string;
-    };
-}) {
+export default async function Home(
+    props: {
+        params: Promise<{
+            spaceID: string;
+        }>;
+    }
+) {
+    const params = await props.params;
     const school = await getSchool(params.spaceID);
 
     return (

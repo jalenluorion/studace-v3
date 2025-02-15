@@ -2,6 +2,8 @@ import { allModules, AllSupabaseModules } from '@/config/default';
 import { Tables } from '@/database.types';
 import { CarouselItem } from '../../ui/carousel';
 
+import type { JSX } from "react";
+
 const GetModuleComponent = (module: string) => {
     const moduleData = allModules.find((mod) => mod.name === module);
     if (moduleData) {

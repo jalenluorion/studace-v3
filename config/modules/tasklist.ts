@@ -1,6 +1,8 @@
 import { Tables } from '@/database.types';
 import Tasklist from '@/components/modules/tasklist';
 
+import type { JSX } from "react";
+
 const defaultTags = [
     {
         name: 'English',

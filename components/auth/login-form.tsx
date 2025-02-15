@@ -15,7 +15,7 @@ export function LoginForm({ searchParams }: { searchParams: Message }) {
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
                 <CardTitle className="text-2xl">Welcome Back!</CardTitle>
-                <CardDescription>Log in to Studace.live</CardDescription>
+                <CardDescription>Log in to Studace</CardDescription>
             </CardHeader>
             <CardContent>
                 <form>

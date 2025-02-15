@@ -67,6 +67,7 @@ const DialogContentChild = React.forwardRef<
             )}
             {...props}
         >
+            <DialogPrimitive.Title className="sr-only" />
             {children}
         </DialogPrimitive.Content>
     </DialogPortal>

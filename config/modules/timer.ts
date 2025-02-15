@@ -1,6 +1,8 @@
 import { Tables } from '@/database.types';
 import Timer from '@/components/modules/timer';
 
+import type { JSX } from "react";
+
 const defaultTimers = [
     {
         name: 'Study Time',

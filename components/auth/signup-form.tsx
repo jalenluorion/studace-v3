@@ -15,7 +15,7 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
                 <CardTitle className="text-2xl">Welcome!</CardTitle>
-                <CardDescription>Create an account at Studace.live</CardDescription>
+                <CardDescription>Create an account at Studace</CardDescription>
             </CardHeader>
             <CardContent>
                 <form>

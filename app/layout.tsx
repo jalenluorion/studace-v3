@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils';
 import './globals.css';
 import NextTopLoader from 'nextjs-toploader';
@@ -12,7 +12,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
     metadataBase: new URL(defaultUrl),
     title: 'Studace',
-    description: 'A modern online study room.',
+    description: 'Your modern personalized space for productivity, collaboration, and learning',
 };
 
 const fontSans = FontSans({
@@ -26,14 +26,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html suppressHydrationWarning lang="en">
             <body className={cn('bg-background font-sans antialiased', fontSans.variable)}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="dark"
-                    enableSystem
-                    disableTransitionOnChange
-                >
+                <ThemeProvider attribute="class">
                     <NextTopLoader 
                         showSpinner={false}
                     />

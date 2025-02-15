@@ -9,12 +9,6 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        staleTimes: {
-          dynamic: 0, // Re-fetch dynamic routes after 30 seconds
-          static: 30,  // Re-fetch static routes after 3 minutes
-        },
-    },
 };
 
 module.exports = nextConfig;
