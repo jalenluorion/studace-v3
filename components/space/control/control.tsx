@@ -85,7 +85,7 @@ export default function Control({
         setFullScreen(!fullScreen);
     }
 
-    const controlRef = useRef(null);
+    const controlRef = useRef<HTMLDivElement>(null);
 
     return (
         <div className="">
@@ -136,8 +136,7 @@ export default function Control({
                                 <LayoutGrid className="" />
                             </Toggle>
                         </PopoverTrigger>
-                        {/* @ts-expect-error: PopoverAnchor requires a virtualRef prop */}
-                        <PopoverAnchor virtualRef={controlRef}></PopoverAnchor>
+                        {controlRef.current && <PopoverAnchor virtualRef={controlRef as React.RefObject<HTMLDivElement>}></PopoverAnchor>}
                         <PopoverContent>pick a new space</PopoverContent>
                     </Popover>
                     <Separator orientation="vertical" className="h-6" />
@@ -162,8 +161,7 @@ export default function Control({
                                 <ListMusic className="" />
                             </Toggle>
                         </PopoverTrigger>
-                        {/* @ts-expect-error: PopoverAnchor requires a virtualRef prop */}
-                        <PopoverAnchor virtualRef={controlRef}></PopoverAnchor>
+                        {controlRef.current && <PopoverAnchor virtualRef={controlRef as React.RefObject<HTMLDivElement>}></PopoverAnchor>}
                         <PopoverContentChild>
                             <AudioPicker 
                                 audio={volumeOn} 
