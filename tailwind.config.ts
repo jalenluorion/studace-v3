@@ -10,9 +10,6 @@ const config = {
         './app/**/*.{ts,tsx}',
         './src/**/*.{ts,tsx}',
     ],
-	safelist: [
-		'dark'
-	],
     prefix: '',
     theme: {
     	container: {
