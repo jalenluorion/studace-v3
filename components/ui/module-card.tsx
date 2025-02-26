@@ -8,7 +8,7 @@ const Module = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElem
         <div
             ref={ref}
             className={cn(
-                'modsm:w-72 modmd:w-72 modmodlg:w-72 flex h-full w-full flex-1 flex-col rounded-lg border-2 bg-card text-card-foreground shadow-sm',
+                'modsm:w-72 modmd:w-72 modmodlg:w-72 flex h-full w-full flex-1 flex-col rounded-lg border-2 bg-card text-card-foreground shadow-xs',
                 className,
             )}
             {...props}

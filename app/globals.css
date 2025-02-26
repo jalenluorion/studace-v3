@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@config '../tailwind.config.ts';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 @layer base {
   :root {
@@ -74,38 +92,41 @@
   }
 }
 
-html, body {
-  overflow: hidden;
-}
+@layer utilities {
+  html,
+  body {
+    overflow: hidden;
+  }
 
-.right-enter {
-  transform: translateX(105%);
-}
-.right-enter-active {
-  transform: translateX(0);
-  transition: transform 250ms;
-}
-.right-exit {
-  transform: translateX(0);
-}
-.right-exit-active {
-  transform: translateX(105%);
-  transition: transform 250ms;
-}
+  .right-enter {
+    transform: translateX(105%);
+  }
+  .right-enter-active {
+    transform: translateX(0);
+    transition: transform 250ms;
+  }
+  .right-exit {
+    transform: translateX(0);
+  }
+  .right-exit-active {
+    transform: translateX(105%);
+    transition: transform 250ms;
+  }
 
-.left-enter {
-  transform: translateX(-105%);
-}
-.left-enter-active {
-  transform: translateX(0);
-  transition: transform 250ms;
-}
-.left-exit {
-  transform: translateX(0);
-}
-.left-exit-active {
-  transform: translateX(-105%);
-  transition: transform 250ms;
+  .left-enter {
+    transform: translateX(-105%);
+  }
+  .left-enter-active {
+    transform: translateX(0);
+    transition: transform 250ms;
+  }
+  .left-exit {
+    transform: translateX(0);
+  }
+  .left-exit-active {
+    transform: translateX(-105%);
+    transition: transform 250ms;
+  }
 }
 
 @layer base {

@@ -49,7 +49,7 @@ export default function Space({
 function Loading({ background }: { background: string }) {
     return (
         <div>
-            <div className="absolute z-30 flex h-full w-full items-center justify-center backdrop-blur transition-opacity">
+            <div className="absolute z-30 flex h-full w-full items-center justify-center backdrop-blur-sm transition-opacity">
                 <div className="animate-pulse text-xl text-white">Loading...</div>
             </div>
             <Image

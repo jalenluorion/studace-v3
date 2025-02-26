@@ -19,7 +19,7 @@ export default async function SpaceList() {
                             className="pointer-events-none relative aspect-video w-full overflow-hidden border-none transition-transform active:scale-95 active:transform"
                         >
                             <div className="absolute z-10 flex h-full w-full items-center justify-center">
-                                <CardTitle className="text-white shadow">{space.name}</CardTitle>
+                                <CardTitle className="text-white shadow-sm">{space.name}</CardTitle>
                             </div>
                             <Image
                                 src={`https://img.youtube.com/vi/${space.background}/maxresdefault.jpg`}
