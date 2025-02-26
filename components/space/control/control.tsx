@@ -93,7 +93,7 @@ export default function Control({
                 className="flex flex-col items-center rounded-b-none modmd:rounded-b-lg modlg:rounded-b-lg"
                 ref={controlRef}
             >
-                <div className={`flex items-center [&>*]:mt-2 ${hidden ? 'mb-2' : ''}`}>
+                <div className={`flex items-center *:mt-2 ${hidden ? 'mb-2' : ''}`}>
                     <Button
                         variant="ghost"
                         className="mx-2 h-auto w-auto p-1"
@@ -111,7 +111,7 @@ export default function Control({
                     </Button>
                 </div>
                 <div
-                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in [&>*]:m-1 [&_svg]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
+                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in *:m-1 [&_svg]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">
