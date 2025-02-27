@@ -32,7 +32,7 @@ async function fetch(module: { name: string; default: unknown }, spaceId: string
         return module.default;
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
     // FIXME: Unsafe typing
     if (allModules.map((mod) => mod.name).includes(module.name)) {
         const { data, error } = await supabase
@@ -50,7 +50,7 @@ async function fetch(module: { name: string; default: unknown }, spaceId: string
     throw new Error('Module not found');
 }
 async function create(module: { name: string; default: unknown }, spaceId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
     // FIXME: Unsafe typing
     if (allModules.map((mod) => mod.name).includes(module.name)) {
         const spaceData = {

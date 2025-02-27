@@ -8,8 +8,6 @@ import { getSpace } from '@/lib/supabase/space';
 import { getAuthUser, getLastSpace, getProfile, updateLastSpace } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
 
-import { createClient } from '@/lib/supabase/server';
-
 export default async function SpaceHandler({
     spaceID,
 }: {

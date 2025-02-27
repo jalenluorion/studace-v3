@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { createClient as adminClient} from '@supabase/supabase-js';
 
 export async function getAuthUser(redirectLink: string | null = '/login') {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
         data: { user },
@@ -25,7 +25,7 @@ export async function getAuthUser(redirectLink: string | null = '/login') {
 }
 
 export async function registerProfile() {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
         data: { user },
@@ -65,7 +65,7 @@ export async function registerProfile() {
 }
 
 export async function getProfile(userId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.from('profile').select().eq('user_id', userId).single();
 
@@ -77,7 +77,7 @@ export async function getProfile(userId: string) {
 }
 
 export async function getLastSpace(userId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase
         .from('profile')
@@ -93,7 +93,7 @@ export async function getLastSpace(userId: string) {
 }
 
 export async function updateLastSpace(userId: string, spaceId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { error: userError } = await supabase
         .from('profile')
@@ -115,7 +115,7 @@ export async function updateLastSpace(userId: string, spaceId: string) {
 }
 
 export async function getSpaces(userId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.from('space').select().eq('owner_id', userId);
     
@@ -127,7 +127,7 @@ export async function getSpaces(userId: string) {
 }
 
 export async function signOut() {
-    const supabase = createClient();
+    const supabase = await createClient();
     await supabase.auth.signOut();
     return redirect('/login');
 }

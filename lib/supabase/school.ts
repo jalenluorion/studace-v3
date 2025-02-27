@@ -3,7 +3,7 @@ import { Database, Tables, Enums } from '@/database.types';
 import { createSpace } from './space';
 
 export async function getSchools(userId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.from('school').select().contains('users', [userId]);
 
@@ -15,7 +15,7 @@ export async function getSchools(userId: string) {
 }
 
 export async function getSchool(schoolId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.from('school').select().eq('school_id', schoolId).single();
 

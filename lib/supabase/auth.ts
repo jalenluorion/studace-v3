@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export const signIn = async (formData: FormData) => {
     let email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    const supabase = createClient();
+    const supabase = await createClient();
 
     if (email && !email.includes('@')) {
         const result = await getEmail(email);
@@ -33,7 +33,7 @@ export const signIn = async (formData: FormData) => {
 export const signUp = async (formData: FormData) => {
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
-    const supabase = createClient();
+    const supabase = await createClient();
     const origin = (await headers()).get("origin");
 
     if (!email || !password) {
@@ -60,7 +60,7 @@ export const signUp = async (formData: FormData) => {
 };
 
 export const registerAccount = async (formData: FormData) => {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const username = formData.get('username')!.toString();
     const firstName = formData.get('firstName')!.toString();
@@ -103,7 +103,7 @@ export const registerAccount = async (formData: FormData) => {
 
 export const forgotPassword = async (formData: FormData) => {
     const email = formData.get('email')?.toString();
-    const supabase = createClient();
+    const supabase = await createClient();
     const origin = (await headers()).get('origin');
     const callbackUrl = formData.get('callbackUrl')?.toString();
 
@@ -131,7 +131,7 @@ export const forgotPassword = async (formData: FormData) => {
 };
 
 export const resetPassword = async (formData: FormData) => {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const password = formData.get('password') as string;
     const confirmPassword = formData.get('confirmPassword') as string;

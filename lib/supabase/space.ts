@@ -15,7 +15,7 @@ interface SpaceInput {
 }
 
 export async function createSpace(spaceInput: SpaceInput) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     let defaultName = defaultSpace.name;
     if (!spaceInput.name) {
@@ -47,7 +47,7 @@ export async function createSpace(spaceInput: SpaceInput) {
 }
 
 export async function getSpace(spaceId: string) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.from('space').select().eq('space_id', spaceId).single();
 
@@ -59,7 +59,7 @@ export async function getSpace(spaceId: string) {
 }
 
 export async function getSpacesByUser(userId: string) {
-    const supabase = createClient();
+    const supabase =await createClient();
 
     const { data, error } = await supabase.from('space').select().eq('owner_id', userId);
 

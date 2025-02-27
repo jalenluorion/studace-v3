@@ -5,10 +5,6 @@ import {
     CarouselPrevious,
 } from '@/components/ui/carousel';
 import { CSSTransition } from 'react-transition-group';
-import { CarouselModule } from './control/modules';
-import { createClient } from '@/lib/supabase/client';
-import { useEffect, useState } from 'react';
-import { Tables } from '@/database.types';
 import { CarouselCard, CarouselAddCard } from './control/userCard';
 import { SocialUser } from './control/social';
 

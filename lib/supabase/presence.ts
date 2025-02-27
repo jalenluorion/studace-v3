@@ -5,7 +5,7 @@ import { createClient } from './server';
 import { getProfile } from './user';
 
 export async function registerPresence(status: "SUBSCRIBED" | "TIMED_OUT" | "CLOSED" | "CHANNEL_ERROR", room: RealtimeChannel) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
         data: { user },

@@ -4,7 +4,7 @@ import { createClient } from '../server';
 import { Database, Tables, Enums } from '@/database.types';
 
 export async function updateTimer(timer: Tables<'timer'>) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const {
         data: { user },
