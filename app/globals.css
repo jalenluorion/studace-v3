@@ -1,6 +1,106 @@
 @import 'tailwindcss';
 
-@config '../tailwind.config.ts';
+@custom-variant dark (&:is(.dark *));
+
+@custom-variant min-video-aspect (@media (min-aspect-ratio: 16/9));
+@custom-variant max-video-aspect (@media (max-aspect-ratio: 16/9));
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xsm: calc(var(--radius) - 8px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  --font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --breakpoint-modsm: 20rem;
+  --breakpoint-modmd: 34rem;
+  --breakpoint-modlg: 72rem;
+
+  --flex-basis-2\/2: 100%;
+  --flex-basis-2\/4: 50%;
+  --flex-basis-3\/4: 75%;
+  --flex-basis-4\/4: 100%;
+  --flex-basis-2\/6: 33.333333%;
+  --flex-basis-3\/6: 50%;
+  --flex-basis-4\/6: 66.666667%;
+  --flex-basis-5\/6: 83.333333%;
+  --flex-basis-6\/6: 100%;
+
+  --height-1b: 7.5rem;
+  --height-2b: 15rem;
+  --height-3b: 22.5rem;
+  --height-4b: 30rem;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-modsm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -92,48 +192,36 @@
   }
 }
 
-@layer utilities {
-  html,
-  body {
-    overflow: hidden;
-  }
-
-  .right-enter {
-    transform: translateX(105%);
-  }
-  .right-enter-active {
-    transform: translateX(0);
-    transition: transform 250ms;
-  }
-  .right-exit {
-    transform: translateX(0);
-  }
-  .right-exit-active {
-    transform: translateX(105%);
-    transition: transform 250ms;
-  }
-
-  .left-enter {
-    transform: translateX(-105%);
-  }
-  .left-enter-active {
-    transform: translateX(0);
-    transition: transform 250ms;
-  }
-  .left-exit {
-    transform: translateX(0);
-  }
-  .left-exit-active {
-    transform: translateX(-105%);
-    transition: transform 250ms;
-  }
+html, body {
+  overflow: hidden;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.right-enter {
+  transform: translateX(105%);
+}
+.right-enter-active {
+  transform: translateX(0);
+  transition: transform 250ms;
+}
+.right-exit {
+  transform: translateX(0);
+}
+.right-exit-active {
+  transform: translateX(105%);
+  transition: transform 250ms;
+}
+
+.left-enter {
+  transform: translateX(-105%);
+}
+.left-enter-active {
+  transform: translateX(0);
+  transition: transform 250ms;
+}
+.left-exit {
+  transform: translateX(0);
+}
+.left-exit-active {
+  transform: translateX(-105%);
+  transition: transform 250ms;
 }

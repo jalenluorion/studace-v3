@@ -49,7 +49,7 @@ export default function Interface({
                     <SpaceModules modules={spaceSettings.modules} data={res} hidden={hidden} />
                 </div>
             </div>
-            <div className="w-full modmd:static modmd:w-auto modmd:pb-2 modlg:absolute modlg:bottom-0 modlg:left-1/2 modlg:z-20 modlg:w-auto modlg:-translate-x-1/2 modlg:transform modlg:pb-2">
+            <div className="w-full modmd:static modmd:w-auto modmd:pb-2 modlg:absolute modlg:bottom-0 modlg:left-1/2 modlg:z-20 modlg:w-auto modlg:-translate-x-1/2 modlg:pb-2">
                 <Control
                     user={spaceUser}
                     name={spaceSettings.name}
