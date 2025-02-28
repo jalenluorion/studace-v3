@@ -25,13 +25,13 @@ export default function Home() {
                         key={index}
                         src={`https://img.youtube.com/vi/${bg.value}/maxresdefault.jpg`}
                         alt={`Background ${index}`}
-                        layout="fill"
-                        objectFit="cover"
+                        fill={true}
+                        style={{objectFit: "cover"}}
                         className={`transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
                     />
                 ))}
             </div>
-            <div className="relative z-10 text-white flex flex-col items-center justify-center h-full space-y-4 bg-black bg-opacity-50">
+            <div className="relative z-10 text-white flex flex-col items-center justify-center h-full space-y-4 bg-black/25">
                 <h1 className="text-4xl font-bold">Studace</h1>
                 <p className="text-lg text-center">Your modern personalized space for productivity, collaboration, and learning.</p>
                 <div className="flex space-x-4">
