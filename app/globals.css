@@ -5,6 +5,8 @@
 @custom-variant min-video-aspect (@media (min-aspect-ratio: 16/9));
 @custom-variant max-video-aspect (@media (max-aspect-ratio: 16/9));
 
+@config "../tailwind.config.js";
+
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
