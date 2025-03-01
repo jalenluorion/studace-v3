@@ -5,7 +5,7 @@ import Space from './spaceMain';
 import { defaultSpace } from '@/config/default';
 import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
-import { getAuthUser, getLastSpace, getProfile, updateLastSpace } from '@/lib/supabase/user';
+import { getAuthUser, getProfile } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
 
 export default async function SpaceHandler({
@@ -20,8 +20,7 @@ export default async function SpaceHandler({
             });
         
         if (user) {
-            const lastSpace = await getLastSpace(user.id);
-            return redirect(lastSpace ? '/space/' + lastSpace : '/');
+            return redirect('/home');
         } else {
             return (
                 <Space
@@ -35,10 +34,8 @@ export default async function SpaceHandler({
     } else {
         const user = await getAuthUser()
 
-        const lastSpace = await getLastSpace(user.id);
-
         const initialData = await getSpace(spaceID).catch(() => {
-            return redirect(lastSpace ? '/space/' + lastSpace : '/');
+            return redirect('/home');
         });
 
         // Check if the user ID is in the space ID owners
@@ -48,10 +45,9 @@ export default async function SpaceHandler({
                 initialData.allowed_users !== null &&
                 !initialData.allowed_users.includes(user.id))
         ) {
-            return redirect(lastSpace ? '/space/' + lastSpace : '/');
+            // TODO: locked spaces
+            return redirect('/home');
         }
-
-        await updateLastSpace(user.id, spaceID);
 
         const spaceUser = await getProfile(user.id);
 

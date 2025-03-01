@@ -23,20 +23,93 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="email"
-                                className={'error' in searchParams ? 'text-red-500' : ''}
+                                className={
+                                    'error' in searchParams
+                                        ? 'text-red-500'
+                                        : 'success' in searchParams
+                                          ? 'text-green-500'
+                                          : ''
+                                }
                             >
-                                Email Address{' '}
-                                {'error' in searchParams ? '- ' + searchParams.error : ''}
+                                Email {'error' in searchParams ? '- ' + searchParams.error : ''}
+                                {'success' in searchParams ? '- ' + searchParams.success : ''}
                             </Label>
                             <Input
                                 name="email"
                                 type="text"
                                 placeholder="you@example.com"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={
+                                    'error' in searchParams
+                                        ? 'border-red-500'
+                                        : 'success' in searchParams
+                                          ? 'border-green-500'
+                                          : ''
+                                }
                             />
                         </div>
-                        <SubmitButton pendingText="Registering...">
+                        <div className="grid gap-2">
+                            <div className="flex items-center">
+                                <Label
+                                    htmlFor="password"
+                                    className={
+                                        'error' in searchParams
+                                            ? 'text-red-500'
+                                            : 'success' in searchParams
+                                              ? 'text-green-500'
+                                              : ''
+                                    }
+                                >
+                                    Password
+                                </Label>
+                            </div>
+                            <Input
+                                name="password"
+                                placeholder="••••••••"
+                                type="password"
+                                required
+                                className={
+                                    'error' in searchParams
+                                        ? 'border-red-500'
+                                        : 'success' in searchParams
+                                          ? 'border-green-500'
+                                          : ''
+                                }
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <div className="flex items-center">
+                                <Label
+                                    htmlFor="confirmPassword"
+                                    className={
+                                        'error' in searchParams
+                                            ? 'text-red-500'
+                                            : 'success' in searchParams
+                                              ? 'text-green-500'
+                                              : ''
+                                    }
+                                >
+                                    Confirm Password{' '}
+                                    {'passwordError' in searchParams
+                                        ? '- ' + searchParams.passwordError
+                                        : ''}
+                                </Label>
+                            </div>
+                            <Input
+                                name="confirmPassword"
+                                placeholder="••••••••"
+                                type="password"
+                                required
+                                className={
+                                    'error' in searchParams
+                                        ? 'border-red-500'
+                                        : 'success' in searchParams
+                                          ? 'border-green-500'
+                                          : ''
+                                }
+                            />
+                        </div>
+                        <SubmitButton formAction={signUp} pendingText="Registering...">
                             Register
                         </SubmitButton>
                         <div className="relative">

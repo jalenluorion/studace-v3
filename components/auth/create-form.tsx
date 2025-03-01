@@ -80,51 +80,6 @@ export function WelcomeForm({
                                 className={'dateError' in searchParams ? 'border-red-500' : ''}
                             />
                         </div>
-
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label
-                                    htmlFor="password"
-                                    className={
-                                        'passwordError' in searchParams ? 'text-red-500' : ''
-                                    }
-                                >
-                                    Password{' '}
-                                    {'passwordError' in searchParams
-                                        ? '- ' + searchParams.passwordError
-                                        : ''}
-                                </Label>
-                            </div>
-                            <Input
-                                name="password"
-                                placeholder="••••••••"
-                                type="password"
-                                required
-                                className={'passwordError' in searchParams ? 'border-red-500' : ''}
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label
-                                    htmlFor="confirmPassword"
-                                    className={
-                                        'passwordError' in searchParams ? 'text-red-500' : ''
-                                    }
-                                >
-                                    Confirm Password{' '}
-                                    {'passwordError' in searchParams
-                                        ? '- ' + searchParams.passwordError
-                                        : ''}
-                                </Label>
-                            </div>
-                            <Input
-                                name="confirmPassword"
-                                placeholder="••••••••"
-                                type="password"
-                                required
-                                className={'passwordError' in searchParams ? 'border-red-500' : ''}
-                            />
-                        </div>
                         <SubmitButton formAction={registerAccount} pendingText="Registering...">
                             Register
                         </SubmitButton>

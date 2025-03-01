@@ -19,12 +19,39 @@ export async function getAuthUser(redirectLink: string | null = '/login') {
         } else {
             return redirect(redirectLink);
         }
-    }
+    } else {
+        try {
+            await getProfile(user.id);
+        } catch (error) {
+            return redirect('/welcome');
+        }
 
-    return user;
+        return user;
+    }
 }
 
-export async function registerProfile() {
+export async function isRegistered() {
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        return redirect('/login');
+    }
+    
+    try {
+        await getProfile(user.id);
+    } catch (error) {
+        return
+    }
+
+    return redirect('/home');
+}
+
+
+export async function registerProfile(userFirst: string, userLast: string, username: string, birthday: string) {
     const supabase = await createClient();
 
     const {
@@ -36,10 +63,6 @@ export async function registerProfile() {
     }
 
     const userId = user.id;
-    const userFirst = user.user_metadata.firstName;
-    const userLast = user.user_metadata.lastName;
-    const username = user.user_metadata.username;
-    const birthday = user.user_metadata.birthday;
 
     const { error } = await supabase.from('profile').insert([
         {
@@ -74,44 +97,6 @@ export async function getProfile(userId: string) {
     }
 
     return data;
-}
-
-export async function getLastSpace(userId: string) {
-    const supabase = await createClient();
-
-    const { data, error } = await supabase
-        .from('profile')
-        .select('last_space')
-        .eq('user_id', userId)
-        .single();
-
-    if (error) {
-        throw error;
-    }
-
-    return data.last_space;
-}
-
-export async function updateLastSpace(userId: string, spaceId: string) {
-    const supabase = await createClient();
-
-    const { error: userError } = await supabase
-        .from('profile')
-        .update({ last_space: spaceId })
-        .eq('user_id', userId);
-
-    if (userError) {
-        throw userError;
-    }
-
-    const { error: spaceError } = await supabase
-        .from('space')
-        .update({ last_opened: new Date().toUTCString() })
-        .eq('space_id', spaceId);
-
-    if (spaceError) {
-        throw spaceError;
-    }
 }
 
 export async function getSpaces(userId: string) {

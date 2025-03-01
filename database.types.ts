@@ -16,7 +16,6 @@ export type Database = {
           date_created: string
           first_name: string
           last_name: string
-          last_space: string | null
           user_id: string
           username: string
         }
@@ -26,7 +25,6 @@ export type Database = {
           date_created?: string
           first_name?: string
           last_name?: string
-          last_space?: string | null
           user_id?: string
           username?: string
         }
@@ -36,19 +34,10 @@ export type Database = {
           date_created?: string
           first_name?: string
           last_name?: string
-          last_space?: string | null
           user_id?: string
           username?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_last_space_fkey"
-            columns: ["last_space"]
-            isOneToOne: false
-            referencedRelation: "space"
-            referencedColumns: ["space_id"]
-          },
-        ]
+        Relationships: []
       }
       school: {
         Row: {

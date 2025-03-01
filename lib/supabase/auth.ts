@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from "@/lib/supabase/server";
-import { getEmail } from "@/lib/supabase/user";
+import { getEmail, registerProfile } from "@/lib/supabase/user";
 import { encodedRedirect, encodedRedirectMultipleTypes } from "@/lib/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -33,29 +33,38 @@ export const signIn = async (formData: FormData) => {
 export const signUp = async (formData: FormData) => {
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
+    const confirmPassword = formData.get("confirmPassword")?.toString();
     const supabase = await createClient();
     const origin = (await headers()).get("origin");
 
     if (!email || !password) {
-      return { error: "Email and password are required" };
+        return encodedRedirect("error", "/signup", "Email and password are required");
+    }
+
+    if (password !== confirmPassword) {
+        return encodedRedirect("error", "/signup", "Passwords do not match");
     }
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${origin}/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback?redirect_to=/welcome`,
       },
     });
 
     if (error) {
-      return encodedRedirect("error", "/signup", "Error trying to sign up");
+        if (error.code === "validation_failed") {
+            return encodedRedirect("error", "/signup", "Invalid email");
+        }
+
+       return encodedRedirect("error", "/signup", "Error trying to sign up");
     } else {
-      return encodedRedirect(
-        "success",
-        "/signup",
-        "Thanks for signing up! Please check your email for a verification link.",
-      );
+        return encodedRedirect(
+            "success",
+            "/signup",
+            "Verification link successfully sent",
+          );
     }
 };
 
@@ -66,20 +75,12 @@ export const registerAccount = async (formData: FormData) => {
     const firstName = formData.get('firstName')!.toString();
     const lastName = formData.get('lastName')!.toString();
     const birthday = formData.get('birthday')!.toString();
-    const password = formData.get('password')!.toString();
-    const confirmPassword = formData.get('confirmPassword')!.toString();
 
     const errorMessages = [];
     // check if username is unique
     const { data } = await supabase.from('profile').select('username').eq('username', username);
     if (data && data.length > 0) {
         errorMessages.push({ type: 'usernameError', message: 'Username already exists' });
-    }
-
-    // check if password and confirmPassword match
-
-    if (password !== confirmPassword) {
-        errorMessages.push({ type: 'passwordError', message: 'Passwords do not match' });
     }
 
     // check if birthday is valid and user is at least 13 years old
@@ -98,7 +99,13 @@ export const registerAccount = async (formData: FormData) => {
         return encodedRedirectMultipleTypes('/welcome', errorMessages);
     }
 
-    
+    const newSpace = await registerProfile(firstName, lastName, username, birthday)
+        .catch((error) => {
+            return encodedRedirect('error', '/welcome', error.message);
+        }
+    );
+
+    return redirect(`/space/${newSpace}`);
 }
 
 export const forgotPassword = async (formData: FormData) => {
