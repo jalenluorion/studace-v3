@@ -23,7 +23,6 @@ export const signIn = async (formData: FormData) => {
     });
 
     if (error) {
-        console.log(error);
         return {message: 'Invalid Credentials'};
     }
 
@@ -60,7 +59,7 @@ export const signUp = async (formData: FormData) => {
         if (error.status === 422) {
             return {message: 'Password must be at least 6 characters'};
         }
-        return {message: 'Error trying to sign up'};
+        return {message: 'Error trying to sign up. Please try again later'};
     } else {
         return 'Verification link successfully sent';
     }
@@ -145,11 +144,16 @@ export const resetPassword = async (formData: FormData) => {
 
     if (error) {
         if (error.status === 422) {
-            return {message: 'New password cannot be existing password'};
+            if (error.message.includes('old password')) {
+                return {message: 'New password cannot be existing password'};
+            } else if (error.message.includes('6')) {
+                return {message: 'Password must be at least 6 characters'};
+            } else {
+                return {message: 'Weak password. Please try again'};
+            }
         }
-        
         return {message: 'Password update failed. Please try again later'};
     }
 
-    return 'Password updated';
+    return 'Password successfully updated';
 };
