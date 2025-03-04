@@ -209,12 +209,6 @@ export default function Control({
                                 'hi'
                             ) : (
                                 <LoginForm
-                                    searchParams={
-                                        {} as
-                                            | { success: string }
-                                            | { error: string }
-                                            | { message: string }
-                                    }
                                 ></LoginForm>
                             )}
                         </DialogContentChild>
