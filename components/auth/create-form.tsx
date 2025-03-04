@@ -13,9 +13,9 @@ export function WelcomeForm() {
 
     function runButton(formData: FormData) {
         registerAccount(formData)
-            .catch((error) => {
-                if (error.message !== 'NEXT_REDIRECT') {
-                    setError(error.message);
+            .then((res) => {
+                if (res.message && res.message !== 'NEXT_REDIRECT') {
+                    setError(res.message);
                 }
             }
         );

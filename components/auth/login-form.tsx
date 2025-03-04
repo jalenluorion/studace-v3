@@ -16,9 +16,9 @@ export function LoginForm() {
 
     function runButton(formData: FormData) {
         signIn(formData)
-            .catch((error) => {
-                if (error.message !== 'NEXT_REDIRECT') {
-                    setError(error.message);
+            .then((res) => {
+                if (res.message && res.message !== 'NEXT_REDIRECT') {
+                    setError(res.message);
                 }
             }
         );
@@ -40,9 +40,9 @@ export function LoginForm() {
                                 Email or Username
                             </Label>
                             <Input
-                                name="email"
-                                type="email"
-                                placeholder="you@example.com"
+                                name="email or username"
+                                type="text"
+                                placeholder="you@example.com or john_doe"
                                 required
                                 className={error ? 'border-red-500' : ''}
                             />

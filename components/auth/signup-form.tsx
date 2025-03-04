@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 
 import { SubmitButton } from '@/components/auth/submit-button';
 import { signUp } from '@/lib/supabase/auth';
+import { set } from 'date-fns';
 
 export function RegisterForm() {
     const [error, setError] = useState<string | null>(null);
@@ -17,13 +18,13 @@ export function RegisterForm() {
 
     function runButton(formData: FormData) {
         signUp(formData)
-            .catch((error) => {
-                setError(error.message);
-            })
-            .then((message) => {
-                if (message) {
+            .then((res) => {
+                if (typeof res === 'object' && 'message' in res) {
+                    setError(res.message);
+                    setSuccess(null);
+                } else if (res) {
                     setError(null);
-                    setSuccess(message);
+                    setSuccess(res);
                 }
             });
     }

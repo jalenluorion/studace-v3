@@ -23,7 +23,8 @@ export const signIn = async (formData: FormData) => {
     });
 
     if (error) {
-        throw new Error('Invalid Credentials');
+        console.log(error);
+        return {message: 'Invalid Credentials'};
     }
 
     return redirect('/home');
@@ -37,11 +38,11 @@ export const signUp = async (formData: FormData) => {
     const origin = (await headers()).get("origin");
 
     if (!email || !password) {
-        throw new Error("Email and password are required");
+        return {message: 'Email and password are required'};
     }
 
     if (password !== confirmPassword) {
-        throw new Error("Passwords do not match");
+        return {message: 'Passwords do not match'};
     }
 
     const { error } = await supabase.auth.signUp({
@@ -53,7 +54,13 @@ export const signUp = async (formData: FormData) => {
     });
 
     if (error) {
-        throw new Error("Error trying to sign up");
+        if (error.status === 429) {
+            return {message: 'Too many requests. Please try again later'};
+        }
+        if (error.status === 422) {
+            return {message: 'Password must be at least 6 characters'};
+        }
+        return {message: 'Error trying to sign up'};
     } else {
         return 'Verification link successfully sent';
     }
@@ -70,7 +77,7 @@ export const registerAccount = async (formData: FormData) => {
     // check if username is unique
     const { data } = await supabase.from('profile').select('username').eq('username', username);
     if (data && data.length > 0) {
-        throw new Error('Username already exists');
+        return {message: 'Username already exists'};
     }
 
     // check if birthday is valid and user is at least 13 years old
@@ -82,12 +89,12 @@ export const registerAccount = async (formData: FormData) => {
         age--;
     }
     if (age < 13) {
-        throw new Error('You must be at least 13 years old');
+        return {message: 'You must be at least 13 years old'};
     }
 
     const newSpace = await registerProfile(firstName, lastName, username, birthday)
         .catch(() => {
-            throw new Error('Error creating profile. Please try again later');
+            return {message: 'Error creating profile. Please try again later'};
         }
     );
 
@@ -100,7 +107,7 @@ export const forgotPassword = async (formData: FormData) => {
     const origin = (await headers()).get('origin');
 
     if (!email) {
-        throw new Error('Email is required');
+        return {message: 'Email is required'};
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -108,7 +115,10 @@ export const forgotPassword = async (formData: FormData) => {
     });
 
     if (error) {
-        throw new Error('Invalid email');
+        if (error.status === 429) {
+            return {message: 'Too many requests. Please try again later'};
+        }
+        return {message: 'Error sending password reset link'};
     }
     
     return 'Password reset link successfully sent'
@@ -122,11 +132,11 @@ export const resetPassword = async (formData: FormData) => {
     const confirmPassword = formData.get('confirmPassword') as string;
 
     if (!password || !confirmPassword) {
-        throw new Error('Password and confirm password are required');
+        return {message: 'Password and confirm password are required'};
     }
 
     if (password !== confirmPassword) {
-        throw new Error('Passwords do not match');
+        return {message: 'Passwords do not match'};
     }
 
     const { error } = await supabase.auth.updateUser({
@@ -135,9 +145,10 @@ export const resetPassword = async (formData: FormData) => {
 
     if (error) {
         if (error.status === 422) {
-            throw new Error('New password cannot be existing password');
+            return {message: 'New password cannot be existing password'};
         }
-        throw new Error('Password update failed. Please try again later');
+
+        return {message: 'Password update failed. Please try again later'};
     }
 
     return 'Password updated';

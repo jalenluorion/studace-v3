@@ -16,13 +16,13 @@ export function ForgotPassword() {
 
     function runButton(formData: FormData) {
         forgotPassword(formData)
-            .catch((error) => {
-                setError(error.message);
-            })
-            .then((message) => {
-                if (message) {
+            .then((res) => {
+                if (typeof res === 'object' && 'message' in res) {
+                    setError(res.message);
+                    setSuccess(null);
+                } else if (res) {
                     setError(null);
-                    setSuccess(message);
+                    setSuccess(res);
                 }
             });
     }
@@ -81,13 +81,12 @@ export function ResetPassword() {
 
     function runButton(formData: FormData) {
         resetPassword(formData)
-            .catch((error) => {
-                setError(error.message);
-            })
-            .then((message) => {
-                if (message) {
+            .then((res) => {
+                if (typeof res === 'object' && 'message' in res) {
+                    setError(res.message);
+                } else if (res) {
                     setError(null);
-                    setSuccess(message);
+                    setSuccess(res);
                 }
             });
     }
