@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -5,13 +8,19 @@ import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/auth/submit-button';
 import { registerAccount } from '@/lib/supabase/auth';
 
-type Errors = { usernameError: string } | { passwordError: string } | { dateError: string };
+export function WelcomeForm() {
+    const [error, setError] = useState<string | null>(null);
 
-export function WelcomeForm({
-    searchParams,
-}: {
-    searchParams: { code: string; redirectTo: string } | Errors;
-}) {
+    function runButton(formData: FormData) {
+        registerAccount(formData)
+            .catch((error) => {
+                if (error.message !== 'NEXT_REDIRECT') {
+                    setError(error.message);
+                }
+            }
+        );
+    }
+
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
@@ -24,19 +33,15 @@ export function WelcomeForm({
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="username"
-                                className={'usernameError' in searchParams ? 'text-red-500' : ''}
                             >
-                                Username{' '}
-                                {'usernameError' in searchParams
-                                    ? '- ' + searchParams.usernameError
-                                    : ''}
+                                Username
                             </Label>
                             <Input
                                 name="username"
                                 type="text"
                                 placeholder="john_doe"
                                 required
-                                className={'usernameError' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
 
@@ -49,7 +54,7 @@ export function WelcomeForm({
                                         type="text"
                                         placeholder="John"
                                         required
-                                        className="flex-1"
+                                        className={error ? 'border-red-500 flex-1' : 'flex-1'}
                                     />
                                 </div>
                                 <div>
@@ -59,7 +64,7 @@ export function WelcomeForm({
                                         type="text"
                                         placeholder="Doe"
                                         required
-                                        className="flex-1"
+                                        className={error ? 'border-red-500 flex-1' : 'flex-1'}
                                     />
                                 </div>
                             </div>
@@ -68,19 +73,22 @@ export function WelcomeForm({
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="birthday"
-                                className={'dateError' in searchParams ? 'text-red-500' : ''}
                             >
-                                Birthday{' '}
-                                {'dateError' in searchParams ? '- ' + searchParams.dateError : ''}
+                                Birthday
                             </Label>
                             <Input
                                 name="birthday"
                                 type="date"
                                 required
-                                className={'dateError' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={registerAccount} pendingText="Registering...">
+                        {error && (
+                            <Label className="text-red-500 text-center">
+                                {error}
+                            </Label>
+                        )}
+                        <SubmitButton formAction={runButton} pendingText="Registering...">
                             Register
                         </SubmitButton>
                     </div>

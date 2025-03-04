@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,13 +10,27 @@ import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/auth/submit-button';
 import { forgotPassword, resetPassword } from '@/lib/supabase/auth';
 
-type Message = { success: string } | { error: string } | { message: string };
+export function ForgotPassword() {
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
-export function ForgotPassword({ searchParams }: { searchParams: Message }) {
+    function runButton(formData: FormData) {
+        forgotPassword(formData)
+            .catch((error) => {
+                setError(error.message);
+            })
+            .then((message) => {
+                if (message) {
+                    setError(null);
+                    setSuccess(message);
+                }
+            });
+    }
+
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
-                <CardTitle className="text-2xl">Reset Password</CardTitle>
+                <CardTitle className="text-2xl">Forgot Password</CardTitle>
             </CardHeader>
             <CardContent>
                 <form>
@@ -21,31 +38,33 @@ export function ForgotPassword({ searchParams }: { searchParams: Message }) {
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="email"
-                                className={
-                                    'error' in searchParams
-                                        ? 'text-red-500'
-                                        : 'success' in searchParams
-                                          ? 'text-green-500'
-                                          : ''
-                                }
                             >
-                                Email {'error' in searchParams ? '- ' + searchParams.error : ''}
-                                {'success' in searchParams ? '- ' + searchParams.success : ''}
+                                Email
                             </Label>
                             <Input
                                 name="email"
-                                type="text"
+                                type="email"
                                 placeholder="you@example.com"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={forgotPassword} pendingText="Sending...">
-                            Reset Password
+                        {error && (
+                            <Label className="text-red-500 text-center">
+                                {error}
+                            </Label>
+                        )}
+                        {success && (
+                            <Label className="text-green-500 text-center">
+                                {success}
+                            </Label>
+                        )}
+                        <SubmitButton formAction={runButton} pendingText="Sending...">
+                            Send Reset Link
                         </SubmitButton>
                     </div>
                     <div className="mt-4 text-center text-sm">
-                        Already have an account?{' '}
+                        Remembered your password?{' '}
                         <Link href="/login" className="underline">
                             Login
                         </Link>
@@ -56,7 +75,23 @@ export function ForgotPassword({ searchParams }: { searchParams: Message }) {
     );
 }
 
-export function ResetPassword({ searchParams }: { searchParams: Message }) {
+export function ResetPassword() {
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
+    function runButton(formData: FormData) {
+        resetPassword(formData)
+            .catch((error) => {
+                setError(error.message);
+            })
+            .then((message) => {
+                if (message) {
+                    setError(null);
+                    setSuccess(message);
+                }
+            });
+    }
+
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
@@ -69,17 +104,8 @@ export function ResetPassword({ searchParams }: { searchParams: Message }) {
                             <div className="flex items-center">
                                 <Label
                                     htmlFor="password"
-                                    className={
-                                        'error' in searchParams
-                                            ? 'text-red-500'
-                                            : 'success' in searchParams
-                                              ? 'text-green-500'
-                                              : ''
-                                    }
                                 >
-                                    New Password{' '}
-                                    {'error' in searchParams ? '- ' + searchParams.error : ''}
-                                    {'success' in searchParams ? '- ' + searchParams.success : ''}
+                                    New Password
                                 </Label>
                             </div>
                             <Input
@@ -87,24 +113,15 @@ export function ResetPassword({ searchParams }: { searchParams: Message }) {
                                 placeholder="••••••••"
                                 type="password"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
                         <div className="grid gap-2">
                             <div className="flex items-center">
                                 <Label
-                                    htmlFor="password"
-                                    className={
-                                        'error' in searchParams
-                                            ? 'text-red-500'
-                                            : 'success' in searchParams
-                                              ? 'text-green-500'
-                                              : ''
-                                    }
+                                    htmlFor="confirmPassword"
                                 >
-                                    Confirm Password{' '}
-                                    {'error' in searchParams ? '- ' + searchParams.error : ''}
-                                    {'success' in searchParams ? '- ' + searchParams.success : ''}
+                                    Confirm Password
                                 </Label>
                             </div>
                             <Input
@@ -112,10 +129,20 @@ export function ResetPassword({ searchParams }: { searchParams: Message }) {
                                 placeholder="••••••••"
                                 type="password"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={resetPassword} pendingText="Signing In...">
+                        {error && (
+                            <Label className="text-red-500 text-center">
+                                {error}
+                            </Label>
+                        )}
+                        {success && (
+                            <Label className="text-green-500 text-center">
+                                {success}
+                            </Label>
+                        )}
+                        <SubmitButton formAction={runButton} pendingText="Resetting...">
                             Reset Password
                         </SubmitButton>
                     </div>

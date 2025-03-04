@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,9 +11,19 @@ import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/auth/submit-button';
 import { signIn } from '@/lib/supabase/auth';
 
-type Message = { success: string } | { error: string } | { message: string };
+export function LoginForm() {
+    const [error, setError] = useState<string | null>(null);
 
-export function LoginForm({ searchParams }: { searchParams: Message }) {
+    function runButton(formData: FormData) {
+        signIn(formData)
+            .catch((error) => {
+                if (error.message !== 'NEXT_REDIRECT') {
+                    setError(error.message);
+                }
+            }
+        );
+    }
+    
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
@@ -23,27 +36,23 @@ export function LoginForm({ searchParams }: { searchParams: Message }) {
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="email"
-                                className={'error' in searchParams ? 'text-red-500' : ''}
                             >
-                                Email or Username{' '}
-                                {'error' in searchParams ? '- ' + searchParams.error : ''}
+                                Email or Username
                             </Label>
                             <Input
                                 name="email"
-                                type="text"
+                                type="email"
                                 placeholder="you@example.com"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
                         <div className="grid gap-2">
                             <div className="flex items-center">
                                 <Label
                                     htmlFor="password"
-                                    className={'error' in searchParams ? 'text-red-500' : ''}
                                 >
-                                    Password{' '}
-                                    {'error' in searchParams ? '- ' + searchParams.error : ''}
+                                    Password
                                 </Label>
                                 <Link
                                     href="/forgot-password"
@@ -57,10 +66,15 @@ export function LoginForm({ searchParams }: { searchParams: Message }) {
                                 placeholder="••••••••"
                                 type="password"
                                 required
-                                className={'error' in searchParams ? 'border-red-500' : ''}
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={signIn} pendingText="Signing In...">
+                        {error && (
+                            <Label className="text-red-500 text-center">
+                                {error}
+                            </Label>
+                        )}
+                        <SubmitButton formAction={runButton} pendingText="Signing In...">
                             Login
                         </SubmitButton>
                         <div className="relative">

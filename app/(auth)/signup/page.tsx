@@ -2,11 +2,7 @@ import { RegisterForm } from '@/components/auth/signup-form';
 import { getAuthUser } from '@/lib/supabase/user';
 import { redirect } from 'next/navigation';
 
-type Message = { success: string } | { error: string } | { message: string };
-
-export default async function Login(props: { searchParams: Promise<Message> }) {
-    const searchParams = await props.searchParams;
-
+export default async function Login() {
     const user = await getAuthUser(null)
         .catch(() => {
             return null;
@@ -18,9 +14,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
 
     return (
         <div className="flex h-screen w-full items-center justify-center px-4">
-            <RegisterForm 
-                searchParams={searchParams}
-            />
+            <RegisterForm />
         </div>
     );
 }

@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,9 +11,23 @@ import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/auth/submit-button';
 import { signUp } from '@/lib/supabase/auth';
 
-type Message = { success: string } | { error: string } | { message: string };
+export function RegisterForm() {
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
-export function RegisterForm({ searchParams }: { searchParams: Message }) {
+    function runButton(formData: FormData) {
+        signUp(formData)
+            .catch((error) => {
+                setError(error.message);
+            })
+            .then((message) => {
+                if (message) {
+                    setError(null);
+                    setSuccess(message);
+                }
+            });
+    }
+
     return (
         <Card className="mx-auto w-full sm:w-96">
             <CardHeader>
@@ -23,94 +40,57 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="email"
-                                className={
-                                    'error' in searchParams
-                                        ? 'text-red-500'
-                                        : 'success' in searchParams
-                                          ? 'text-green-500'
-                                          : ''
-                                }
                             >
-                                Email {'error' in searchParams ? '- ' + searchParams.error : ''}
-                                {'success' in searchParams ? '- ' + searchParams.success : ''}
+                                Email
                             </Label>
                             <Input
                                 name="email"
-                                type="text"
+                                type="email"
                                 placeholder="you@example.com"
                                 required
-                                className={
-                                    'error' in searchParams
-                                        ? 'border-red-500'
-                                        : 'success' in searchParams
-                                          ? 'border-green-500'
-                                          : ''
-                                }
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
                         <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label
-                                    htmlFor="password"
-                                    className={
-                                        'error' in searchParams
-                                            ? 'text-red-500'
-                                            : 'success' in searchParams
-                                              ? 'text-green-500'
-                                              : ''
-                                    }
-                                >
-                                    Password
-                                </Label>
-                            </div>
+                            <Label
+                                htmlFor="password"
+                            >
+                                Password
+                            </Label>
                             <Input
                                 name="password"
                                 placeholder="••••••••"
                                 type="password"
                                 required
-                                className={
-                                    'error' in searchParams
-                                        ? 'border-red-500'
-                                        : 'success' in searchParams
-                                          ? 'border-green-500'
-                                          : ''
-                                }
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
                         <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label
-                                    htmlFor="confirmPassword"
-                                    className={
-                                        'error' in searchParams
-                                            ? 'text-red-500'
-                                            : 'success' in searchParams
-                                              ? 'text-green-500'
-                                              : ''
-                                    }
-                                >
-                                    Confirm Password{' '}
-                                    {'passwordError' in searchParams
-                                        ? '- ' + searchParams.passwordError
-                                        : ''}
-                                </Label>
-                            </div>
+                            <Label
+                                htmlFor="confirmPassword"
+                            >
+                                Confirm Password
+                            </Label>
                             <Input
                                 name="confirmPassword"
                                 placeholder="••••••••"
                                 type="password"
                                 required
-                                className={
-                                    'error' in searchParams
-                                        ? 'border-red-500'
-                                        : 'success' in searchParams
-                                          ? 'border-green-500'
-                                          : ''
-                                }
+                                className={error ? 'border-red-500' : ''}
                             />
                         </div>
-                        <SubmitButton formAction={signUp} pendingText="Registering...">
-                            Register
+                        {success && (
+                            <Label className="text-green-500 text-center">
+                                {success}
+                            </Label>
+                        )}
+                        {error && (
+                            <Label className="text-red-500 text-center">
+                                {error}
+                            </Label>
+                        )}
+                        <SubmitButton formAction={runButton} pendingText="Signing Up...">
+                            Sign Up
                         </SubmitButton>
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
@@ -123,7 +103,7 @@ export function RegisterForm({ searchParams }: { searchParams: Message }) {
                             </div>
                         </div>
                         <Button variant="outline" className="w-full">
-                            Register with Google
+                            Sign Up with Google
                         </Button>
                     </div>
                     <div className="mt-4 text-center text-sm">

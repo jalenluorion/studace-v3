@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getEmail, registerProfile } from "@/lib/supabase/user";
-import { encodedRedirect, encodedRedirectMultipleTypes } from "@/lib/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -24,7 +23,7 @@ export const signIn = async (formData: FormData) => {
     });
 
     if (error) {
-        return encodedRedirect('error', '/login', 'Invalid Credentials');
+        throw new Error('Invalid Credentials');
     }
 
     return redirect('/home');
@@ -38,11 +37,11 @@ export const signUp = async (formData: FormData) => {
     const origin = (await headers()).get("origin");
 
     if (!email || !password) {
-        return encodedRedirect("error", "/signup", "Email and password are required");
+        throw new Error("Email and password are required");
     }
 
     if (password !== confirmPassword) {
-        return encodedRedirect("error", "/signup", "Passwords do not match");
+        throw new Error("Passwords do not match");
     }
 
     const { error } = await supabase.auth.signUp({
@@ -54,17 +53,9 @@ export const signUp = async (formData: FormData) => {
     });
 
     if (error) {
-        if (error.code === "validation_failed") {
-            return encodedRedirect("error", "/signup", "Invalid email");
-        }
-
-       return encodedRedirect("error", "/signup", "Error trying to sign up");
+        throw new Error("Error trying to sign up");
     } else {
-        return encodedRedirect(
-            "success",
-            "/signup",
-            "Verification link successfully sent",
-          );
+        return 'Verification link successfully sent';
     }
 };
 
@@ -76,11 +67,10 @@ export const registerAccount = async (formData: FormData) => {
     const lastName = formData.get('lastName')!.toString();
     const birthday = formData.get('birthday')!.toString();
 
-    const errorMessages = [];
     // check if username is unique
     const { data } = await supabase.from('profile').select('username').eq('username', username);
     if (data && data.length > 0) {
-        errorMessages.push({ type: 'usernameError', message: 'Username already exists' });
+        throw new Error('Username already exists');
     }
 
     // check if birthday is valid and user is at least 13 years old
@@ -92,16 +82,12 @@ export const registerAccount = async (formData: FormData) => {
         age--;
     }
     if (age < 13) {
-        errorMessages.push({ type: 'dateError', message: 'You must be at least 13 years old' });
-    }
-
-    if (errorMessages.length > 0) {
-        return encodedRedirectMultipleTypes('/welcome', errorMessages);
+        throw new Error('You must be at least 13 years old');
     }
 
     const newSpace = await registerProfile(firstName, lastName, username, birthday)
-        .catch((error) => {
-            return encodedRedirect('error', '/welcome', error.message);
+        .catch(() => {
+            throw new Error('Error creating profile. Please try again later');
         }
     );
 
@@ -112,10 +98,9 @@ export const forgotPassword = async (formData: FormData) => {
     const email = formData.get('email')?.toString();
     const supabase = await createClient();
     const origin = (await headers()).get('origin');
-    const callbackUrl = formData.get('callbackUrl')?.toString();
 
     if (!email) {
-        return encodedRedirect('error', '/forgot-password', 'Email is required');
+        throw new Error('Email is required');
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -123,20 +108,13 @@ export const forgotPassword = async (formData: FormData) => {
     });
 
     if (error) {
-        return encodedRedirect('error', '/forgot-password', 'Invalid email');
+        throw new Error('Invalid email');
     }
-
-    if (callbackUrl) {
-        return redirect(callbackUrl);
-    }
-
-    return encodedRedirect(
-        'success',
-        '/forgot-password',
-        'Password reset link successfully sent',
-    );
+    
+    return 'Password reset link successfully sent'
 };
 
+// TODO: Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.
 export const resetPassword = async (formData: FormData) => {
     const supabase = await createClient();
 
@@ -144,15 +122,11 @@ export const resetPassword = async (formData: FormData) => {
     const confirmPassword = formData.get('confirmPassword') as string;
 
     if (!password || !confirmPassword) {
-        encodedRedirect(
-            'error',
-            '/reset-password',
-            'Password and confirm password are required',
-        );
+        throw new Error('Password and confirm password are required');
     }
 
     if (password !== confirmPassword) {
-        encodedRedirect('error', '/reset-password', 'Passwords do not match');
+        throw new Error('Passwords do not match');
     }
 
     const { error } = await supabase.auth.updateUser({
@@ -160,8 +134,11 @@ export const resetPassword = async (formData: FormData) => {
     });
 
     if (error) {
-        encodedRedirect('error', '/reset-password', 'Password update failed');
+        if (error.status === 422) {
+            throw new Error('New password cannot be existing password');
+        }
+        throw new Error('Password update failed. Please try again later');
     }
 
-    encodedRedirect('success', '/reset-password', 'Password updated');
+    return 'Password updated';
 };
