@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 
 import { SubmitButton } from '@/components/auth/submit-button';
 import { signUp } from '@/lib/supabase/auth';
-import { set } from 'date-fns';
 
 export function RegisterForm() {
     const [error, setError] = useState<string | null>(null);

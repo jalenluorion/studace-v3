@@ -40,7 +40,7 @@ export function LoginForm() {
                                 Email or Username
                             </Label>
                             <Input
-                                name="email or username"
+                                name="email"
                                 type="text"
                                 placeholder="you@example.com or john_doe"
                                 required

@@ -147,7 +147,7 @@ export const resetPassword = async (formData: FormData) => {
         if (error.status === 422) {
             return {message: 'New password cannot be existing password'};
         }
-
+        
         return {message: 'Password update failed. Please try again later'};
     }
 
