@@ -7,16 +7,21 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import { CarouselCard, CarouselAddCard } from './control/userCard';
 import { SocialUser } from './control/social';
+import { TransitionStatus } from 'react-transition-state';
 
 export default function SpaceSocial({
     activeUsers,
-    hidden,
+    status
 }: {
     activeUsers: SocialUser & { presence_ref: string }[];
-    hidden: boolean;
+    status: TransitionStatus;
 }) {
     return (
-        <CSSTransition in={!hidden} timeout={250} classNames="left" unmountOnExit>
+        <div className={`transition duration-500${
+            status === "preEnter" || status === "exiting"
+              ? " transform scale-75 opacity-0"
+              : ""
+          }`}>
             <div className="flex h-[38rem] w-full items-center @container modsm:w-48 modmd:h-full modmd:w-48 modlg:h-full modlg:w-48">
                 <Carousel
                     opts={{
@@ -36,6 +41,6 @@ export default function SpaceSocial({
                     <CarouselNext />
                 </Carousel>
             </div>
-        </CSSTransition>
+        </div>
     );
 }

@@ -6,18 +6,23 @@ import {
 } from '@/components/ui/carousel';
 import { CSSTransition } from 'react-transition-group';
 import { CarouselModule } from './control/modules';
+import { TransitionStatus } from 'react-transition-state';
 
 export default function SpaceModules({
     modules,
     data,
-    hidden,
+    status,
 }: {
     modules: string[];
     data: unknown[];
-    hidden: boolean;
+    status: TransitionStatus
 }) {
     return (
-        <CSSTransition in={!hidden} timeout={250} classNames="right" unmountOnExit>
+        <div className={`transition duration-500${
+            status === "preEnter" || status === "exiting"
+              ? " transform scale-75 opacity-0"
+              : ""
+          }`}>
             <div className="modsm:w-72 modmd:h-full modmd:w-72 modlg:h-full modlg:w-72 flex h-[38rem] w-full items-center @container">
                 <Carousel
                     opts={{
@@ -36,6 +41,6 @@ export default function SpaceModules({
                     <CarouselNext />
                 </Carousel>
             </div>
-        </CSSTransition>
+        </div>
     );
 }
