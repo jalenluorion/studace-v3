@@ -7,6 +7,7 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import { CarouselCard, CarouselAddCard } from './control/userCard';
 import { SocialUser } from './control/social';
+import { useRef } from 'react';
 
 export default function SpaceSocial({
     activeUsers,
@@ -15,9 +16,10 @@ export default function SpaceSocial({
     activeUsers: SocialUser & { presence_ref: string }[];
     hidden: boolean;
 }) {
+    const nodeRef = useRef(null);
     return (
-        <CSSTransition in={!hidden} timeout={250} classNames="left" unmountOnExit>
-            <div className="flex h-[38rem] w-full items-center @container modsm:w-48 modmd:h-full modmd:w-48 modlg:h-full modlg:w-48">
+        <CSSTransition nodeRef={nodeRef} in={!hidden} timeout={250} classNames="left" unmountOnExit>
+            <div ref={nodeRef} className="flex h-[38rem] w-full items-center @container modsm:w-48 modmd:h-full modmd:w-48 modlg:h-full modlg:w-48">
                 <Carousel
                     opts={{
                         align: 'start',
