@@ -17,9 +17,9 @@ export default function SpaceSocial({
     status: TransitionStatus;
 }) {
     return (
-        <div className={`transition duration-500${
+        <div className={`transition duration-250${
             status === "preEnter" || status === "exiting"
-              ? " transform scale-75 opacity-0"
+              ? " transform -translate-x-[105%]"
               : ""
           }`}>
             <div className="flex h-[38rem] w-full items-center @container modsm:w-48 modmd:h-full modmd:w-48 modlg:h-full modlg:w-48">

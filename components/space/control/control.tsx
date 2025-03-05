@@ -111,7 +111,7 @@ export default function Control({
                     </Button>
                 </div>
                 <div
-                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in *:m-1 [&_svg]:size-6 ${visible ? 'opacity-100 modmd:max-h-12 modlg:max-h-12': 'max-h-0 opacity-0'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
+                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] *:m-1 [&_svg]:size-6 ${visible ? 'opacity-100 modmd:max-h-12 modlg:max-h-12': 'max-h-0 opacity-0'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">

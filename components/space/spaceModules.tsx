@@ -18,9 +18,9 @@ export default function SpaceModules({
     status: TransitionStatus
 }) {
     return (
-        <div className={`transition duration-500${
+        <div className={`transition duration-250${
             status === "preEnter" || status === "exiting"
-              ? " transform scale-75 opacity-0"
+              ? " transform translate-x-[105%]"
               : ""
           }`}>
             <div className="modsm:w-72 modmd:h-full modmd:w-72 modlg:h-full modlg:w-72 flex h-[38rem] w-full items-center @container">
