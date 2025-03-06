@@ -1,13 +1,20 @@
+'use client'
+
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { mediaOptions, background } from '@/config/media';
+import CategoryPicker from '@/components/ui/categories';
+
 export default function BackgroundPicker({
+    categories,
     background,
     setBackground,
 }: {
+    categories: { value: string; label: string }[];
     background: string;
     setBackground: (background: string) => void;
 }) {
-    // TODO: scrollbar overflow
+    const [category, setCategory] = useState('trending');
 
     return (
         <Card>
@@ -15,7 +22,8 @@ export default function BackgroundPicker({
                 <CardTitle>Backgrounds</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="inline-grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-max">
+                <CategoryPicker categories={categories} category={category} setCategory={setCategory} className="w-[22.3rem] modmd:w-[34rem] modlg:w-[45.5rem] mb-4"/>
+                <div className="inline-grid grid-cols-2 modmd:grid-cols-3 modlg:grid-cols-4 gap-4 w-max max-h-[80vh] overflow-y-auto">
                     {mediaOptions.backgrounds.map((bg: background) => (
                         <div key={bg.value} className="">
                             <button

@@ -65,18 +65,18 @@ export function AppSidebar({
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton asChild isActive={pathname === '/trending'}>
-                                    <a href="/trending">
-                                        <Flame />
-                                        <span>Trending</span>
-                                    </a>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                            <SidebarMenuItem>
                                 <SidebarMenuButton asChild isActive={pathname === '/home'}>
                                     <a href="/home">
                                         <LayoutGrid />
                                         <span>My Spaces</span>
+                                    </a>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild isActive={pathname === '/discover'}>
+                                    <a href="/discover">
+                                        <Flame />
+                                        <span>Discover</span>
                                     </a>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>

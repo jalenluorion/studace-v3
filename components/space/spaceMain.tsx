@@ -9,16 +9,20 @@ import Interface from './spaceInterface';
 import Image from 'next/image';
 import Social, { SocialUser } from './control/social';
 
+import { globalSettings } from '@/lib/supabase/globals';
+
 export default function Space({
     spaceUser,
     spaceSettings,
     spaceStates,
     spaceData,
+    spaceGlobals,
 }: {
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
     spaceData: Promise<unknown[]>;
+    spaceGlobals: globalSettings;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);
     const [audio, setAudio] = useState({id: '', on: false, ready: false});
@@ -33,6 +37,7 @@ export default function Space({
                 <Interface
                     spaceUser={spaceUser}
                     spaceSettings={spaceSettings}
+                    spaceGlobals={spaceGlobals}
                     activeUsers={activeUsers}
                     spaceStates={spaceStates}
                     spaceData={spaceData}

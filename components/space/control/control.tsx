@@ -44,6 +44,8 @@ import { LoginForm } from '@/components/auth/login-form';
 import BackgroundPicker from './backgroundPicker';
 import AudioPicker from './audioPicker';
 
+import { globalSettings } from '@/lib/supabase/globals';
+
 export default function Control({
     user,
     name,
@@ -57,6 +59,7 @@ export default function Control({
     setHidden,
     background,
     setBackground,
+    globalSettings,
 }: {
     user: Tables<'profile'> | null;
     name: string;
@@ -70,6 +73,7 @@ export default function Control({
     setHidden: (hidden: boolean) => void;
     background: string;
     setBackground: (background: string) => void;
+    globalSettings: globalSettings;
 }) {
     const [spacePopup, setSpacePopup] = useState(false);
     const [musicPopup, setMusicPopup] = useState(false);
@@ -111,7 +115,7 @@ export default function Control({
                     </Button>
                 </div>
                 <div
-                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in *:m-1 [&_svg]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
+                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in *:m-1 [&_svg:not([class*='size-'])]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">
@@ -129,8 +133,8 @@ export default function Control({
                                 size="icon"
                                 className={
                                     spacePopup
-                                        ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
-                                        : ''
+                                        ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
+                                        : 'hover:bg-accent'
                                 }
                             >
                                 <LayoutGrid className="" />
@@ -154,8 +158,8 @@ export default function Control({
                                 size="icon"
                                 className={
                                     musicPopup
-                                        ? 'bg-accent text-accent-foreground hover:text-accent-foreground'
-                                        : ''
+                                        ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
+                                        : 'hover:bg-accent '
                                 }
                             >
                                 <ListMusic className="" />
@@ -176,7 +180,7 @@ export default function Control({
                             </Button>
                         </DialogTrigger>
                         <DialogContentChild>
-                            <BackgroundPicker background={background} setBackground={setBackground} />
+                            <BackgroundPicker categories={globalSettings.categories} background={background} setBackground={setBackground} />
                         </DialogContentChild>
                     </Dialog>
                     <Separator orientation="vertical" className="h-6" />

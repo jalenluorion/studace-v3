@@ -1,32 +1,31 @@
 import { Suspense } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { getAuthUser, getSpaces } from '@/lib/supabase/user';
 import { Skeleton } from "@/components/ui/skeleton";
-import SpaceList from "@/components/dashboard/spaces";
+import { getGlobalSettings } from "@/lib/supabase/globals";
+
+import DiscoverList from "@/components/dashboard/discover";
 
 export default async function Home() {
     return (
         <div className="flex-1 overflow-auto flex flex-col">
             <header className="flex items-center gap-2 border-b p-4">
                 <SidebarTrigger />
-                <h1 className="text-2xl font-bold">My Spaces</h1>
+                <h1 className="text-2xl font-bold">Discover Spaces</h1>
             </header>
             <div className="p-6 flex-1">
               <Suspense fallback={<SpaceLoader />}>
-                < HomeMain />
+                < DiscoverMain />
               </Suspense>
             </div>
         </div>
     );
 }
 
-export async function HomeMain() {
-    const user = await getAuthUser();
+export async function DiscoverMain() {            
+    const globalSettings = await getGlobalSettings();
     
-    const spaces = await getSpaces(user.id);
-
     return( 
-      <SpaceList spaces={spaces} /> 
+      <DiscoverList categories={globalSettings.categories} /> 
     );
 }
 

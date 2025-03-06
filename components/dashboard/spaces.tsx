@@ -1,14 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getAuthUser, getSpaces } from '@/lib/supabase/user';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Tables } from '@/database.types';
 
-export default async function SpaceList() {
-    const user = await getAuthUser();
-    
-    const spaces = await getSpaces(user.id);
-
+export default async function SpaceList({ spaces }: { spaces: Tables<'space'>[] }) {
     return (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {spaces.map((space) => (
@@ -30,16 +25,6 @@ export default async function SpaceList() {
                         </Card>
                     </Link>
                 </button>
-            ))}
-        </div>
-    );
-}
-
-export async function SpaceLoader() {
-    return (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {Array.from({ length: 12 }).map((_, i) => (
-                <Skeleton key={i} className="w-full aspect-video" />
             ))}
         </div>
     );

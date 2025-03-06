@@ -6,11 +6,13 @@ import SpaceModules from './spaceModules';
 import SpaceSocial from './spaceSocial';
 import { Tables } from '@/database.types';
 import { SocialUser } from './control/social';
+import { globalSettings } from '@/lib/supabase/globals';
 
 export default function Interface({
     spaceUser,
     spaceSettings,
     spaceStates,
+    spaceGlobals,
     activeUsers,
     spaceData,
     audio,
@@ -21,6 +23,7 @@ export default function Interface({
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
+    spaceGlobals: globalSettings;
     activeUsers: SocialUser & { presence_ref: string }[];
     spaceData: Promise<unknown[]>;
     audio: { id: string; on: boolean, ready: boolean };
@@ -63,6 +66,7 @@ export default function Interface({
                     setHidden={setHidden}
                     background={background}
                     setBackground={setBackground}
+                    globalSettings={spaceGlobals}
                 />
             </div>
         </div>
