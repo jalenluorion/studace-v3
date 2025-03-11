@@ -58,10 +58,16 @@ export async function getSpace(spaceId: string) {
     return data;
 }
 
-export async function getSpacesByUser(userId: string) {
-    const supabase =await createClient();
+export async function getSpacesByUser(userId: string, limit?: number) {
+    const supabase = await createClient();
 
-    const { data, error } = await supabase.from('space').select().eq('owner_id', userId);
+    let query = supabase.from('space').select().eq('owner_id', userId);
+
+    if (limit) {
+        query = query.order('last_opened', { ascending: false }).limit(limit);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         throw error;

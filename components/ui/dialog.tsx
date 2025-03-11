@@ -88,7 +88,6 @@ function DialogContentChild({
           )}
           {...props}
         >
-        <DialogPrimitive.Title className="sr-only" />
           {children}
         </DialogPrimitive.Content>
       </DialogPortal>

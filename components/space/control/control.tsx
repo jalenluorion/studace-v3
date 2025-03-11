@@ -5,7 +5,13 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverContentChild } from '@/components/ui/popover';
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverAnchor,
+    PopoverContentChild,
+} from '@/components/ui/popover';
 import {
     Dialog,
     DialogContent,
@@ -63,8 +69,8 @@ export default function Control({
 }: {
     user: Tables<'profile'> | null;
     name: string;
-    volumeOn: { id: string; on: boolean, ready: boolean };
-    setVolumeOn: (volumeOn: { id: string; on: boolean, ready: boolean }) => void;
+    volumeOn: { id: string; on: boolean; ready: boolean };
+    setVolumeOn: (volumeOn: { id: string; on: boolean; ready: boolean }) => void;
     micOn: boolean;
     setMicOn: (micOn: boolean) => void;
     cameraOn: boolean;
@@ -92,9 +98,9 @@ export default function Control({
     const controlRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div className="">
+        <div>
             <Card
-                className="flex flex-col items-center rounded-b-none modmd:rounded-b-lg modlg:rounded-b-lg"
+                className="modmd:rounded-b-lg modlg:rounded-b-lg flex flex-col items-center rounded-b-none"
                 ref={controlRef}
             >
                 <div className={`flex items-center *:mt-2 ${hidden ? 'mb-2' : ''}`}>
@@ -115,36 +121,72 @@ export default function Control({
                     </Button>
                 </div>
                 <div
-                    className={`duration-250 flex items-center overflow-hidden transition-[max-height,opacity] ease-in *:m-1 [&_svg:not([class*='size-'])]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'opacity-100 modmd:max-h-12 modlg:max-h-12'} flex-wrap modmd:flex-nowrap modlg:flex-nowrap`}
+                    className={`flex items-center overflow-hidden transition-[max-height,opacity] duration-250 ease-in *:m-1 [&_svg:not([class*='size-'])]:size-6 ${hidden ? 'max-h-0 opacity-0' : 'modmd:max-h-12 modlg:max-h-12 opacity-100'} modmd:flex-nowrap modlg:flex-nowrap flex-wrap`}
                 >
                     <Link href="/home">
                         <Button variant="ghost" size="icon">
-                            <House className="" />
+                            <House />
                         </Button>
                     </Link>
-                    <Popover open={spacePopup}>
-                        <PopoverTrigger asChild>
+                    {user ? (
+                        <Popover open={spacePopup}>
+                            <PopoverTrigger asChild>
+                                <Toggle
+                                    pressed={spacePopup}
+                                    onPressedChange={() => {
+                                        setSpacePopup(!spacePopup);
+                                        setMusicPopup(false);
+                                    }}
+                                    size="icon"
+                                    className={
+                                        spacePopup
+                                            ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
+                                            : 'hover:bg-accent'
+                                    }
+                                >
+                                    <LayoutGrid />
+                                </Toggle>
+                            </PopoverTrigger>
+                            {controlRef.current && (
+                                <PopoverAnchor
+                                    virtualRef={controlRef as React.RefObject<HTMLDivElement>}
+                                ></PopoverAnchor>
+                            )}
+                            <PopoverContentChild>pick a new space</PopoverContentChild>
+                        </Popover>
+                    ) : (
+                        <Dialog>
+                            <DialogTrigger asChild>
                             <Toggle
-                                pressed={spacePopup}
-                                onPressedChange={() => {
-                                    setSpacePopup(!spacePopup);
-                                    setMusicPopup(false);
-                                }}
-                                size="icon"
-                                className={
-                                    spacePopup
-                                        ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
-                                        : 'hover:bg-accent'
-                                }
-                            >
-                                <LayoutGrid className="" />
-                            </Toggle>
-                        </PopoverTrigger>
-                        {controlRef.current && <PopoverAnchor virtualRef={controlRef as React.RefObject<HTMLDivElement>}></PopoverAnchor>}
-                        <PopoverContent>pick a new space</PopoverContent>
-                    </Popover>
+                                    pressed={spacePopup}
+                                    onPressedChange={() => {
+                                        setSpacePopup(!spacePopup);
+                                        setMusicPopup(false);
+                                    }}
+                                    size="icon"
+                                    className={
+                                        spacePopup
+                                            ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
+                                            : 'hover:bg-accent'
+                                    }
+                                >
+                                    <LayoutGrid />
+                                </Toggle>
+                            </DialogTrigger>
+                            <DialogContentChild>
+                                <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
+                                <LoginForm />
+                            </DialogContentChild>
+                        </Dialog>
+                    )}
                     <Separator orientation="vertical" className="h-6" />
-                    <Button variant="ghost" size="icon" onClick={() => setVolumeOn({id: volumeOn.id, on: !volumeOn.on, ready: false})}>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                            setVolumeOn({ id: volumeOn.id, on: !volumeOn.on, ready: false })
+                        }
+                    >
                         {volumeOn.on ? <Volume2 /> : <VolumeX className="text-destructive" />}
                     </Button>
                     <Popover open={musicPopup}>
@@ -159,18 +201,19 @@ export default function Control({
                                 className={
                                     musicPopup
                                         ? 'hover:bg-accent bg-accent text-accent-foreground hover:text-accent-foreground'
-                                        : 'hover:bg-accent '
+                                        : 'hover:bg-accent'
                                 }
                             >
-                                <ListMusic className="" />
+                                <ListMusic />
                             </Toggle>
                         </PopoverTrigger>
-                        {controlRef.current && <PopoverAnchor virtualRef={controlRef as React.RefObject<HTMLDivElement>}></PopoverAnchor>}
+                        {controlRef.current && (
+                            <PopoverAnchor
+                                virtualRef={controlRef as React.RefObject<HTMLDivElement>}
+                            ></PopoverAnchor>
+                        )}
                         <PopoverContentChild>
-                            <AudioPicker 
-                                audio={volumeOn} 
-                                setAudio={setVolumeOn} 
-                            />
+                            <AudioPicker audio={volumeOn} setAudio={setVolumeOn} />
                         </PopoverContentChild>
                     </Popover>
                     <Dialog>
@@ -180,7 +223,11 @@ export default function Control({
                             </Button>
                         </DialogTrigger>
                         <DialogContentChild>
-                            <BackgroundPicker categories={globalSettings.categories} background={background} setBackground={setBackground} />
+                            <BackgroundPicker
+                                categories={globalSettings.categories}
+                                background={background}
+                                setBackground={setBackground}
+                            />
                         </DialogContentChild>
                     </Dialog>
                     <Separator orientation="vertical" className="h-6" />
@@ -210,10 +257,15 @@ export default function Control({
                         </DialogTrigger>
                         <DialogContentChild>
                             {user ? (
-                                'hi'
+                                <>
+                                    <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
+                                    <p>hi</p>
+                                </>
                             ) : (
-                                <LoginForm
-                                ></LoginForm>
+                                <>
+                                    <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
+                                    <LoginForm />
+                                </>
                             )}
                         </DialogContentChild>
                     </Dialog>
