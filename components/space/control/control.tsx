@@ -49,6 +49,7 @@ import { Tables } from '@/database.types';
 import { LoginForm } from '@/components/auth/login-form';
 import BackgroundPicker from './backgroundPicker';
 import AudioPicker from './audioPicker';
+import SpaceSwitcher from './switcher';
 
 import { globalSettings } from '@/lib/supabase/globals';
 
@@ -152,7 +153,7 @@ export default function Control({
                                     virtualRef={controlRef as React.RefObject<HTMLDivElement>}
                                 ></PopoverAnchor>
                             )}
-                            <PopoverContentChild>pick a new space</PopoverContentChild>
+                            <PopoverContentChild><SpaceSwitcher recentSpaces={globalSettings.recentSpaces}/></PopoverContentChild>
                         </Popover>
                     ) : (
                         <Dialog>

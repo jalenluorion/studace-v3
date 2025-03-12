@@ -8,36 +8,55 @@ export default function SpaceSwitcher({
 } : {
     recentSpaces: Tables<'space'>[];
 }) {
-    const [personal, setPersonal] = useState(true);
+    type optionType = 'My Spaces' | 'Shared' | 'School';
+    const [option, setOption] = useState<optionType>('My Spaces');
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Switch Space</CardTitle>
-                <CardDescription>Switch between your personal and shared spaces</CardDescription>
             </CardHeader>
             <CardContent>
-                <ToggleGroup>
+                <ToggleGroup
+                    variant="outline"
+                    type="single"
+                    value={option}
+                    onValueChange={(value) => setOption(value as optionType)}
+                >
                     <ToggleGroupItem
-                        active={personal}
-                        onClick={() => setPersonal(true)}
+                        value='My Spaces'
+                        onClick={() => setOption('My Spaces')}
                     >
-                        Personal
+                        My Spaces
                     </ToggleGroupItem>
                     <ToggleGroupItem
-                        active={!personal}
-                        onClick={() => setPersonal(false)}
+                        value='Shared'
+                        onClick={() => setOption('Shared')}
                     >
                         Shared
                     </ToggleGroupItem>
+                    <ToggleGroupItem
+                        value='School'
+                        onClick={() => setOption('School')}
+                    >
+                        School
+                    </ToggleGroupItem>
                 </ToggleGroup>
-                <div className="grid grid-cols-2 gap-4">
-                    {personal ? (
-                        <div>Personal</div>
-                    ) : (
-                        <div>Shared</div>
-                    )}
-                </div>
+                <div className="inline-grid grid-cols-2 modmd:grid-cols-3 modlg:grid-cols-4 gap-4 w-max max-h-[50vh] overflow-y-auto">
+                                    {recentSpaces.map((space) => (
+                                        <div key={space.background} className="">
+                                            <button
+                                                className={`h-24 aspect-video rounded-lg bg-cover bg-center ${
+                                                    bg.value === background ? 'border-2 border-blue-500' : 'border-2'
+                                                }`}
+                                                style={{ backgroundImage: `url(https://i.ytimg.com/vi/${bg.value}/maxresdefault.jpg)` }}
+                                                onClick={() => setBackground(bg.value)}
+                                            >
+                                            </button>
+                                            <div className="text-center text-sm">{bg.label}</div>
+                                        </div>
+                                    ))}
+                                </div>
             </CardContent>
         </Card>
     );    
