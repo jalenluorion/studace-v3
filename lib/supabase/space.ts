@@ -1,7 +1,7 @@
 import { createClient } from './server';
 import { defaultSpace } from '@/config/default';
 import { createModules } from './modules';
-import { getProfile } from './user';
+import { getProfile, getAuthUser } from './user';
 
 interface SpaceInput {
     allowed_users?: string[];
@@ -58,8 +58,19 @@ export async function getSpace(spaceId: string) {
     return data;
 }
 
-export async function getSpacesByUser(userId: string, limit?: number) {
+export async function getSpacesByUser(limit?: number) {
     const supabase = await createClient();
+
+    const user = await getAuthUser(null)
+        .catch(() => {
+            return null;
+        });
+
+    const userId = user?.id || null;
+
+    if (userId == null) {
+        return [];
+    }
 
     let query = supabase.from('space').select().eq('owner_id', userId);
 

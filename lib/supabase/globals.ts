@@ -1,4 +1,5 @@
 import { createClient } from './server';
+import { getSpacesByUser } from './space';
 
 export async function getCategories() {
     const supabase = await createClient();
@@ -24,9 +25,11 @@ export async function getCategories() {
 
 export async function getGlobalSettings() {
     const categories = await getCategories();
+    const recentSpaces = await getSpacesByUser();
 
     return {
         categories,
+        recentSpaces,
     };
 }
 
