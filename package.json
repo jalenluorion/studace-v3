@@ -65,7 +65,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "supabase": "^1.191.3"
+    "supabase": "^2.20.5"
   },
   "overrides": {
     "@types/react": "19.0.8",
