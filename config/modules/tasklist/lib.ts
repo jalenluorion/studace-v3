@@ -1,9 +1,9 @@
 'use server'
 
-import { createClient } from '../server';
+import { createClient } from '@/lib/supabase/server';
 import { Database, Tables, Enums } from '@/database.types';
 
-export async function updateTimer(timer: Tables<'timer'>) {
+export async function updateTasks(tasklist: Tables<'tasklist'>) {
     const supabase = await createClient();
 
     const {
@@ -15,9 +15,9 @@ export async function updateTimer(timer: Tables<'timer'>) {
     }
 
     const { error } = await supabase
-        .from('timer')
-        .upsert([{ ...timer }])
-        .eq('space_id', timer.space_id);
+        .from('tasklist')
+        .upsert([{ ...tasklist }])
+        .eq('space_id', tasklist.space_id);
 
     if (error) {
         throw error;

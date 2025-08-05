@@ -1,72 +1,55 @@
 import { Tables } from '@/database.types';
 import { createClient } from './server';
-import { allModules, AllSupabaseModules } from '@/config/default';
+import { allModules } from '@/config/modules';
+import type { AllModules, ModuleType } from '@/config/modules/types';
 
-const getModuleData = (module: string, spaceId: string | null) => {
-    const moduleData = allModules.find((mod) => mod.name === module);
-    if (moduleData) {
-        return fetch(moduleData, spaceId);
-    }
-    return null;
-};
-const createModuleData = (module: string, spaceId: string) => {
-    const moduleData = allModules.find((mod) => mod.name === module);
-    if (moduleData) {
-        return create(moduleData, spaceId);
-    }
-    return null;
-};
-
-export function fetchModules(module: string[], spaceId: string | null) {
-    const modulePromises = module.map((mod) => getModuleData(mod, spaceId));
-    return Promise.all(modulePromises);
-}
-export function createModules(module: string[], spaceId: string) {
-    const modulePromises = module.map((mod) => createModuleData(mod, spaceId));
-
-    return Promise.all(modulePromises);
+export async function fetchModules(modules: AllModules[], spaceId: string | null) {
+    return Promise.all(
+        modules.map(async (mod) => {
+            const moduleObj = allModules[mod] as ModuleType;
+            const data = await fetch(moduleObj, spaceId);
+            moduleObj.data = data as Tables<AllModules>;
+            return moduleObj;
+        })
+    );
 }
 
-async function fetch(module: { name: string; default: unknown }, spaceId: string | null) {
-    if (!spaceId) {
-        return module.default;
-    }
+export async function createModules(modules: AllModules[], spaceId: string) {
+    return Promise.all(
+        modules.map(async (mod) => {
+            const moduleObj = allModules[mod] as ModuleType;
+            const data = await create(moduleObj, spaceId);
+            moduleObj.data = data as Tables<AllModules>;
+            return moduleObj;
+        })
+    );
+}
+
+async function fetch(module: ModuleType, spaceId: string | null) {
+    if (!spaceId) return module.data;
 
     const supabase = await createClient();
-    // FIXME: Unsafe typing
-    if (allModules.map((mod) => mod.name).includes(module.name)) {
-        const { data, error } = await supabase
-            .from(module.name as AllSupabaseModules)
-            .select()
-            .eq('space_id', spaceId)
-            .single();
+    const { data, error } = await supabase
+        .from(module.name as AllModules)
+        .select()
+        .eq('space_id', spaceId)
+        .single();
 
-        if (error) {
-            throw error;
-        }
-
-        return data;
-    }
-    throw new Error('Module not found');
+    if (error) throw error;
+    return data;
 }
-async function create(module: { name: string; default: unknown }, spaceId: string) {
+
+async function create(module: ModuleType, spaceId: string) {
     const supabase = await createClient();
-    // FIXME: Unsafe typing
-    if (allModules.map((mod) => mod.name).includes(module.name)) {
-        const spaceData = {
-            ...(module.default as object),
-            space_id: spaceId,
-        };
+    const spaceData = {
+        ...(module.data as object),
+        space_id: spaceId,
+    };
 
-        const { error } = await supabase
-            .from(module.name as AllSupabaseModules)
-            .insert(spaceData as Tables<AllSupabaseModules>);
+    const { error } = await supabase
+        .from(module.name as AllModules)
+        .insert(spaceData as Tables<AllModules>);
 
-        if (error) {
-            throw error;
-        }
-
-        return spaceData;
-    }
-    throw new Error('Module not found');
+    if (error) throw error;
+    return spaceData;
 }

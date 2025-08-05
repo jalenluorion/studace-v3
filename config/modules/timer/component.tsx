@@ -1,12 +1,12 @@
 'use client';
 
 import { Module, ModuleHeader, ModuleTitle, ModuleContent, SocialButton, ExpandButton, MenuButton } from '@/components/ui/module-card';
-import { Badge } from '../ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
-import { Button } from '../ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { Database, Tables } from '@/database.types';
 import { use, useEffect, useState } from 'react';
-import { updateTimer } from '@/lib/supabase/modules/timer';
+import { updateTimer } from './lib';
 import { Play, Pause, XIcon } from 'lucide-react';
 
 export default function Timer({ data }: { data: Tables<'timer'> }) {

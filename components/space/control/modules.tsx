@@ -1,23 +1,9 @@
-import { allModules, AllSupabaseModules } from '@/config/default';
-import { Tables } from '@/database.types';
 import { CarouselItem } from '../../ui/carousel';
+import type { ModuleType } from '@/config/modules/types';
+import type { ModuleSize } from '@/config/modules/types';
 
-import type { JSX } from "react";
-
-const GetModuleComponent = (module: string) => {
-    const moduleData = allModules.find((mod) => mod.name === module);
-    if (moduleData) {
-        return moduleData.component;
-    }
-    return null;
-};
-
-export const GetModuleSize = (module: string) => {
-    const moduleData = allModules.find((mod) => mod.name === module);
-    if (!moduleData) {
-        return;
-    }
-    switch (moduleData.size) {
+export const GetModuleSize = (moduleSize: ModuleSize) => {
+    switch (moduleSize) {
         case '1x2':
             return [`basis-1/2 @[38rem]:basis-1/4 @[54rem]:basis-1/6`, 'h-1b'];
         case '2x2':
@@ -27,46 +13,27 @@ export const GetModuleSize = (module: string) => {
         case '4x2':
             return [`basis-2/2 @[38rem]:basis-4/4 @[54rem]:basis-4/6`, 'h-2b @[38rem]:h-4b'];
         default:
-            return;
+            return [`basis-1/2 @[38rem]:basis-1/4 @[54rem]:basis-1/6`, 'h-1b'];
     }
 };
 
-export function Module({ name, data }: { name: string; data: unknown }) {
-    // FIXME: Unsafe typing
-    const ModuleComponent = GetModuleComponent(name) as (props: {
-        data: Tables<AllSupabaseModules>;
-    }) => JSX.Element; // Update the type of ModuleComponent
-    if (!ModuleComponent) {
-        return null;
-    }
-    const size = GetModuleSize(name);
-    if (!size) {
-        return null;
-    }
+export function Module({ module }: { module: ModuleType }) {
+    const size = GetModuleSize(module.size);
 
     return (
         <div className={size[1]}>
-            <ModuleComponent data={data as Tables<AllSupabaseModules>} />
+            <module.component data={module.data} />
         </div>
     );
 }
-export function CarouselModule({ name, data }: { name: string; data: unknown }) {
-    // FIXME: Unsafe typing
-    const ModuleComponent = GetModuleComponent(name) as (props: {
-        data: Tables<AllSupabaseModules>;
-    }) => JSX.Element; // Update the type of ModuleComponent
-    if (!ModuleComponent) {
-        return null;
-    }
-    const size = GetModuleSize(name);
-    if (!size) {
-        return null;
-    }
+
+export function CarouselModule({ module }: { module: ModuleType }) {
+    const size = GetModuleSize(module.size);
 
     return (
         <CarouselItem className={`flex items-center pt-0 ${size[0]}`}>
             <div className={size[1]}>
-                <ModuleComponent data={data as Tables<AllSupabaseModules>} />
+                <module.component data={module.data} />
             </div>
         </CarouselItem>
     );

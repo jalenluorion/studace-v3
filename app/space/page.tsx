@@ -25,7 +25,7 @@ export default async function SpaceGuest() {
                 spaceUser={null}
                 spaceSettings={defaultSpace}
                 spaceStates={Promise.all([fetchUsersLoading()])}
-                spaceData={fetchModules(defaultSpace.modules, null)}
+                modules={fetchModules(defaultSpace.modules, null)}
                 spaceGlobals={globalSettings}
             />
         );

@@ -10,18 +10,19 @@ import Image from 'next/image';
 import Social, { SocialUser } from './control/social';
 
 import { globalSettings } from '@/lib/supabase/globals';
+import { ModuleType } from '@/config/modules/types';
 
 export default function Space({
     spaceUser,
     spaceSettings,
     spaceStates,
-    spaceData,
+    modules,
     spaceGlobals,
 }: {
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
     spaceStates: Promise<string[]>;
-    spaceData: Promise<unknown[]>;
+    modules: Promise<ModuleType[]>;
     spaceGlobals: globalSettings;
 }) {
     const [background, setbackground] = useState<string>(spaceSettings.background);
@@ -40,7 +41,7 @@ export default function Space({
                     spaceGlobals={spaceGlobals}
                     activeUsers={activeUsers}
                     spaceStates={spaceStates}
-                    spaceData={spaceData}
+                    modules={modules}
                     audio={audio}
                     setAudio={setAudio}
                     background={background}

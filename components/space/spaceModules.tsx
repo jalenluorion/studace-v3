@@ -7,14 +7,13 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import { CarouselModule } from './control/modules';
 import { useRef } from 'react';
+import { ModuleType } from '@/config/modules/types';
 
 export default function SpaceModules({
     modules,
-    data,
     hidden,
 }: {
-    modules: string[];
-    data: unknown[];
+    modules: ModuleType[];
     hidden: boolean;
 }) {
     const nodeRef = useRef(null);
@@ -30,8 +29,8 @@ export default function SpaceModules({
                     className="w-full"
                 >
                     <CarouselContent className="mt-0 h-[16rem] @[38rem]:h-[32rem] @[54rem]:h-[48rem]">
-                        {modules.map((module, index) => (
-                            <CarouselModule key={index} name={module} data={data[index]} />
+                        {modules.map((mod, index) => (
+                            <CarouselModule key={index} module={mod} />
                         ))}
                     </CarouselContent>
                     <CarouselPrevious />

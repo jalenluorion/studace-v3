@@ -1,22 +1,14 @@
-import { Database, Tables } from '@/database.types';
+import { Tables } from '@/database.types';
 
-// Modules
-import tasklistModule from '@/config/modules/tasklist';
-import timerModule from '@/config/modules/timer';
+import { defaultModuleKeys } from './modules';
 
-export type AllDataTypes = Database['public']['Tables'][keyof Database['public']['Tables']]['Row'];
-export type AllSupabaseModules = keyof Database['public']['Tables'];
-
-export const allModules = [tasklistModule, timerModule];
-
-const defaultModules = [tasklistModule, timerModule];
-
+// Use keys for the default space
 export const defaultSpace: Tables<'space'> = {
     allowed_users: [],
     background: 'c0_ejQQcrwI',
     is_public: false,
     last_opened: null,
-    modules: defaultModules.map((module) => module.name),
+    modules: defaultModuleKeys,
     name: 'Studace Space',
     owner_id: '',
     school: null,

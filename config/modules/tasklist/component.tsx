@@ -21,7 +21,7 @@ import {
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { updateTasks } from '@/lib/supabase/modules/tasklist';
+import { updateTasks } from './lib';
 
 import { useState, useRef } from 'react';
 
