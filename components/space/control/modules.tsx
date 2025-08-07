@@ -1,6 +1,6 @@
 import { CarouselItem } from '../../ui/carousel';
-import type { ModuleType } from '@/config/modules/types';
-import type { ModuleSize } from '@/config/modules/types';
+import type { ModuleType } from '@/modules/types';
+import type { ModuleSize } from '@/modules/types';
 
 export const GetModuleSize = (moduleSize: ModuleSize) => {
     switch (moduleSize) {

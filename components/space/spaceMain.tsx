@@ -10,7 +10,7 @@ import Image from 'next/image';
 import Social, { SocialUser } from './control/social';
 
 import { globalSettings } from '@/lib/supabase/globals';
-import { ModuleType } from '@/config/modules/types';
+import { ModuleType } from '@/modules/types';
 
 export default function Space({
     spaceUser,

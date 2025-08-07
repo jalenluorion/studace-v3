@@ -7,7 +7,7 @@ import SpaceSocial from './spaceSocial';
 import { Tables } from '@/database.types';
 import { SocialUser } from './control/social';
 import { globalSettings } from '@/lib/supabase/globals';
-import { ModuleType } from '@/config/modules/types';
+import { ModuleType } from '@/modules/types';
 
 export default function Interface({
     spaceUser,

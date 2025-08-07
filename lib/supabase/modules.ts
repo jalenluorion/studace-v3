@@ -1,7 +1,7 @@
 import { Tables } from '@/database.types';
 import { createClient } from './server';
-import { allModules } from '@/config/modules';
-import type { AllModules, ModuleType } from '@/config/modules/types';
+import { allModules } from '@/modules';
+import type { AllModules, ModuleType } from '@/modules/types';
 
 export async function fetchModules(modules: AllModules[], spaceId: string | null) {
     return Promise.all(

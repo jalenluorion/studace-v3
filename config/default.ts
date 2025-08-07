@@ -1,6 +1,6 @@
 import { Tables } from '@/database.types';
 
-import { defaultModuleKeys } from './modules';
+import { defaultModuleKeys } from '../modules';
 
 // Use keys for the default space
 export const defaultSpace: Tables<'space'> = {

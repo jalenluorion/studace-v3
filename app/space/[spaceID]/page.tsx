@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 import Space from '@/components/space/spaceMain';
 
-import { defaultSpace } from '@/config/default';
 import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
 import { getAuthUser, getProfile } from '@/lib/supabase/user';

@@ -7,7 +7,7 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import { CarouselModule } from './control/modules';
 import { useRef } from 'react';
-import { ModuleType } from '@/config/modules/types';
+import { ModuleType } from '@/modules/types';
 
 export default function SpaceModules({
     modules,
