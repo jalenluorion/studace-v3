@@ -1,6 +1,15 @@
 'use client';
 
-import { Module, ModuleHeader, ModuleTitle, ModuleContent, SocialButton, ExpandButton, MenuButton } from '@/components/ui/module-card';
+import {
+    Module,
+    ModuleHeader,
+    ModuleTitle,
+    ModuleContent,
+    SocialButton,
+    ExpandButton,
+    MenuButton,
+    ModuleAction,
+} from '@/components/ui/module-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, Timer, Tag } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
@@ -60,7 +69,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
             return;
         }
 
-        const newData : Tables<'tasklist'> = {
+        const newData: Tables<'tasklist'> = {
             ...data,
             private_tasks: [
                 ...tasks,
@@ -86,7 +95,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
 
     function clearCompleted() {
         if (currentTab == 'tasks') {
-            const newData : Tables<'tasklist'> = {
+            const newData: Tables<'tasklist'> = {
                 ...data,
                 private_tasks: tasks.filter((task) => !task.complete && task.task),
                 tasks_complete:
@@ -96,7 +105,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
             setTasks(newData.private_tasks);
             updateTasks(newData);
         } else {
-            const newData : Tables<'tasklist'> = {
+            const newData: Tables<'tasklist'> = {
                 ...data,
                 private_tasks: tasks.filter((task) => !task.complete && !task.task),
                 tasks_complete:
@@ -113,20 +122,22 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
         <Module>
             <ModuleHeader>
                 <ModuleTitle>Daily Planner</ModuleTitle>
-                <SocialButton />
-                <ExpandButton />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <MenuButton />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem>Sort by due date</DropdownMenuItem>
-                        <DropdownMenuItem>Sort by tag</DropdownMenuItem>
-                        <DropdownMenuItem onClick={clearCompleted}>
-                            Clear completed
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ModuleAction>
+                    <SocialButton />
+                    <ExpandButton />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <MenuButton />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>Sort by due date</DropdownMenuItem>
+                            <DropdownMenuItem>Sort by tag</DropdownMenuItem>
+                            <DropdownMenuItem onClick={clearCompleted}>
+                                Clear completed
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </ModuleAction>
             </ModuleHeader>
             <ModuleContent className="flex min-h-0 flex-col">
                 <Tabs
@@ -165,7 +176,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                             updateTasks(newData);
                                         }}
                                     />
-                                    <div className={`flex flex-1 flex-col ml-1 gap-0.5`}>
+                                    <div className={`ml-1 flex flex-1 flex-col gap-0.5`}>
                                         <p
                                             className={
                                                 task.complete
@@ -175,28 +186,33 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                         >
                                             {task.name}
                                         </p>
-                                        { (task.tag || task.end) && (
-                                        <div className="flex gap-1">
-                                            {task.tag && (
-                                                <Badge
-                                                    className={colorMap[task.tag.color || 'black']}
-                                                >
-                                                    {task.tag.name}
-                                                </Badge>
-                                            )}
-                                            {task.end && (
-                                                <Badge variant="outline">
-                                                    {new Date(task.end).toLocaleString('en-US', {
-                                                        month: '2-digit',
-                                                        day: '2-digit',
-                                                        year: '2-digit',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                        hour12: true,
-                                                    })}
-                                                </Badge>
-                                            )}
-                                        </div>
+                                        {(task.tag || task.end) && (
+                                            <div className="flex gap-1">
+                                                {task.tag && (
+                                                    <Badge
+                                                        className={
+                                                            colorMap[task.tag.color || 'black']
+                                                        }
+                                                    >
+                                                        {task.tag.name}
+                                                    </Badge>
+                                                )}
+                                                {task.end && (
+                                                    <Badge variant="outline">
+                                                        {new Date(task.end).toLocaleString(
+                                                            'en-US',
+                                                            {
+                                                                month: '2-digit',
+                                                                day: '2-digit',
+                                                                year: '2-digit',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                hour12: true,
+                                                            },
+                                                        )}
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -206,7 +222,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                             <Input
                                 className="h-8 flex-1"
                                 placeholder={currentTab == 'tasks' ? 'New Task' : 'New Event'}
-                                value={input}
+                                value={input ?? ''}
                                 ref={inputRef}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={handleKeyDown}

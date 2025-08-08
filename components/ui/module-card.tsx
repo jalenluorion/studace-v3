@@ -1,88 +1,126 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { User, Users, Maximize2, Minimize2, Menu } from 'lucide-react';
+import * as React from "react"
 
-const Module = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ className, ...props }, ref) => (
-        <div
-            ref={ref}
-            className={cn(
-                'modsm:w-72 modmd:w-72 modmodlg:w-72 flex h-full w-full flex-1 flex-col rounded-lg border-2 bg-card text-card-foreground shadow-xs',
-                className,
-            )}
-            {...props}
-        />
-    ),
-);
-Module.displayName = 'Module';
+import { cn } from "@/lib/utils"
+import { Button } from "./button"
+import { Maximize2, Menu, User } from "lucide-react"
 
-const ModuleHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ className, ...props }, ref) => (
-        <div ref={ref} className={cn('flex items-center gap-1 px-3', className)} {...props} />
-    ),
-);
-ModuleHeader.displayName = 'ModuleHeader';
+function Module({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "modsm:w-72 modmd:w-72 modmodlg:w-72 w-full h-full bg-card text-card-foreground flex flex-col gap-2 rounded-xl border py-3 shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const ModuleTitle = React.forwardRef<
-    HTMLParagraphElement,
-    React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn('my-1 flex-1 text-lg font-semibold', className)} {...props} />
-));
-ModuleTitle.displayName = 'ModuleTitle';
+// todo: css fucking sucks ballsss
+function ModuleHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-1 has-data-[slot=card-description]:grid-rows-[auto_auto] items-start has-data-[slot=card-description]:gap-1 px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-2",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const SocialButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
-    ({ className, ...props }, ref) => {
-        return (
-            <Button
-                ref={ref}
-                className={cn('h-auto w-auto p-1', className)}
-                variant="ghost"
-                {...props}
-            >
-                <User size={20} />
-            </Button>
-        );
-    },
-);
-SocialButton.displayName = 'SocialButton';
-const ExpandButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
-    ({ className, ...props }, ref) => {
-        return (
-            <Button
-                ref={ref}
-                className={cn('h-auto w-auto p-1', className)}
-                variant="ghost"
-                {...props}
-            >
-                <Maximize2 size={20} />
-            </Button>
-        );
-    },
-);
-ExpandButton.displayName = 'ExpandButton';
-const MenuButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<typeof Button>>(
-    ({ className, ...props }, ref) => {
-        return (
-            <Button
-                ref={ref}
-                className={cn('h-auto w-auto p-1', className)}
-                variant="ghost"
-                {...props}
-            >
-                <Menu size={20} />
-            </Button>
-        );
-    },
-);
-MenuButton.displayName = 'MenuButton';
+function ModuleTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold h-full flex items-center", className)}
+      {...props}
+    />
+  )
+}
 
-const ModuleContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ className, ...props }, ref) => (
-        <div ref={ref} className={cn('w-full flex-1 p-3 pt-0', className)} {...props} />
-    ),
-);
-ModuleContent.displayName = 'ModuleContent';
+function ModuleAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end flex gap-1",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-export { Module, ModuleHeader, ModuleTitle, ModuleContent, SocialButton, ExpandButton, MenuButton };
+function SocialButton({ className, ...props }: React.ComponentProps<typeof Button>) {
+  return (
+    <Button
+      className={cn('', className)}
+      variant="ghost"
+      size="xs"
+      {...props}
+    >
+      <User />
+    </Button>
+  )
+}
+
+function ExpandButton({ className, ...props }: React.ComponentProps<typeof Button>) {
+  return (
+    <Button
+      className={cn('', className)}
+      variant="ghost"
+      size="xs"
+      {...props}
+    >
+      <Maximize2 />
+    </Button>
+  )
+}
+
+function MenuButton({ className, ...props }: React.ComponentProps<typeof Button>) {
+  return (
+    <Button
+      className={cn('', className)}
+      variant="ghost"
+      {...props}
+      size="xs"
+    >
+      <Menu />
+    </Button>
+  )
+}
+
+function ModuleContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn("px-3 flex-1", className)}
+      {...props}
+    />
+  )
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-3 [.border-t]:pt-2", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+    Module,
+    ModuleHeader,
+    ModuleTitle,
+    ModuleAction,
+    SocialButton,
+    ExpandButton,
+    MenuButton,
+    ModuleContent,
+    CardFooter
+}

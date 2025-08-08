@@ -101,13 +101,13 @@ export default function Control({
     return (
         <div>
             <Card
-                className="modmd:rounded-b-lg modlg:rounded-b-lg flex flex-col items-center rounded-b-none"
+                className="modmd:rounded-b-lg modlg:rounded-b-lg rounded-b-none items-center gap-0 p-1"
                 ref={controlRef}
             >
-                <div className={`flex items-center *:mt-2 ${hidden ? 'mb-2' : ''}`}>
+                <div className={`flex items-center gap-2 *:mt-1 ${hidden ? 'mb-1' : ''}`}>
                     <Button
                         variant="ghost"
-                        className="mx-2 h-auto w-auto p-1"
+                        size='xs'
                         onClick={() => setHidden(!hidden)}
                     >
                         {hidden ? <ChevronUp /> : <ChevronDown />}
@@ -115,7 +115,7 @@ export default function Control({
                     <CardTitle>{name}</CardTitle>
                     <Button
                         variant="ghost"
-                        className="mx-2 h-auto w-auto p-1"
+                        size='xs'
                         onClick={editFullScreen}
                     >
                         {fullScreen ? <Minimize2 /> : <Maximize2 />}

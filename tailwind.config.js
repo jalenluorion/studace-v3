@@ -24,7 +24,7 @@ const config = {
                 },
                 {
                     values: {
-                        DEFAULT: 'size',
+                        DEFAULT: 'inline-size',
                         normal: 'normal',
                     },
                     modifiers: 'any',

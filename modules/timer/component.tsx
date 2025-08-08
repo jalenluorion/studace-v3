@@ -1,6 +1,6 @@
 'use client';
 
-import { Module, ModuleHeader, ModuleTitle, ModuleContent, SocialButton, ExpandButton, MenuButton } from '@/components/ui/module-card';
+import { Module, ModuleHeader, ModuleTitle, ModuleContent, SocialButton, ExpandButton, MenuButton, ModuleAction } from '@/components/ui/module-card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -102,7 +102,8 @@ export default function Timer({ data }: { data: Tables<'timer'> }) {
     function formatTime(time: number) {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        // Pad minutes and seconds with leading zeros to always be 2 digits
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
     function setIndexString(index: string) {
@@ -110,33 +111,29 @@ export default function Timer({ data }: { data: Tables<'timer'> }) {
         changeTimerType(parseInt(index));
     }
 
-    const timerWidth = timeRemaining / 60 < 10 ? ('w-[5.2rem]') : 'w-[6.625rem]';
+
 
     return (
         <Module>
             <ModuleHeader>
                 <ModuleTitle>Timer</ModuleTitle>
-                <div className="flex gap-1">
+                <ModuleAction className="">
                     <SocialButton />
                     <MenuButton />
-                </div>
+                </ModuleAction>
             </ModuleHeader>
-            <ModuleContent className='flex flex-col items-center'>
-                <div className='flex mb-2'>
-                    <div className='w-28 flex justify-end'>
-                        <div className={'font-semibold text-4xl text-left ' + timerWidth}>{formatTime(timeRemaining)}</div>
-                    </div>
-                    <div className='flex gap-2 ml-2'>
+            <ModuleContent className='flex flex-col items-center gap-2'>
+                <div className='flex gap-2'>
+                        <div className={'font-semibold text-3xl text-left'}>{formatTime(timeRemaining)}</div>
                         {running ? <Button onClick={stopTimer} size='icon' variant='outline' className='rounded-full'><Pause /></Button> : <Button onClick={startTimer} size='icon' variant='outline' className='rounded-full'><Play /></Button>}
                         <Button onClick={resetTimer} size='icon' variant='outline' className='rounded-full'><XIcon /></Button>
-                    </div>
                 </div>
                 { !running ? <Tabs
                 defaultValue={timerIndex.toString()}
                     value={timerIndex.toString()}
                     onValueChange={setIndexString}
                 >
-                    <TabsList className="h-auto w-full p-0.5">
+                    <TabsList className="h-auto w-full rounded-full p-0.5">
                         {data.timers.map((timer, index) => (
                             <TabsTrigger key={index} value={index.toString()} className="flex-1 px-2.5 py-0.5 rounded-full font-semibold text-xs">
                                 {timer.name}
