@@ -46,24 +46,24 @@ export function AppSidebar({
     schools: Tables<'school'>[];
 }) {
     const pathname = usePathname();
-	
+
     return (
         <Sidebar>
             <SidebarHeader>
                 <SidebarGroup>
                     <h1 className="text-xl font-semibold">Studace</h1>
-                    <SidebarGroupContent>
-                        <Button className="mt-2 w-full" variant="default">
-                            <PlusCircle className="mr-2" />
-                            Create New Space
-                        </Button>
-                    </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
+                            <SidebarMenuItem className='mb-2'>
+                                <Button variant="default" className="w-full">
+                                    <PlusCircle className="" />
+                                    Create New Space
+                                </Button>
+                            </SidebarMenuItem>
                             <SidebarMenuItem>
                                 <SidebarMenuButton asChild isActive={pathname === '/home'}>
                                     <a href="/home">
@@ -83,23 +83,25 @@ export function AppSidebar({
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-				<SidebarGroup>
-					<SidebarGroupLabel>My Schools</SidebarGroupLabel>
-					<SidebarGroupContent>
-						<SidebarMenu>
-							{schools.map((school) => (
-								<SidebarMenuItem key={school.school_id}>
-									<SidebarMenuButton
-										asChild
-										isActive={pathname === `/school/${school.school_id}`}
-									>
-										<a href={`/school/${school.school_id}`}>{school.name}</a>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
+                {schools.length > 0 && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>My Schools</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {schools.map((school) => (
+                                    <SidebarMenuItem key={school.school_id}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={pathname === `/school/${school.school_id}`}
+                                        >
+                                            <a href={`/school/${school.school_id}`}>{school.name}</a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
@@ -111,15 +113,23 @@ export function AppSidebar({
                                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                                 >
                                     <Avatar className="h-8 w-8 rounded-lg">
-                                        <AvatarImage src={profile.avatar || undefined} alt={profile.username} />
-                                        <AvatarFallback className="rounded-lg">{(profile.first_name.charAt(0) + profile.last_name.charAt(0)).toUpperCase()}</AvatarFallback>
+                                        <AvatarImage
+                                            src={profile.avatar || undefined}
+                                            alt={profile.username}
+                                        />
+                                        <AvatarFallback className="rounded-lg">
+                                            {(
+                                                profile.first_name.charAt(0) +
+                                                profile.last_name.charAt(0)
+                                            ).toUpperCase()}
+                                        </AvatarFallback>
                                     </Avatar>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
                                         <span className="truncate font-semibold">
                                             {profile.username}
                                         </span>
-                                        <span className="text-green-500 truncate text-xs">
-                                                Online
+                                        <span className="truncate text-xs text-green-500">
+                                            Online
                                         </span>
                                     </div>
                                     <ChevronsUpDown className="ml-auto size-4" />
@@ -138,13 +148,18 @@ export function AppSidebar({
                                                 src={profile.avatar || undefined}
                                                 alt={profile.username}
                                             />
-                                            <AvatarFallback className="rounded-lg">{(profile.first_name.charAt(0) + profile.last_name.charAt(0)).toUpperCase()}</AvatarFallback>
+                                            <AvatarFallback className="rounded-lg">
+                                                {(
+                                                    profile.first_name.charAt(0) +
+                                                    profile.last_name.charAt(0)
+                                                ).toUpperCase()}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div className="grid flex-1 text-left text-sm leading-tight">
                                             <span className="truncate font-semibold">
                                                 {profile.username}
                                             </span>
-                                            <span className="text-green-500 truncate text-xs">
+                                            <span className="truncate text-xs text-green-500">
                                                 Online
                                             </span>
                                         </div>
