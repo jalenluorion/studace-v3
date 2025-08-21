@@ -28,113 +28,54 @@
 
 ## ✨ Features
 
-- **🎯 Personalized Dashboard** - Customize your workspace to fit your unique workflow
+- **🎯 Personalized Spaces** - Customize your space to fit your unique workflow
 - **👥 Real-time Collaboration** - Work together seamlessly with team members
 - **📚 Smart Learning Tools** - Enhance your learning experience with intelligent features
-- **📱 Responsive Design** - Access your workspace from any device, anywhere
+- **📱 Responsive Design** - Access your space from any device, anywhere
 - **🔒 Secure & Private** - Your data is protected with industry-standard security
 
-## 🚀 Quick Start
-
-### Try It Now
+## Try It Now
 **[🌐 Launch Studace](http://137.184.243.212)** - No installation required!
-
-### Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/studace.git
-
-# Navigate to project directory
-cd studace
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Open your browser to http://localhost:3000
-```
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React.js, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express
+- **Backend**: Next.js
 - **Database**: PostgreSQL
 - **Authentication**: JWT
 - **Real-time**: WebSocket
-- **Deployment**: Docker, Digital Ocean
+- **Deployment**: DigitalOcean
 
 ## 📖 Usage
 
 ### Getting Started
 1. **Sign Up**: Create your free account at [studace.app](http://137.184.243.212)
 2. **Set Up Your Space**: Customize your dashboard and preferences
-3. **Invite Collaborators**: Add team members to your workspace
+3. **Invite Collaborators**: Add team members to your space
 4. **Start Creating**: Begin organizing your projects and tasks
-
-### Key Workflows
-- **Project Management**: Create, organize, and track your projects
-- **Team Collaboration**: Share documents and communicate in real-time
-- **Learning Paths**: Set up structured learning journeys
-- **Progress Tracking**: Monitor your productivity and learning goals
-
-## 🎨 Screenshots
-
-| Dashboard | Collaboration | Learning Tools |
-|-----------|---------------|----------------|
-| ![Dashboard](docs/dashboard.png) | ![Collaboration](docs/collaboration.png) | ![Learning](docs/learning.png) |
 
 ## 🗺️ Roadmap
 
-- [ ] Mobile App (iOS/Android)
-- [ ] Advanced Analytics Dashboard
+- [ ] Enhanced collaboration support
+- [ ] Space explore & marketplace
 - [ ] Third-party Integrations (Google Workspace, Slack)
 - [ ] AI-Powered Study Recommendations
-- [ ] Offline Mode Support
-- [ ] Advanced Permission System
-
-## 🤝 Contributing
-
-We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-```bash
-# Fork the repo and clone your fork
-git clone https://github.com/yourusername/studace.git
-
-# Create a new branch for your feature
-git checkout -b feature/amazing-feature
-
-# Make your changes and commit
-git commit -m 'Add amazing feature'
-
-# Push to your fork and create a pull request
-git push origin feature/amazing-feature
-```
+- [ ] Further space customization options
+- [ ] School-specific collaboration
 
 ## 📄 License
 
 **Proprietary Software** - All rights reserved.
 
-Copyright (c) 2025 [Your Name/Company]. This software and associated documentation files are proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
+Copyright (c) 2025 [Jalen Lu]. This software and associated documentation files are proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
 
-For licensing inquiries, contact: [your-email@studace.app]
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors who helped build Studace
-- Inspired by modern productivity and learning platforms
-- Built with ❤️ for students and professionals worldwide
+For licensing inquiries, contact: [jalenlu2000@icloud.com]
 
 ## 📞 Support
 
 - 🐛 **Bug Reports**: [Create an issue](https://github.com/yourusername/studace/issues)
 - 💡 **Feature Requests**: [Start a discussion](https://github.com/yourusername/studace/discussions)
-- 📧 **Contact**: support@studace.app
-- 💬 **Community**: [Join our Discord](https://discord.gg/studace)
-
+- 📧 **Contact**: jalenlu2000@icloud.com
 ---
 
 <div align="center">
@@ -142,7 +83,6 @@ For licensing inquiries, contact: [your-email@studace.app]
   <p>
     <a href="http://137.184.243.212">🌐 Live Demo</a> •
     <a href="#features">📋 Features</a> •
-    <a href="#contributing">🤝 Contributing</a> •
     <a href="#support">📞 Support</a>
   </p>
 </div>
