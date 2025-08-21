@@ -1,4 +1,4 @@
-## [Enter Studace now!](https://137.184.243.212)
+## [Enter Studace now!](http://137.184.243.212)
 
 # Studace
 
