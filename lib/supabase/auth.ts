@@ -56,6 +56,9 @@ export const signUp = async (formData: FormData) => {
         if (error.status === 429) {
             return {message: 'Too many requests. Please try again later'};
         }
+        if (error.code === 'user_already_exists') {
+            return {message: 'User already exists'};
+        }
         if (error.status === 422) {
             return {message: 'Password must be at least 6 characters'};
         }

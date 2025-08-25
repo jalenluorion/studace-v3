@@ -46,10 +46,12 @@ async function create(module: ModuleType, spaceId: string) {
         space_id: spaceId,
     };
 
-    const { error } = await supabase
+    console.log('Creating module data for', module.name, spaceData);
+    const { data, error } = await supabase
         .from(module.name as AllModules)
         .insert(spaceData as Tables<AllModules>);
-
+    console.log('Insert response:', data);
     if (error) throw error;
+
     return spaceData;
 }

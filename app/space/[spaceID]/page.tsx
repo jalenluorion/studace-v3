@@ -40,7 +40,7 @@ export default async function SpaceId(props: {
         <Space
             spaceUser={spaceUser}
             spaceSettings={initialData}
-            spaceStates={Promise.all([fetchUsersLoading()])}
+            spaceStates={Promise.all([fetchUsersLoading(), fetchBgLoading()])}
             modules={fetchModules(initialData.modules, params.spaceID)}
             spaceGlobals={globalSettings}
         />

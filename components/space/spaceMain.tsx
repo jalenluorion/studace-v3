@@ -54,12 +54,12 @@ export default function Space({
 
 function Loading({ background }: { background: string }) {
     return (
-        <div>
+        <div className='absolute z-0 h-full w-full overflow-hidden'>
             <div className="absolute z-30 flex h-full w-full items-center justify-center backdrop-blur-sm transition-opacity">
                 <div className="animate-pulse text-xl text-white">Loading...</div>
             </div>
             <Image
-                className="absolute left-1/2 z-10 h-full w-auto max-w-none -translate-x-1/2 transform min-video-aspect:top-1/2 min-video-aspect:h-auto min-video-aspect:w-full min-video-aspect:-translate-y-1/2"
+                className="overflow-hidden absolute left-1/2 z-10 h-full w-auto max-w-none -translate-x-1/2 transform min-video-aspect:top-1/2 min-video-aspect:h-auto min-video-aspect:w-full min-video-aspect:-translate-y-1/2"
                 src={`https://img.youtube.com/vi/${background}/maxresdefault.jpg`}
                 width="0"
                 height="0"

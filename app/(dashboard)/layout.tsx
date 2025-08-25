@@ -1,5 +1,5 @@
 import { getSchools } from '@/lib/supabase/school';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/dashboard/sidebar';
 import { getAuthUser, getProfile } from '@/lib/supabase/user';
 
@@ -19,7 +19,9 @@ export default async function RootLayout({
                 profile={profile}
                 schools={schools}
             />
-            <main className="h-screen w-full">{children}</main>
+            <SidebarInset>
+                <div className="w-full">{children}</div>
+            </SidebarInset>
         </SidebarProvider>
     );
 }

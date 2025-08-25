@@ -55,8 +55,9 @@ export default function Interface({
             </div>
             <div className="w-full modmd:static modmd:w-auto modmd:pb-2 modlg:absolute modlg:bottom-0 modlg:left-1/2 modlg:z-20 modlg:w-auto modlg:-translate-x-1/2 modlg:pb-2">
                 <Control
-                    user={spaceUser}
-                    name={spaceSettings.name}
+                    spaceUser={spaceUser}
+                    spaceSettings={spaceSettings}
+                    spaceGlobals={spaceGlobals}
                     volumeOn={audio}
                     setVolumeOn={setAudio}
                     micOn={micOn}
@@ -67,7 +68,6 @@ export default function Interface({
                     setHidden={setHidden}
                     background={background}
                     setBackground={setBackground}
-                    globalSettings={spaceGlobals}
                 />
             </div>
         </div>

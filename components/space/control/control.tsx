@@ -53,9 +53,15 @@ import SpaceSwitcher from './switcher';
 
 import { globalSettings } from '@/lib/supabase/globals';
 
+import SettingsEditor from './settings';
+import userMenu from '@/components/dashboard/user-menu';
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { space } from 'postcss/lib/list';
+
 export default function Control({
-    user,
-    name,
+    spaceUser,
+    spaceSettings,
+    spaceGlobals,
     volumeOn,
     setVolumeOn,
     micOn,
@@ -66,10 +72,10 @@ export default function Control({
     setHidden,
     background,
     setBackground,
-    globalSettings,
 }: {
-    user: Tables<'profile'> | null;
-    name: string;
+    spaceUser: Tables<'profile'> | null;
+    spaceSettings: Tables<'space'>;
+    spaceGlobals: globalSettings;
     volumeOn: { id: string; on: boolean; ready: boolean };
     setVolumeOn: (volumeOn: { id: string; on: boolean; ready: boolean }) => void;
     micOn: boolean;
@@ -80,7 +86,6 @@ export default function Control({
     setHidden: (hidden: boolean) => void;
     background: string;
     setBackground: (background: string) => void;
-    globalSettings: globalSettings;
 }) {
     const [spacePopup, setSpacePopup] = useState(false);
     const [musicPopup, setMusicPopup] = useState(false);
@@ -101,23 +106,15 @@ export default function Control({
     return (
         <div>
             <Card
-                className="modmd:rounded-b-lg modlg:rounded-b-lg rounded-b-none items-center gap-0 p-1"
+                className="modmd:rounded-b-lg modlg:rounded-b-lg items-center gap-0 rounded-b-none p-1"
                 ref={controlRef}
             >
                 <div className={`flex items-center gap-2 *:mt-1 ${hidden ? 'mb-1' : ''}`}>
-                    <Button
-                        variant="ghost"
-                        size='xs'
-                        onClick={() => setHidden(!hidden)}
-                    >
+                    <Button variant="ghost" size="xs" onClick={() => setHidden(!hidden)}>
                         {hidden ? <ChevronUp /> : <ChevronDown />}
                     </Button>
-                    <CardTitle>{name}</CardTitle>
-                    <Button
-                        variant="ghost"
-                        size='xs'
-                        onClick={editFullScreen}
-                    >
+                    <CardTitle>{spaceSettings.name}</CardTitle>
+                    <Button variant="ghost" size="xs" onClick={editFullScreen}>
                         {fullScreen ? <Minimize2 /> : <Maximize2 />}
                     </Button>
                 </div>
@@ -129,7 +126,7 @@ export default function Control({
                             <House />
                         </Button>
                     </Link>
-                    {user ? (
+                    {spaceUser ? (
                         <Popover open={spacePopup}>
                             <PopoverTrigger asChild>
                                 <Toggle
@@ -153,12 +150,14 @@ export default function Control({
                                     virtualRef={controlRef as React.RefObject<HTMLDivElement>}
                                 ></PopoverAnchor>
                             )}
-                            <PopoverContentChild><SpaceSwitcher recentSpaces={globalSettings.recentSpaces}/></PopoverContentChild>
+                            <PopoverContentChild>
+                                <SpaceSwitcher recentSpaces={spaceGlobals.recentSpaces} />
+                            </PopoverContentChild>
                         </Popover>
                     ) : (
                         <Dialog>
                             <DialogTrigger asChild>
-                            <Toggle
+                                <Toggle
                                     pressed={spacePopup}
                                     onPressedChange={() => {
                                         setSpacePopup(!spacePopup);
@@ -180,7 +179,9 @@ export default function Control({
                             </DialogContentChild>
                         </Dialog>
                     )}
-                    <Separator orientation="vertical" className="h-6" />
+                    <div className="h-6">
+                        <Separator orientation="vertical" />
+                    </div>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -225,13 +226,15 @@ export default function Control({
                         </DialogTrigger>
                         <DialogContentChild>
                             <BackgroundPicker
-                                categories={globalSettings.categories}
+                                categories={spaceGlobals.categories}
                                 background={background}
                                 setBackground={setBackground}
                             />
                         </DialogContentChild>
                     </Dialog>
-                    <Separator orientation="vertical" className="h-6" />
+                    <div className="h-6">
+                        <Separator orientation="vertical" className="h-6" />
+                    </div>
                     <Button variant="ghost" size="icon" onClick={() => setMicOn(!micOn)}>
                         {micOn ? <Mic /> : <MicOff className="text-destructive" />}
                     </Button>
@@ -246,38 +249,68 @@ export default function Control({
                         </DialogTrigger>
                         <DialogContent>share screen</DialogContent>
                     </Dialog>
-                    <Separator orientation="vertical" className="h-6" />
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src="" />
-                                    <AvatarFallback>JL</AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContentChild>
-                            {user ? (
-                                <>
-                                    <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
-                                    <p>hi</p>
-                                </>
-                            ) : (
-                                <>
-                                    <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
-                                    <LoginForm />
-                                </>
-                            )}
-                        </DialogContentChild>
-                    </Dialog>
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <Settings />
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>settings</DialogContent>
-                    </Dialog>
+                    <div className="h-6">
+                        <Separator orientation="vertical" className="h-6" />
+                    </div>
+                    {spaceUser ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src={spaceUser.avatar || ''} />
+                                        <AvatarFallback>
+                                            {spaceUser.first_name && spaceUser.last_name
+                                                ? `${spaceUser.first_name[0]}${spaceUser.last_name[0]}`
+                                                : 'U'}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            {userMenu({ profile: spaceUser })}
+                        </DropdownMenu>
+                    ) : (
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src="" />
+                                        <AvatarFallback>Login</AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContentChild>
+                                <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
+                                <LoginForm />
+                            </DialogContentChild>
+                        </Dialog>
+                    )}
+                    {spaceUser ? (
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <Settings />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContentChild>
+                                <SettingsEditor
+                                    spaceUserId={spaceUser.user_id}
+                                    spaceSettings={spaceSettings}
+                                />
+                            </DialogContentChild>
+                        </Dialog>
+                    ) : (
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <Settings />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContentChild>
+                                <DialogTitle className="sr-only">Welcome Back!</DialogTitle>
+                                <LoginForm />
+                            </DialogContentChild>
+                        </Dialog>
+                    )}
                 </div>
             </Card>
         </div>

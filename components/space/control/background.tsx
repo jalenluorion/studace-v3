@@ -50,7 +50,7 @@ export default function Background({
             />
             {!bgLoaded && (
                 <Image
-                    className="absolute left-1/2 z-10 h-full w-auto max-w-none -translate-x-1/2 transform min-video-aspect:top-1/2 min-video-aspect:h-auto min-video-aspect:w-full min-video-aspect:-translate-y-1/2"
+                    className="overflow-hidden absolute left-1/2 z-10 h-full w-auto max-w-none -translate-x-1/2 transform min-video-aspect:top-1/2 min-video-aspect:h-auto min-video-aspect:w-full min-video-aspect:-translate-y-1/2"
                     src={`https://img.youtube.com/vi/${backgroundId}/maxresdefault.jpg`}
                     width="0"
                     height="0"

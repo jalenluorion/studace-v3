@@ -71,6 +71,7 @@ export async function registerProfile(userFirst: string, userLast: string, usern
             last_name: userLast,
             username: username,
             birthday: birthday,
+            friends: [] as string[],
         },
     ]);
 
