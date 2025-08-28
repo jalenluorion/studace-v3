@@ -11,7 +11,7 @@ import {
     ModuleAction,
 } from '@/components/ui/module-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Timer, Tag } from 'lucide-react';
+import { Plus, Timer, Tag, Edit, Trash, X } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { Database, Tables } from '@/database.types';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,14 @@ import {
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { updateTasks } from './lib';
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem
+} from '@/components/ui/select';
+import { updateTasks, updateTags } from './lib';
 
 import { useState, useRef } from 'react';
 
@@ -46,6 +53,8 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
     const [dueDate, setDueDate] = useState<Date>();
     const [tag, setTag] = useState<{ name: string; color: string }>();
     const [input, setInput] = useState<string>();
+    const [isEditingTags, setIsEditingTags] = useState<boolean>(false);
+    const [tags, setTags] = useState<Database['public']['CompositeTypes']['tag'][]>(data.tags);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -116,6 +125,42 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
             setTasks(newData.private_tasks);
             updateTasks(newData);
         }
+    }
+
+    function updateTagName(index: number, newName: string) {
+        const updatedTags = [...tags];
+        updatedTags[index] = {
+            ...updatedTags[index],
+            name: newName,
+        };
+        setTags(updatedTags);
+    }
+
+    function updateTagColor(index: number, newColor: string) {
+        const updatedTags = [...tags];
+        updatedTags[index] = {
+            ...updatedTags[index],
+            color: newColor,
+        };
+        setTags(updatedTags);
+    }
+
+    function addNewTag() {
+        const newTag: Database['public']['CompositeTypes']['tag'] = {
+            name: 'New Tag',
+            color: 'blue',
+        };
+        setTags([...tags, newTag]);
+    }
+
+    function deleteTag(index: number) {
+        const updatedTags = tags.filter((_, i) => i !== index);
+        setTags(updatedTags);
+    }
+
+    function saveAllTags() {
+        updateTags(data.space_id, tags);
+        setIsEditingTags(false);
     }
 
     return (
@@ -189,7 +234,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                         {(task.tag || task.end) && (
                                             <div className="flex gap-1">
                                                 {task.tag && (
-                                                    <Badge
+                                                    <Badge variant="outline"
                                                         className={
                                                             colorMap[task.tag.color || 'black']
                                                         }
@@ -242,37 +287,104 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                                 </Toggle>
                                             </TooltipTrigger>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuLabel>Tags</DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            {data.tags.map((tagOption) => (
-                                                <DropdownMenuCheckboxItem
-                                                    key={tagOption.name}
-                                                    checked={tag === tagOption}
-                                                    onCheckedChange={() =>
-                                                        setTag(
-                                                            tag === tagOption
-                                                                ? undefined
-                                                                : (tagOption as {
-                                                                      name: string;
-                                                                      color: string;
-                                                                  }),
-                                                        )
-                                                    }
+                                        <DropdownMenuContent className="">
+                                            <div className="flex items-center justify-between">
+                                                <DropdownMenuLabel>Tags</DropdownMenuLabel>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="h-6 w-6 p-0"
+                                                    onClick={() => setIsEditingTags(!isEditingTags)}
                                                 >
-                                                    {tagOption.name}
-                                                </DropdownMenuCheckboxItem>
-                                            ))}
+                                                    <Edit size={14} />
+                                                </Button>
+                                            </div>
+                                            <DropdownMenuSeparator />
+                                            
+                                            {isEditingTags ? (
+                                                <div className="space-y-2 p-2">
+                                                    {tags.map((tagOption, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="flex items-center gap-2"
+                                                        >
+                                                            <Input
+                                                                value={tagOption.name || ''}
+                                                                onChange={(e) =>
+                                                                    updateTagName(index, e.target.value)
+                                                                }
+                                                                className="h-7 flex-1 text-sm"
+                                                            />
+                                                            <Select
+                                                                value={tagOption.color || 'blue'}
+                                                                onValueChange={(value) => updateTagColor(index, value)}
+                                                            >
+                                                                <SelectTrigger className="h-7 w-20 border px-2 text-xs">
+                                                                    <SelectValue placeholder="Color" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {Object.keys(colorMap).map((color) => (
+                                                                        <SelectItem key={color} value={color}>
+                                                                            {color}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <Button
+                                                                size="sm"
+                                                                variant="ghost"
+                                                                className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
+                                                                onClick={() => deleteTag(index)}
+                                                            >
+                                                                <Trash size={12} />
+                                                            </Button>
+                                                        </div>
+                                                    ))}
+                                                    <div className="flex gap-2 pt-2">
+                                                        <Button
+                                                            size="sm"
+                                                            variant="outline"
+                                                            onClick={addNewTag}
+                                                            className="flex-1"
+                                                        >
+                                                            <Plus size={14} />
+                                                            Add Tag
+                                                        </Button>
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={saveAllTags}
+                                                            className="flex-1"
+                                                        >
+                                                            Save Changes
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    {tags.map((tagOption, index) => (
+                                                        <DropdownMenuCheckboxItem
+                                                            key={index}
+                                                            checked={tag === tagOption}
+                                                            onCheckedChange={() =>
+                                                                setTag(
+                                                                    tag === tagOption
+                                                                        ? undefined
+                                                                        : (tagOption as {
+                                                                              name: string;
+                                                                              color: string;
+                                                                          }),
+                                                                )
+                                                            }
+                                                        >
+                                                            {tagOption.name}
+                                                        </DropdownMenuCheckboxItem>
+                                                    ))}
+                                                </>
+                                            )}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
-                                    <TooltipContent>
-                                        {tag ? (
-                                            <Badge className={colorMap[tag.color]}>
-                                                {tag.name}
-                                            </Badge>
-                                        ) : (
-                                            'Tag'
-                                        )}
+                                    <TooltipContent className={tag ? colorMap[tag.color] : ''}>
+                                        {tag ? tag.name : 'Tag'}
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -290,20 +402,18 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                         </TooltipTrigger>
                                     </DatetimePicker>
                                     <TooltipContent>
-                                        {dueDate ? (
-                                            <Badge variant="outline">
-                                                {dueDate.toLocaleString('en-US', {
-                                                    month: '2-digit',
-                                                    day: '2-digit',
-                                                    year: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                    hour12: true,
-                                                })}
-                                            </Badge>
-                                        ) : (
-                                            'Due Date'
-                                        )}
+                                        {dueDate
+                                            ? dueDate.toLocaleString('en-US', {
+                                                weekday: 'long',
+                                                month: 'short',
+                                                day: '2-digit',
+                                                year: undefined,
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: true,
+                                            })
+                                            : 'Due Date'
+                                        }
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
@@ -323,14 +433,14 @@ type options = {
 };
 
 const colorMap: options = {
-    red: 'bg-red-600 text-white',
-    orange: 'bg-orange-600 text-white',
-    yellow: 'bg-yellow-600 text-white',
-    green: 'bg-green-600 text-white',
-    teal: 'bg-teal-600 text-white',
-    blue: 'bg-blue-600 text-white',
-    indigo: 'bg-indigo-600 text-white',
-    purple: 'bg-purple-600 text-white',
-    pink: 'bg-pink-600 text-white',
-    black: 'bg-white text-black',
+    red: 'bg-red-600 text-white fill-red-600',
+    orange: 'bg-orange-600 text-white fill-orange-600',
+    yellow: 'bg-yellow-600 text-white fill-yellow-600',
+    green: 'bg-green-600 text-white fill-green-600',
+    teal: 'bg-teal-600 text-white fill-teal-600',
+    blue: 'bg-blue-600 text-white fill-blue-600',
+    indigo: 'bg-indigo-600 text-white fill-indigo-600',
+    purple: 'bg-purple-600 text-white fill-purple-600',
+    pink: 'bg-pink-600 text-white fill-pink-600',
+    black: 'bg-white text-black fill-black border border-black',
 };

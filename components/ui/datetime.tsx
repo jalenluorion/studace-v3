@@ -3,13 +3,6 @@
 import { Calendar } from './calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState, useRef } from 'react';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
 
@@ -21,7 +14,7 @@ interface DatetimePickerV1Props {
 
 export function DatetimePicker({ children, date, setDate }: DatetimePickerV1Props) {
     const [isOpen, setIsOpen] = useState(false);
-    const [time, setTime] = useState<string>('05:00');
+    const [time, setTime] = useState<string>('23:59');
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     return (
@@ -49,48 +42,75 @@ export function DatetimePicker({ children, date, setDate }: DatetimePickerV1Prop
                             setDate(selectedDate!);
                         }}
                         onDayClick={() => setIsOpen(false)}
-                        fromYear={2000}
-                        toYear={new Date().getFullYear()}
                         disabled={(date) =>
                             Number(date) < Date.now() - 1000 * 60 * 60 * 24 ||
                             Number(date) > Date.now() + 1000 * 60 * 60 * 24 * 30
                         }
                     />
-                    <Select
-                        defaultValue={time}
-                        onValueChange={(e) => {
-                            setTime(e);
-                            if (date) {
-                                const [hours, minutes] = e.split(':');
-                                const newDate = new Date(date.getTime());
-                                newDate.setHours(parseInt(hours), parseInt(minutes));
-                                setDate(newDate);
-                            }
-                        }}
-                    >
-                        <SelectTrigger className="my-2 mr-2 w-[120px] font-normal focus:ring-0">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="fixed left-0 top-2 mr-2 border-none shadow-none">
-                            <ScrollArea className="h-[15rem]">
-                                {Array.from({ length: 96 }).map((_, i) => {
-                                    const hour = Math.floor(i / 4);
-                                    const minute = ((i % 4) * 15).toString().padStart(2, '0');
-                                    const amPm = hour < 12 ? 'AM' : 'PM';
-                                    const displayHour =
-                                        hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-                                    return (
-                                        <SelectItem
-                                            key={i}
-                                            value={`${hour.toString().padStart(2, '0')}:${minute}`}
+                    <div className="my-3 mr-3 mb-3 w-[120px]">
+                        <button className="flex h-8 w-full items-center justify-between rounded-md border border-input px-3 py-2 text-sm font-medium ring-offset-background focus:ring-0">
+                            <span>
+                                {(() => {
+                                    const [hour, minute] = time.split(':');
+                                    const hourNum = parseInt(hour);
+                                    const amPm = hourNum < 12 ? 'AM' : 'PM';
+                                    const displayHour = hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
+                                    return `${displayHour}:${minute} ${amPm}`;
+                                })()}
+                            </span>
+                        </button>
+                        <div className="mt-4 border-none shadow-none">
+                            <ScrollArea className="max-h-[260px] overflow-y-auto overflow-x-hidden">
+                                <div className="">
+                                    {[
+                                        ...Array.from({ length: 48 }).map((_, i) => {
+                                            const hour = Math.floor(i / 2);
+                                            const minute = (i % 2 === 0 ? '00' : '30');
+                                            const amPm = hour < 12 ? 'AM' : 'PM';
+                                            const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+                                            const value = `${hour.toString().padStart(2, '0')}:${minute}`;
+                                            return (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => {
+                                                        setTime(value);
+                                                        if (date) {
+                                                            const [hours, minutes] = value.split(':');
+                                                            const newDate = new Date(date.getTime());
+                                                            newDate.setHours(parseInt(hours), parseInt(minutes));
+                                                            setDate(newDate);
+                                                        }
+                                                    }}
+                                                    className={`relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
+                                                        time === value ? 'bg-accent text-accent-foreground' : ''
+                                                    }`}
+                                                >
+                                                    {`${displayHour}:${minute} ${amPm}`}
+                                                </button>
+                                            );
+                                        }),
+                                        // Add 11:59 PM
+                                        <button
+                                            key="11:59"
+                                            onClick={() => {
+                                                setTime('23:59');
+                                                if (date) {
+                                                    const newDate = new Date(date.getTime());
+                                                    newDate.setHours(23, 59);
+                                                    setDate(newDate);
+                                                }
+                                            }}
+                                            className={`relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${
+                                                time === '23:59' ? 'bg-accent text-accent-foreground' : ''
+                                            }`}
                                         >
-                                            {`${displayHour}:${minute} ${amPm}`}
-                                        </SelectItem>
-                                    );
-                                })}
+                                            11:59 PM
+                                        </button>
+                                    ]}
+                                </div>
                             </ScrollArea>
-                        </SelectContent>
-                    </Select>
+                        </div>
+                    </div>
                 </div>
             </PopoverContent>
         </Popover>

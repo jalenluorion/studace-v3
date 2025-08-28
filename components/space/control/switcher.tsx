@@ -45,15 +45,15 @@ export default function SpaceSwitcher({
                 <div className="inline-grid grid-cols-2 modmd:grid-cols-3 modlg:grid-cols-4 gap-4 w-max max-h-[50vh] overflow-y-auto">
                                     {recentSpaces.map((space) => (
                                         <div key={space.background} className="">
-                                            <button
+                                            {/* <button
                                                 className={`h-24 aspect-video rounded-lg bg-cover bg-center ${
                                                     bg.value === background ? 'border-2 border-blue-500' : 'border-2'
                                                 }`}
                                                 style={{ backgroundImage: `url(https://i.ytimg.com/vi/${bg.value}/maxresdefault.jpg)` }}
                                                 onClick={() => setBackground(bg.value)}
                                             >
-                                            </button>
-                                            <div className="text-center text-sm">{bg.label}</div>
+                                            </button> */}
+                                            {/* <div className="text-center text-sm">{bg.label}</div> */}
                                         </div>
                                     ))}
                                 </div>
