@@ -8,8 +8,33 @@ import { Database, Tables } from '@/database.types';
 import { use, useEffect, useState } from 'react';
 import { updateTimer } from './lib';
 import { Play, Pause, XIcon } from 'lucide-react';
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 
 export default function Timer({ data }: { data: Tables<'timer'> }) {
+    // Local state for editing durations
+    const [studyDuration, setStudyDuration] = useState<number>(data.timers[0]?.time ? Math.floor(data.timers[0].time / 60) : 25);
+    const [breakDuration, setBreakDuration] = useState<number>(data.timers[1]?.time ? Math.floor(data.timers[1].time / 60) : 5);
+
+    function saveDurations() {
+        const newTimers = [...data.timers];
+        if (newTimers[0]) newTimers[0].time = studyDuration * 60;
+        if (newTimers[1]) newTimers[1].time = breakDuration * 60;
+        const newData: Tables<'timer'> = {
+            ...data,
+            timers: newTimers,
+            time_remaining: newTimers[timerIndex]?.time || 25 * 60,
+            last_updated: new Date().toISOString(),
+        };
+        setTimeRemaining(newData.time_remaining);
+        updateTimer(newData);
+    }
     const passedTime = Math.floor((new Date().getTime() - new Date(data.last_updated + "Z").getTime()) / 1000);
     const [timerIndex, setTimerIndex] = useState<number>(data.current_timer);
     const [timeRemaining, setTimeRemaining] = useState(data.running ? data.time_remaining - passedTime : data.time_remaining);
@@ -117,9 +142,44 @@ export default function Timer({ data }: { data: Tables<'timer'> }) {
         <Module>
             <ModuleHeader>
                 <ModuleTitle>Timer</ModuleTitle>
-                <ModuleAction className="">
+                <ModuleAction>
                     <SocialButton />
-                    <MenuButton />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <MenuButton />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>Adjust Durations</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <div className="flex flex-col gap-2 p-2">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm w-16">Study</span>
+                                    <Input
+                                        type="number"
+                                        min={1}
+                                        value={studyDuration}
+                                        onChange={e => setStudyDuration(Number(e.target.value))}
+                                        className="h-7 w-16 text-sm"
+                                    />
+                                    <span className="text-xs">min</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm w-16">Break</span>
+                                    <Input
+                                        type="number"
+                                        min={1}
+                                        value={breakDuration}
+                                        onChange={e => setBreakDuration(Number(e.target.value))}
+                                        className="h-7 w-16 text-sm"
+                                    />
+                                    <span className="text-xs">min</span>
+                                </div>
+                                <Button size="sm" className="mt-2" onClick={saveDurations}>
+                                    Save
+                                </Button>
+                            </div>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </ModuleAction>
             </ModuleHeader>
             <ModuleContent className='flex flex-col items-center gap-2'>

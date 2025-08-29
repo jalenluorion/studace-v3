@@ -126,7 +126,7 @@ export default function SettingsEditor({
                     </div>
                     
                     {/* Privacy Toggle */}
-                    <div className="space-y-3">
+                    <div className="space-y-1">
                         <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">Visibility</h4>
                         <div className="flex gap-3">
                             <Button
@@ -179,7 +179,7 @@ export default function SettingsEditor({
                     )}
 
                     {/* Specific User Sharing */}
-                    <div className="space-y-3">
+                    <div className="space-y-1">
                         <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">Invite Users</h4>
                         <div className="flex gap-2">
                             <Input

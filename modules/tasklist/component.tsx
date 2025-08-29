@@ -42,12 +42,51 @@ import { updateTasks, updateTags } from './lib';
 import { useState, useRef } from 'react';
 
 export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
+    // Sorting state with localStorage persistence per space
+    const spaceSortKey = `tasklist-sortType-${data.space_id}`;
+    const [sortType, setSortTypeState] = useState<'none' | 'due' | 'tag'>(() => {
+        if (typeof window !== 'undefined') {
+            return (localStorage.getItem(spaceSortKey) as 'none' | 'due' | 'tag') || 'none';
+        }
+        return 'none';
+    });
+
+    function setSortType(type: 'none' | 'due' | 'tag') {
+        setSortTypeState(type);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(spaceSortKey, type);
+        }
+    }
+
+    // Sorting functions
+    function sortTasks(tasks: Database['public']['CompositeTypes']['task'][]): Database['public']['CompositeTypes']['task'][] {
+        if (sortType === 'due') {
+            return [...tasks].sort((a, b) => {
+                // No due date should be at the top
+                if (!a.end && !b.end) return 0;
+                if (!a.end) return -1;
+                if (!b.end) return 1;
+                const aDate = new Date(a.end).getTime();
+                const bDate = new Date(b.end).getTime();
+                return aDate - bDate;
+            });
+        } else if (sortType === 'tag') {
+            return [...tasks].sort((a, b) => {
+                const aTag = a.tag?.name?.toLowerCase() || '';
+                const bTag = b.tag?.name?.toLowerCase() || '';
+                if (aTag < bTag) return -1;
+                if (aTag > bTag) return 1;
+                return 0;
+            });
+        }
+        return tasks;
+    }
     const [tasks, setTasks] = useState<Database['public']['CompositeTypes']['task'][]>(
         data.private_tasks,
     );
 
     const [currentTab, setCurrentTab] = useState<'tasks' | 'events'>('tasks');
-    const displayed = tasks.filter((task) => task.task === (currentTab == 'tasks'));
+    const displayed = sortTasks(tasks.filter((task) => task.task === (currentTab == 'tasks')));
 
     const [startDate, setStartDate] = useState<Date>();
     const [dueDate, setDueDate] = useState<Date>();
@@ -106,9 +145,9 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
         if (currentTab == 'tasks') {
             const newData: Tables<'tasklist'> = {
                 ...data,
-                private_tasks: tasks.filter((task) => !task.complete && task.task),
+                private_tasks: tasks.filter((task) => !(task.complete && task.task)),
                 tasks_complete:
-                    data.tasks_complete + tasks.filter((task) => task.complete && task.task).length,
+                    data.tasks_complete + tasks.filter((task) => (task.complete && task.task)).length,
             };
 
             setTasks(newData.private_tasks);
@@ -116,10 +155,10 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
         } else {
             const newData: Tables<'tasklist'> = {
                 ...data,
-                private_tasks: tasks.filter((task) => !task.complete && !task.task),
+                private_tasks: tasks.filter((task) => !(task.complete && !task.task)),
                 tasks_complete:
                     data.tasks_complete +
-                    tasks.filter((task) => task.complete && !task.task).length,
+                    tasks.filter((task) => (task.complete && !task.task)).length,
             };
 
             setTasks(newData.private_tasks);
@@ -175,11 +214,21 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                             <MenuButton />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem>Sort by due date</DropdownMenuItem>
-                            <DropdownMenuItem>Sort by tag</DropdownMenuItem>
-                            <DropdownMenuItem onClick={clearCompleted}>
+                            <DropdownMenuCheckboxItem
+                                checked={sortType === 'due'}
+                                onCheckedChange={(checked) => setSortType(checked ? 'due' : 'none')}
+                            >
+                                Sort by due date
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem
+                                checked={sortType === 'tag'}
+                                onCheckedChange={(checked) => setSortType(checked ? 'tag' : 'none')}
+                            >
+                                Sort by tag
+                            </DropdownMenuCheckboxItem>
+                            <DropdownMenuCheckboxItem onClick={clearCompleted}>
                                 Clear completed
-                            </DropdownMenuItem>
+                            </DropdownMenuCheckboxItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModuleAction>
@@ -199,10 +248,10 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                             Events
                         </TabsTrigger>
                     </TabsList>
-                    <div className="mt-2 flex min-h-0 flex-1 flex-col">
-                        <div className="min-h-0 flex-1 overflow-y-auto">
+                    <div className="flex min-h-0 flex-1 flex-col">
+                        <div className="min-h-0 flex-1 overflow-y-auto flex flex-col gap-2">
                             {displayed.map((task) => (
-                                <div key={task.id} className="mb-1 flex items-center gap-1">
+                                <div key={task.id} className="flex items-center gap-1">
                                     <Checkbox
                                         checked={task.complete || false}
                                         onCheckedChange={() => {
@@ -244,17 +293,25 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                                 )}
                                                 {task.end && (
                                                     <Badge variant="outline">
-                                                        {new Date(task.end).toLocaleString(
-                                                            'en-US',
-                                                            {
-                                                                month: '2-digit',
-                                                                day: '2-digit',
-                                                                year: '2-digit',
-                                                                hour: '2-digit',
-                                                                minute: '2-digit',
-                                                                hour12: true,
-                                                            },
-                                                        )}
+                                                        {(() => {
+                                                            const dateObj = new Date(task.end);
+                                                            const now = new Date();
+                                                            const isSameYear = dateObj.getFullYear() === now.getFullYear();
+                                                            const month = dateObj.toLocaleString('en-US', { month: 'short' });
+                                                            const day = dateObj.getDate();
+                                                            const year = dateObj.getFullYear();
+                                                            let hour = dateObj.getHours();
+                                                            const minute = dateObj.getMinutes().toString().padStart(2, '0');
+                                                            const ampm = hour >= 12 ? 'PM' : 'AM';
+                                                            hour = hour % 12;
+                                                            if (hour === 0) hour = 12;
+                                                            const timeStr = `${hour}:${minute} ${ampm}`;
+                                                            if (isSameYear) {
+                                                                return `${month} ${day}, ${timeStr}`;
+                                                            } else {
+                                                                return `${month} ${day} ${year}, ${timeStr}`;
+                                                            }
+                                                        })()}
                                                     </Badge>
                                                 )}
                                             </div>

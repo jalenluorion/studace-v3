@@ -56,7 +56,6 @@ import { globalSettings } from '@/lib/supabase/globals';
 import SettingsEditor from './settings';
 import userMenu from '@/components/dashboard/user-menu';
 import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { space } from 'postcss/lib/list';
 
 export default function Control({
     spaceUser,
@@ -274,7 +273,7 @@ export default function Control({
                                 <Button variant="ghost" size="icon">
                                     <Avatar className="h-8 w-8">
                                         <AvatarImage src="" />
-                                        <AvatarFallback>Login</AvatarFallback>
+                                        <AvatarFallback>U</AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DialogTrigger>
