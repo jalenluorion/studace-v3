@@ -33,7 +33,7 @@ export default function RootLayout({
                     <NextTopLoader 
                         showSpinner={false}
                     />
-                    <GoogleTagManager gtmId="G-7D4X9EE312"/>
+                    <GoogleTagManager gtmId="GTM-W5353JP7"/>
                     {children}
                 </ThemeProvider>
             </body>
