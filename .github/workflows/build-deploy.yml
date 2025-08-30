@@ -1,0 +1,25 @@
+﻿name: Build and Deploy to DigitalOcean
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to DigitalOcean
+              uses: appleboy/ssh-action@v0.1.2
+              with:
+                host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
+                key: ${{secrets.SSH_KEY}} # Private or public key of the server
+                username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
+                script: |
+                    cd studace-v3/
+                    pm2 delete all
+                    git fetch --all && git reset --hard origin/main
+                    git pull origin main --force
+                    npm install
+                    npm run build
+                    pm2 start --name "production" npm -- run start
+                    echo 'Deployment successful to DigitalOcean'
