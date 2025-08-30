@@ -4,7 +4,7 @@
 
 <div align="center">
   
-## **[🚀 LAUNCH STUDACE NOW](http://137.184.243.212)**
+## **[🚀 LAUNCH STUDACE NOW](https://www.studace.live/)**
 
 </div>
 
@@ -35,7 +35,7 @@
 - **🔒 Secure & Private** - Your data is protected with industry-standard security
 
 ## Try It Now
-**[🌐 Launch Studace](http://137.184.243.212)** - No installation required!
+**[🌐 Launch Studace](https://www.studace.live/)**
 
 ## 🛠️ Tech Stack
 
@@ -49,7 +49,7 @@
 ## 📖 Usage
 
 ### Getting Started
-1. **Sign Up**: Create your free account at [studace.app](http://137.184.243.212)
+1. **Sign Up**: Create your free account at [studace.app](https://www.studace.live/)
 2. **Set Up Your Space**: Customize your dashboard and preferences
 3. **Invite Collaborators**: Add team members to your space
 4. **Start Creating**: Begin organizing your projects and tasks
