@@ -75,7 +75,7 @@ For licensing inquiries, contact: [jalenlu2000@icloud.com]
 
 - 🐛 **Bug Reports**: [Create an issue](https://github.com/yourusername/studace/issues)
 - 💡 **Feature Requests**: [Start a discussion](https://github.com/yourusername/studace/discussions)
-- 📧 **Contact**: jalenlu2000@icloud.com
+- 📧 **Contact**: support@studace.live
 ---
 
 <div align="center">
