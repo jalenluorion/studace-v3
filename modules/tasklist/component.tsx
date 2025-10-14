@@ -208,7 +208,7 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                 <ModuleTitle>Daily Planner</ModuleTitle>
                 <ModuleAction>
                     <SocialButton />
-                    <ExpandButton />
+                    {/* <ExpandButton /> */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <MenuButton />
@@ -292,7 +292,9 @@ export default function Tasklist({ data }: { data: Tables<'tasklist'> }) {
                                                     </Badge>
                                                 )}
                                                 {task.end && (
-                                                    <Badge variant="outline">
+                                                    <Badge variant="outline" className={
+                                                        new Date(task.end) < new Date() ? 'text-red-600 ' : ''
+                                                    }>
                                                         {(() => {
                                                             const dateObj = new Date(task.end);
                                                             const now = new Date();
