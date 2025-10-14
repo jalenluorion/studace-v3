@@ -1,10 +1,11 @@
-export const dynamic = 'force-dynamic';
+// app/dashboard/page.tsx
+export const revalidate = 0; // Disable ISR entirely
+export const dynamic = "force-dynamic"; // Always fetch fresh
 
 import { redirect } from 'next/navigation';
 
 import Space from '@/components/space/spaceMain';
 
-import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
 import { getAuthUser, getProfile } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
@@ -40,7 +41,6 @@ export default async function SpaceId(props: {
         <Space
             spaceUser={spaceUser}
             spaceSettings={initialData}
-            spaceStates={Promise.all([fetchUsersLoading()])}
             modules={fetchModules(initialData.modules, params.spaceID)}
             spaceGlobals={globalSettings}
         />

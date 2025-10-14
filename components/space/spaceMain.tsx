@@ -15,46 +15,51 @@ import { ModuleType } from '@/modules/types';
 export default function Space({
     spaceUser,
     spaceSettings,
-    spaceStates,
     modules,
     spaceGlobals,
 }: {
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
-    spaceStates: Promise<string[]>;
     modules: Promise<ModuleType[]>;
     spaceGlobals: globalSettings;
 }) {
-    const [background, setbackground] = useState<string>(spaceSettings.background);
     const [audio, setAudio] = useState({id: '', on: false, ready: false});
+    const [background, setbackground] = useState<string>(spaceSettings.background);
     const [activeUsers, setActiveUsers] = useState<SocialUser & { presence_ref: string }[]>([]);
+
+    const [backgroundLoaded, setBackgroundLoaded] = useState(false);
+    const [usersLoaded, setUsersLoaded] = useState(false);
+    const [modulesLoaded, setModulesLoaded] = useState(false);
+
+    const allLoaded = usersLoaded && modulesLoaded;
 
     return (
         <div className="h-screen w-screen overflow-hidden">
-            <Social setActiveUsers={setActiveUsers} spaceUser={spaceUser} spaceSettings={spaceSettings} />
-            <Background backgroundId={background} live={false} />
+            {!allLoaded &&
+                <Loading background={background} />
+            }
+            <Social setActiveUsers={setActiveUsers} setUsersLoaded={setUsersLoaded} spaceUser={spaceUser} spaceSettings={spaceSettings} />
+            <Background backgroundId={background} setBackgroundLoaded={setBackgroundLoaded} live={false} />
             <Audio audio={audio} setAudio={setAudio} />
-            <Suspense fallback={<Loading background={background} />}>
-                <Interface
-                    spaceUser={spaceUser}
-                    spaceSettings={spaceSettings}
-                    spaceGlobals={spaceGlobals}
-                    activeUsers={activeUsers}
-                    spaceStates={spaceStates}
-                    modules={modules}
-                    audio={audio}
-                    setAudio={setAudio}
-                    background={background}
-                    setBackground={setbackground}
-                />
-            </Suspense>
+            <Interface
+                spaceUser={spaceUser}
+                spaceSettings={spaceSettings}
+                spaceGlobals={spaceGlobals}
+                activeUsers={activeUsers}
+                modules={modules}
+                audio={audio}
+                setAudio={setAudio}
+                background={background}
+                setBackground={setbackground}
+                setModulesLoaded={setModulesLoaded}
+            />
         </div>
     );
 }
 
 function Loading({ background }: { background: string }) {
     return (
-        <div className='absolute z-0 h-full w-full overflow-hidden'>
+        <div className='absolute z-25 h-full w-full overflow-hidden'>
             <div className="absolute z-30 flex h-full w-full items-center justify-center backdrop-blur-sm transition-opacity">
                 <div className="animate-pulse text-xl text-white">Loading...</div>
             </div>

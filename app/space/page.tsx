@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation';
 import Space from '@/components/space/spaceMain';
 
 import { defaultSpace } from '@/config/default';
-import { fetchBgLoading, fetchUsersLoading } from '@/lib/bgHelper';
 import { getSpace } from '@/lib/supabase/space';
 import { getAuthUser, getProfile } from '@/lib/supabase/user';
 import { fetchModules } from '@/lib/supabase/modules';
@@ -24,7 +23,6 @@ export default async function SpaceGuest() {
             <Space
                 spaceUser={null}
                 spaceSettings={defaultSpace}
-                spaceStates={Promise.all([fetchUsersLoading()])}
                 modules={fetchModules(defaultSpace.modules, null)}
                 spaceGlobals={globalSettings}
             />

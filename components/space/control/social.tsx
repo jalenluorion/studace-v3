@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Tables } from '@/database.types';
-import { setUsersLoaded } from '@/lib/bgHelper';
 import { getProfile } from '@/lib/supabase/user';
 
 export interface SocialUser {
@@ -14,17 +13,20 @@ export interface SocialUser {
 
 export default function Social({
     setActiveUsers,
+    setUsersLoaded,
     spaceUser,
     spaceSettings,
 }: {
     setActiveUsers: (users: SocialUser & { presence_ref: string }[]) => void;
+    setUsersLoaded: (loaded: boolean) => void;
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
 }) {
     useEffect(() => {
+        console.log('Setting up social presence...');
         const supabase = createClient();
         if (spaceSettings.space_id === '') {
-            setUsersLoaded('done');
+            setUsersLoaded(true);
             return;
         }
 
@@ -68,9 +70,10 @@ export default function Social({
                 if (status !== 'SUBSCRIBED') {
                     return;
                 }
-
-                setUsersLoaded('done');
+                console.log('Connected to presence channel!');
+                
                 roomOne.track(userStatus);
+                setUsersLoaded(true);
             });
     }, []);
 

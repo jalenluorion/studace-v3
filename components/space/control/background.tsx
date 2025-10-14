@@ -1,15 +1,17 @@
 'use client';
 
 import YouTube from 'react-youtube';
-import { setBgLoaded } from '@/lib/bgHelper';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+//TODO: replace with https://next-video.dev/
 export default function Background({
     backgroundId,
+    setBackgroundLoaded,
     live,
 }: {
     backgroundId: string;
+    setBackgroundLoaded: (loaded: boolean) => void;
     live: boolean;
 }) {
     const [bgLoaded, isBgLoaded] = useState(false);
@@ -21,9 +23,9 @@ export default function Background({
     const videoOptsNorm = {
         playerVars: {
             autoplay: 1,
+            mute: 1,
             controls: 0,
             loop: 1,
-            mute: 1,
             playsinline: 1,
             start: 60,
         },
@@ -44,7 +46,7 @@ export default function Background({
                 videoId={backgroundId}
                 opts={live ? videoOptsLive : videoOptsNorm}
                 onPlay={() => {
-                    setBgLoaded('done');
+                    setBackgroundLoaded(true);
                     isBgLoaded(true);
                 }}
             />

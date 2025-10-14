@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useState, useEffect } from 'react';
 import Control from './control/control';
 import SpaceModules from './spaceModules';
 import SpaceSocial from './spaceSocial';
@@ -12,7 +12,6 @@ import { ModuleType } from '@/modules/types';
 export default function Interface({
     spaceUser,
     spaceSettings,
-    spaceStates,
     spaceGlobals,
     activeUsers,
     modules,
@@ -20,10 +19,10 @@ export default function Interface({
     setAudio,
     background,
     setBackground,
+    setModulesLoaded,
 }: {
     spaceUser: Tables<'profile'> | null;
     spaceSettings: Tables<'space'>;
-    spaceStates: Promise<string[]>;
     spaceGlobals: globalSettings;
     activeUsers: SocialUser & { presence_ref: string }[];
     modules: Promise<ModuleType[]>;
@@ -31,14 +30,20 @@ export default function Interface({
     setAudio: (audio: { id: string; on: boolean, ready: boolean }) => void;
     background: string;
     setBackground: (background: string) => void;
+    setModulesLoaded: (loaded: boolean) => void;
 }) {
     const [micOn, setMicOn] = useState(false);
     const [cameraOn, setCameraOn] = useState(false);
 
     const [hidden, setHidden] = useState(false);
 
-    const state = use(spaceStates);
     const modulesRes = use(modules);
+
+    useEffect(() => {
+        if (modulesRes) {
+            setModulesLoaded(true);
+        }
+    }, [modulesRes, setModulesLoaded]);
 
     return (
         <div className="absolute flex h-full w-full flex-col overflow-hidden modmd:flex modmd:flex-col modmd:items-center modlg:block">
