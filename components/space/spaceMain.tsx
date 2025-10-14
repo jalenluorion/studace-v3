@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Tables } from '@/database.types';
 
 import Background from './control/background';
@@ -31,28 +31,33 @@ export default function Space({
     const [usersLoaded, setUsersLoaded] = useState(false);
     const [modulesLoaded, setModulesLoaded] = useState(false);
 
-    const allLoaded = usersLoaded && modulesLoaded;
+    const allLoaded = backgroundLoaded && usersLoaded && modulesLoaded;
+
 
     return (
-        <div className="h-screen w-screen overflow-hidden">
-            {!allLoaded &&
+        <div className="h-screen w-screen overflow-hidden relative">
+            <div
+                className={`absolute inset-0 z-50 transition-opacity duration-400 ${allLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}
+            >
                 <Loading background={background} />
-            }
-            <Social setActiveUsers={setActiveUsers} setUsersLoaded={setUsersLoaded} spaceUser={spaceUser} spaceSettings={spaceSettings} />
-            <Background backgroundId={background} setBackgroundLoaded={setBackgroundLoaded} live={false} />
-            <Audio audio={audio} setAudio={setAudio} />
-            <Interface
-                spaceUser={spaceUser}
-                spaceSettings={spaceSettings}
-                spaceGlobals={spaceGlobals}
-                activeUsers={activeUsers}
-                modules={modules}
-                audio={audio}
-                setAudio={setAudio}
-                background={background}
-                setBackground={setbackground}
-                setModulesLoaded={setModulesLoaded}
-            />
+            </div>
+            <div className={`transition-opacity duration-400 ${allLoaded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <Social setActiveUsers={setActiveUsers} setUsersLoaded={setUsersLoaded} spaceUser={spaceUser} spaceSettings={spaceSettings} />
+                <Background backgroundId={background} setBackgroundLoaded={setBackgroundLoaded} live={false} />
+                <Audio audio={audio} setAudio={setAudio} />
+                <Interface
+                    spaceUser={spaceUser}
+                    spaceSettings={spaceSettings}
+                    spaceGlobals={spaceGlobals}
+                    activeUsers={activeUsers}
+                    modules={modules}
+                    audio={audio}
+                    setAudio={setAudio}
+                    background={background}
+                    setBackground={setbackground}
+                    setModulesLoaded={setModulesLoaded}
+                />
+            </div>
         </div>
     );
 }
@@ -71,6 +76,7 @@ function Loading({ background }: { background: string }) {
                 sizes="100vw"
                 alt="Video Thumbnail"
             />
+            <div className="absolute inset-0 z-9 bg-black" />
         </div>
     );
 }
