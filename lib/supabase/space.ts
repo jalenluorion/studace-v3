@@ -113,6 +113,15 @@ export async function updateSpaceName(spaceId: string, newName: string, userId: 
         .eq('space_id', spaceId);
 
     if (error) throw error;
+
+    return newName;
+}
+
+export async function deleteSpace(spaceId: string, userId: string) {
+    await checkOwner(spaceId, userId);
+    const supabase = await createClient();
+    const { error } = await supabase.from('space').delete().eq('space_id', spaceId);
+    if (error) throw error;
 }
 
 export async function addAllowedUser(spaceId: string, userId: string, callerId: string) {
@@ -162,6 +171,8 @@ export async function addAllowedUser(spaceId: string, userId: string, callerId: 
         .update({ allowed_users })
         .eq('space_id', spaceId);
     if (error) throw error;
+
+    return allowed_users;
 }
 
 export async function removeAllowedUser(spaceId: string, userId: string, callerId: string) {
@@ -180,6 +191,8 @@ export async function removeAllowedUser(spaceId: string, userId: string, callerI
         .update({ allowed_users })
         .eq('space_id', spaceId);
     if (error) throw error;
+
+    return allowed_users;
 }
 
 export async function changeVisibility(spaceId: string, isPublic: boolean, userId: string) {
@@ -190,6 +203,8 @@ export async function changeVisibility(spaceId: string, isPublic: boolean, userI
         .update({ is_public: isPublic })
         .eq('space_id', spaceId);
     if (error) throw error;
+
+    return isPublic;
 }
 
 export async function updateSpaceModules(spaceId: string, modules: AllModules[], userId: string) {
@@ -203,9 +218,20 @@ export async function updateSpaceModules(spaceId: string, modules: AllModules[],
     if (error) throw error;
 }
 
-export async function deleteSpace(spaceId: string, userId: string) {
-    await checkOwner(spaceId, userId);
+export async function getUsernamesFromIds(userIds: string[]) {
+    if (!userIds || userIds.length === 0) return [];
+
     const supabase = await createClient();
-    const { error } = await supabase.from('space').delete().eq('space_id', spaceId);
+
+    const { data, error } = await supabase
+        .from('profile')
+        .select('user_id, username')
+        .in('user_id', userIds);
+
     if (error) throw error;
+
+    return data.map(profile => ({
+        user_id: profile.user_id,
+        username: profile.username
+    }));
 }

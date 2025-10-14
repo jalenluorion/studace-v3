@@ -33,7 +33,6 @@ export default function Space({
 
     const allLoaded = backgroundLoaded && usersLoaded && modulesLoaded;
 
-
     return (
         <div className="h-screen w-screen overflow-hidden relative">
             <div

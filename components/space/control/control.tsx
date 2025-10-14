@@ -86,6 +86,8 @@ export default function Control({
     background: string;
     setBackground: (background: string) => void;
 }) {
+    const [spaceName, setSpaceName] = useState(spaceSettings.name);
+
     const [spacePopup, setSpacePopup] = useState(false);
     const [musicPopup, setMusicPopup] = useState(false);
 
@@ -112,7 +114,7 @@ export default function Control({
                     <Button variant="ghost" size="xs" onClick={() => setHidden(!hidden)}>
                         {hidden ? <ChevronUp /> : <ChevronDown />}
                     </Button>
-                    <CardTitle>{spaceSettings.name}</CardTitle>
+                    <CardTitle>{spaceName}</CardTitle>
                     <Button variant="ghost" size="xs" onClick={editFullScreen}>
                         {fullScreen ? <Minimize2 /> : <Maximize2 />}
                     </Button>
@@ -294,6 +296,7 @@ export default function Control({
                                 <SettingsEditor
                                     spaceUserId={spaceUser.user_id}
                                     spaceSettings={spaceSettings}
+                                    setSpaceName={setSpaceName}
                                 />
                             </DialogContentChild>
                         </Dialog>
