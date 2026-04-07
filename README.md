@@ -1,3 +1,5 @@
+*i built this before vibe coding btw* · **Defunct:** Now part of [CMUCal](https://cal.scottylabs.org/)
+
 # 🎓 Studace
 
 > Your modern personalized space for productivity, collaboration, and learning.
